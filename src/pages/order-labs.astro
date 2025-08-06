@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+export const prerender = false;
+---
+
+<Layout title="Order Labs">
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">Track Your Labs</a>
+        <nav class="nav">
+          <a href="/order-labs" class="nav-link active">Order Labs</a>
+          <a href="/login" class="btn-login">Login</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <h1 class="page-title">Order Labs</h1>
+      <p class="page-description">
+        Lab ordering functionality coming soon. We're working on partnerships with lab providers to bring you convenient, affordable lab testing.
+      </p>
+      <a href="/" class="btn-back">Back to Home</a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .header {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    text-decoration: none;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav-link {
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: #111827;
+  }
+
+  .btn-login {
+    background: #111827;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .btn-login:hover {
+    background: #1f2937;
+  }
+
+  .main {
+    padding: 4rem 0;
+    min-height: calc(100vh - 73px);
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .page-description {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: #4b5563;
+    text-align: center;
+  }
+
+  .btn-back {
+    display: inline-block;
+    margin: 2rem auto;
+    padding: 0.75rem 2rem;
+    background: #f3f4f6;
+    color: #111827;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+    display: block;
+    width: fit-content;
+  }
+
+  .btn-back:hover {
+    background: #e5e7eb;
+  }
+</style>

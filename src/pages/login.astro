@@ -1,0 +1,218 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+export const prerender = false;
+---
+
+<Layout title="Login">
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">Track Your Labs</a>
+        <nav class="nav">
+          <a href="/order-labs" class="nav-link">Order Labs</a>
+          <a href="/login" class="btn-login active">Login</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <div class="login-container">
+        <h1 class="page-title">Sign In</h1>
+        <p class="page-description">
+          Access your lab results and health insights
+        </p>
+        
+        <form class="login-form">
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" class="form-input" placeholder="your@email.com" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" class="form-input" placeholder="••••••••" required />
+          </div>
+          
+          <button type="submit" class="btn-submit">Sign In</button>
+        </form>
+        
+        <p class="signup-link">
+          Don't have an account? <a href="/signup">Sign up</a>
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .header {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    text-decoration: none;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav-link {
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover {
+    color: #111827;
+  }
+
+  .btn-login {
+    background: #111827;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .btn-login.active {
+    background: #1f2937;
+  }
+
+  .btn-login:hover {
+    background: #1f2937;
+  }
+
+  .main {
+    padding: 4rem 0;
+    min-height: calc(100vh - 73px);
+    display: flex;
+    align-items: center;
+  }
+
+  .login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  .page-description {
+    font-size: 1rem;
+    color: #6b7280;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .login-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #6b7280;
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-submit:hover {
+    background: #1f2937;
+  }
+
+  .signup-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #6b7280;
+  }
+
+  .signup-link a {
+    color: #111827;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.login-form') as HTMLFormElement;
+    
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      console.log('Login form submitted');
+    });
+  });
+</script>

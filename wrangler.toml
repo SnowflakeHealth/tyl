@@ -1,0 +1,16 @@
+name = "tyl-www"
+main = "./dist/_worker.js/index.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+binding = "ASSETS"
+directory = "./dist"
+
+# Environment variables
+[vars]
+ENVIRONMENT = "production"
+
+routes = [
+  { pattern = "www.trackyourlabs.com", custom_domain = true }
+]

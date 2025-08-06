@@ -1,0 +1,145 @@
+---
+export interface Props {
+  id?: string;
+}
+
+const { id = 'file-upload' } = Astro.props;
+---
+
+<div class="file-upload-container">
+  <div class="upload-area" id={id}>
+    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+    </svg>
+    
+    <h3 class="upload-title">Just drop your lab PDF here</h3>
+    
+    <p class="upload-subtitle">Or click to browse files</p>
+    
+    <input type="file" id={`${id}-input`} accept=".pdf,application/pdf" class="hidden" />
+    
+    <div class="upload-features">
+      <span>Always anonymous</span>
+      <span class="separator">•</span>
+      <span>HIPAA-compliant</span>
+      <span class="separator">•</span>
+      <span>Results in 30 seconds</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .file-upload-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .upload-area {
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .upload-area:hover {
+    border-color: #9ca3af;
+    background: #f9fafb;
+  }
+
+  .upload-area.dragover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+  }
+
+  .upload-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    color: #9ca3af;
+  }
+
+  .upload-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.5rem;
+  }
+
+  .upload-subtitle {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+  }
+
+  .upload-features {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    margin-top: 1.5rem;
+  }
+
+  .separator {
+    color: #d1d5db;
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  function initFileUpload(id: string) {
+    const uploadArea = document.getElementById(id);
+    const fileInput = document.getElementById(`${id}-input`) as HTMLInputElement;
+    
+    if (!uploadArea || !fileInput) return;
+
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      
+      const files = (e as DragEvent).dataTransfer?.files;
+      if (files && files.length > 0) {
+        handleFiles(files);
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files.length > 0) {
+        handleFiles(fileInput.files);
+      }
+    });
+
+    function handleFiles(files: FileList) {
+      const file = files[0];
+      if (file && file.type === 'application/pdf') {
+        console.log('PDF file selected:', file.name);
+      } else {
+        alert('Please upload a PDF file');
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initFileUpload('file-upload');
+  });
+</script>
