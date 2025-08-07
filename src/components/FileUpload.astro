@@ -33,16 +33,23 @@ const { id = 'file-upload' } = Astro.props;
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
+    padding: 0 1rem;
   }
 
   .upload-area {
     border: 2px dashed #d1d5db;
     border-radius: 16px;
-    padding: 4rem 3rem;
+    padding: 3rem 1.5rem;
     text-align: center;
     background: #fafafa;
     cursor: pointer;
     transition: all 0.3s ease;
+  }
+
+  @media (min-width: 640px) {
+    .upload-area {
+      padding: 4rem 3rem;
+    }
   }
 
   .upload-area:hover {
@@ -56,38 +63,73 @@ const { id = 'file-upload' } = Astro.props;
   }
 
   .upload-icon {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     margin: 0 auto 1.5rem;
     color: #9ca3af;
   }
 
+  @media (min-width: 640px) {
+    .upload-icon {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
   .upload-title {
-    font-size: 1.375rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: #111827;
     margin-bottom: 0.5rem;
   }
 
+  @media (min-width: 640px) {
+    .upload-title {
+      font-size: 1.375rem;
+    }
+  }
+
   .upload-subtitle {
     color: #6b7280;
     margin-bottom: 2rem;
-    font-size: 1rem;
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 640px) {
+    .upload-subtitle {
+      font-size: 1rem;
+    }
   }
 
   .upload-features {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     color: #9ca3af;
-    font-size: 0.875rem;
+    font-size: 0.813rem;
     margin-top: 2rem;
   }
 
+  @media (min-width: 640px) {
+    .upload-features {
+      flex-direction: row;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+
   .separator {
+    display: none;
     color: #d1d5db;
     margin: 0 0.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .separator {
+      display: inline;
+    }
   }
 
   .hidden {
