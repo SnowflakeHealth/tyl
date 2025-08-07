@@ -34,6 +34,8 @@ const { id = 'file-upload' } = Astro.props;
     max-width: 600px;
     margin: 0 auto;
     padding: 0 1rem;
+    /* Prevent layout shift by ensuring container has stable dimensions */
+    box-sizing: border-box;
   }
 
   .upload-area {
@@ -43,6 +45,10 @@ const { id = 'file-upload' } = Astro.props;
     text-align: center;
     background: #fafafa;
     cursor: pointer;
+    transition: none;
+  }
+  
+  .upload-area.transitions-ready {
     transition: all 0.3s ease;
   }
 
@@ -143,6 +149,11 @@ const { id = 'file-upload' } = Astro.props;
     const fileInput = document.getElementById(`${id}-input`) as HTMLInputElement;
     
     if (!uploadArea || !fileInput) return;
+    
+    // Enable transitions after initial render to prevent layout shift
+    setTimeout(() => {
+      uploadArea.classList.add('transitions-ready');
+    }, 100);
 
     uploadArea.addEventListener('click', () => {
       fileInput.click();

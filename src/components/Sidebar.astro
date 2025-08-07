@@ -2,7 +2,7 @@
 ---
 
 <div class="drawer">
-  <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
+  <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" checked={false} />
   
   <div class="drawer-content flex flex-col">
     <!-- Navbar with hamburger and login -->
@@ -56,7 +56,7 @@
           </a>
         </li>
         
-        <li class="tooltip tooltip-right" data-tip="View and manage your lab results. Login required.">
+        <li>
           <a class="flex items-center gap-3 px-3 py-1.5 opacity-50 cursor-not-allowed">
             <!-- Heroicon: document-text -->
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0">
@@ -70,7 +70,7 @@
           </a>
         </li>
         
-        <li class="tooltip tooltip-right" data-tip="Connect wearables, health trackers, and other devices. Login required.">
+        <li>
           <a class="flex items-center gap-3 px-3 py-1.5 opacity-50 cursor-not-allowed">
             <!-- Heroicon: link -->
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0">
@@ -84,7 +84,7 @@
           </a>
         </li>
         
-        <li class="tooltip tooltip-right" data-tip="Order any lab test directly through our platform">
+        <li>
           <a href="/order-labs" class="flex items-center gap-3 hover:bg-base-200 rounded-lg px-3 py-1.5">
             <!-- Heroicon: beaker -->
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0">
@@ -97,3 +97,34 @@
     </div>
   </div>
 </div>
+
+<style>
+  /* Prevent drawer animation on initial page load */
+  .drawer-side {
+    transition: none !important;
+  }
+  
+  .drawer-side.transitions-enabled {
+    transition: transform 0.3s ease-in-out !important;
+  }
+</style>
+
+<script>
+  // Ensure drawer is closed on page load and enable transitions after initial render
+  document.addEventListener('DOMContentLoaded', () => {
+    const drawerToggle = document.getElementById('sidebar-drawer') as HTMLInputElement;
+    const drawerSide = document.querySelector('.drawer-side');
+    
+    if (drawerToggle) {
+      // Force drawer to be closed
+      drawerToggle.checked = false;
+    }
+    
+    // Enable transitions after a small delay to prevent initial animation
+    if (drawerSide) {
+      setTimeout(() => {
+        drawerSide.classList.add('transitions-enabled');
+      }, 100);
+    }
+  });
+</script>
