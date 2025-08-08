@@ -168,47 +168,17 @@ const {
     margin-top: 1rem;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
-    padding: 1rem;
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
   }
 
-  .file-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem;
-    background: #f9fafb;
-    border-radius: 4px;
-    margin-bottom: 0.5rem;
+  .file-table {
+    font-family: 'Courier New', Courier, monospace;
   }
 
-  .file-item:last-child {
-    margin-bottom: 0;
-  }
-
-  .file-info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .file-size {
-    color: #6b7280;
+  .file-table td {
     font-size: 0.875rem;
-  }
-
-  .file-remove {
-    cursor: pointer;
-    color: #ef4444;
-    font-weight: 500;
-    background: none;
-    border: none;
-    padding: 0.25rem 0.5rem;
-  }
-
-  .file-remove:hover {
-    text-decoration: underline;
+    padding: 0.75rem 1rem;
   }
 
   .upload-btn {
@@ -341,24 +311,18 @@ const {
       fileList.classList.remove('hidden');
       uploadBtn.classList.remove('hidden');
 
-      fileList.innerHTML = selectedFiles.map((file, index) => `
-        <div class="file-item">
-          <div class="file-info">
-            <span>${file.name}</span>
-            <span class="file-size">(${formatFileSize(file.size)})</span>
-          </div>
-          <button type="button" class="file-remove" data-index="${index}">Remove</button>
-        </div>
-      `).join('');
-
-      // Add remove handlers
-      fileList.querySelectorAll('.file-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const index = parseInt(e.target.dataset.index);
-          selectedFiles.splice(index, 1);
-          updateFileList();
-        });
-      });
+      fileList.innerHTML = `
+        <table class="table table-zebra file-table">
+          <tbody>
+            ${selectedFiles.map((file) => `
+              <tr>
+                <td>${file.name}</td>
+                <td class="text-right">${formatFileSize(file.size)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
     }
 
     function formatFileSize(bytes) {

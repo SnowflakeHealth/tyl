@@ -23,13 +23,13 @@ const { id = 'results-table' } = Astro.props;
   </div>
 </div>
 
-<style>
+<style is:global>
   .results-container {
     margin-top: 3rem;
-    padding: 2rem;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .results-header {
@@ -37,140 +37,273 @@ const { id = 'results-table' } = Astro.props;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
+    padding: 0 1rem;
   }
 
   .results-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 1.875rem;
+    font-weight: 700;
     color: #111827;
   }
 
   .clear-btn {
     padding: 0.5rem 1rem;
-    background: #f3f4f6;
-    color: #374151;
+    background: #ef4444;
+    color: white;
     border: none;
     border-radius: 6px;
     font-size: 0.875rem;
+    font-weight: 500;
     cursor: pointer;
     transition: background 0.2s;
   }
 
   .clear-btn:hover {
-    background: #e5e7eb;
+    background: #dc2626;
   }
 
   .results-content {
     min-height: 200px;
+    padding: 0 1rem;
   }
 
-  .panel {
-    margin-bottom: 2rem;
-    border: 1px solid #e5e7eb;
+  /* Card styles */
+  .card {
+    background: white;
+    border: 1px solid #d1d5db;
     border-radius: 8px;
+    margin-bottom: 1.5rem;
     overflow: hidden;
   }
 
-  .panel-header {
-    padding: 1rem;
+  .card-header {
+    padding: 1rem 1.25rem;
     background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
     font-weight: 600;
-    cursor: pointer;
+    font-size: 0.875rem;
+    color: #374151;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .card-body {
+    padding: 0;
+  }
+
+  /* Lab info styles */
+  .lab-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0;
+    padding: 1rem 1.25rem;
+  }
+
+  .lab-info-item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f3f4f6;
   }
 
-  .panel-header:hover {
-    background: #f3f4f6;
+  .lab-info-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
   }
 
-  .panel-body {
-    padding: 1rem;
+  .lab-info-value {
+    font-size: 0.875rem;
+    color: #111827;
+    font-weight: 600;
+    text-align: right;
   }
 
+  /* Test table styles */
   .test-table {
     width: 100%;
     border-collapse: collapse;
   }
 
-  .test-table th {
-    text-align: left;
-    padding: 0.75rem;
-    background: #f9fafb;
-    font-weight: 600;
-    font-size: 0.875rem;
-    color: #374151;
-    border-bottom: 1px solid #e5e7eb;
+  .test-table thead {
+    background: #f3f4f6;
   }
 
-  .test-table td {
-    padding: 0.75rem;
+  .test-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .test-table th.value-header,
+  .test-table th.flag-header {
+    text-align: center;
+  }
+
+  .test-table tbody tr {
     border-bottom: 1px solid #f3f4f6;
   }
 
-  .test-table tr:last-child td {
+  .test-table tbody tr:last-child {
     border-bottom: none;
   }
 
-  .test-value {
+  .test-table td {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    vertical-align: top;
+  }
+
+  .test-name {
     font-weight: 500;
+    color: #111827;
+  }
+
+  .test-value {
+    text-align: right;
+    font-weight: 600;
+    color: #111827;
+    white-space: nowrap;
   }
 
   .test-value.high {
     color: #dc2626;
-    font-weight: 600;
   }
 
   .test-value.low {
     color: #2563eb;
-    font-weight: 600;
   }
 
-  .test-value.critical {
-    color: #dc2626;
-    font-weight: 700;
-    background: #fef2f2;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+  .test-unit {
+    text-align: left;
+    color: #6b7280;
+    padding-left: 0.25rem;
+  }
+
+  .test-range {
+    color: #6b7280;
+    font-size: 0.875rem;
   }
 
   .test-flag {
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .flag-indicator {
     display: inline-block;
     padding: 0.125rem 0.375rem;
     border-radius: 4px;
     font-size: 0.75rem;
     font-weight: 600;
-    margin-left: 0.5rem;
   }
 
-  .test-flag.high {
+  .flag-indicator.h {
     background: #fef2f2;
     color: #dc2626;
   }
 
-  .test-flag.low {
+  .flag-indicator.l {
     background: #eff6ff;
     color: #2563eb;
   }
 
-  .test-flag.critical {
-    background: #dc2626;
-    color: white;
+  /* Notes accordion */
+  .notes-section {
+    border-top: 1px solid #e5e7eb;
+    margin: 0;
   }
 
-  .test-note {
+  .notes-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #fafafa;
+    border: none;
+    cursor: pointer;
     font-size: 0.875rem;
     color: #6b7280;
-    font-style: italic;
+    text-align: left;
+    transition: background 0.2s;
+  }
+
+  .notes-toggle:hover {
+    background: #f3f4f6;
+  }
+
+  .notes-toggle-icon {
+    transition: transform 0.2s;
+  }
+
+  .notes-toggle.expanded .notes-toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .notes-content {
+    padding: 0.75rem 1rem;
+    font-size: 0.813rem;
+    color: #6b7280;
+    line-height: 1.5;
+    background: #fafafa;
+    display: none;
+  }
+
+  .notes-content.expanded {
+    display: block;
+  }
+
+  .note-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .note-item:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Results summary */
+  .results-summary {
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+  }
+
+  .summary-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .summary-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .summary-label {
+    font-size: 0.875rem;
+    color: #6b7280;
     margin-top: 0.25rem;
   }
 
+  /* Actions */
   .results-actions {
     margin-top: 2rem;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 1rem;
+    padding: 0 1rem;
   }
 
   .export-btn {
@@ -188,19 +321,22 @@ const { id = 'results-table' } = Astro.props;
     background: #059669;
   }
 
+  /* Error and empty states */
   .error-message {
-    padding: 1rem;
+    padding: 1.5rem;
     background: #fef2f2;
     border: 1px solid #fecaca;
     border-radius: 8px;
     color: #991b1b;
     margin-bottom: 1rem;
+    text-align: center;
   }
 
   .no-results {
     text-align: center;
     color: #6b7280;
-    padding: 2rem;
+    padding: 3rem;
+    font-size: 1rem;
   }
 
   .hidden {
@@ -210,7 +346,6 @@ const { id = 'results-table' } = Astro.props;
   /* Mobile responsiveness */
   @media (max-width: 640px) {
     .results-container {
-      padding: 1rem;
       margin-top: 2rem;
     }
 
@@ -220,26 +355,27 @@ const { id = 'results-table' } = Astro.props;
       align-items: flex-start;
     }
 
+    .lab-info-grid {
+      grid-template-columns: 1fr;
+    }
+
     .test-table {
-      font-size: 0.875rem;
+      font-size: 0.75rem;
     }
 
     .test-table th,
     .test-table td {
-      padding: 0.5rem;
+      padding: 0.5rem 0.75rem;
     }
 
-    .panel-header {
-      font-size: 0.875rem;
-    }
-
-    .results-actions {
-      justify-content: center;
+    .results-summary {
+      flex-direction: column;
+      gap: 1rem;
     }
   }
 </style>
 
-<script define:vars={{ id }}>
+<script is:inline define:vars={{ id }}>
   function initResultsTable(id) {
     const container = document.getElementById(id);
     const content = document.getElementById(`${id}-content`);
@@ -277,130 +413,387 @@ const { id = 'results-table' } = Astro.props;
 
       // Handle errors
       if (data.error) {
-        content.innerHTML = `<div class="error-message">${data.error}</div>`;
+        content.innerHTML = `<div class="error-message"><strong>Error:</strong> ${data.error}</div>`;
         return;
       }
 
-      // Handle response from API
-      if (!data.results || data.results.length === 0) {
-        content.innerHTML = '<div class="no-results">No results found. Please try uploading your lab files again.</div>';
+      console.log('Received data structure:', JSON.stringify(data, null, 2));
+
+      // Check for aggregated results structure
+      if (data.combined_results && data.combined_results.length > 0) {
+        displayAggregatedResults(data);
         return;
       }
 
-      const html = data.results.map((file, fileIndex) => {
-        if (!file.result || !file.result.success) {
-          return `<div class="error-message">
-            <strong>${file.filename}</strong> - Failed to process: ${file.result?.errors?.join(', ') || 'Unknown error'}
-          </div>`;
-        }
+      // Fallback to file-by-file display if not aggregated
+      if (data.file_results) {
+        displayFileResults(data.file_results);
+        return;
+      }
 
-        if (!file.result.panels || file.result.panels.length === 0) {
-          return `<div class="panel">
-            <div class="panel-header">${file.filename} - No lab results found</div>
-          </div>`;
-        }
+      content.innerHTML = '<div class="no-results">No results found. Please try uploading your lab files again.</div>';
+    }
 
-        return file.result.panels.map((panel, panelIndex) => `
-          <div class="panel">
-            <div class="panel-header" onclick="togglePanel(this)">
-              <span>
-                <strong>${panel.panel_name || 'Lab Panel'}</strong>
-                ${panel.date ? ` - ${panel.date}` : ''}
-                ${panel.provider ? ` (${panel.provider})` : ''}
-              </span>
-              <span class="panel-toggle">▼</span>
+    function displayAggregatedResults(data) {
+      let html = '';
+
+      // Display summary if available
+      if (data.lab_info) {
+        html += `
+          <div class="results-summary">
+            <div class="summary-item">
+              <div class="summary-value">${data.lab_info.total_files || 0}</div>
+              <div class="summary-label">Files Processed</div>
             </div>
-            <div class="panel-body" id="panel-${fileIndex}-${panelIndex}">
-              ${panel.tests && panel.tests.length > 0 ? `
-                <table class="test-table">
-                  <thead>
-                    <tr>
-                      <th>Test Name</th>
-                      <th>Result</th>
-                      <th>Reference Range</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${panel.tests.map(test => {
-                      const flagClass = test.flag ? test.flag.toLowerCase() : '';
-                      const valueClass = test.in_range === false ? (test.flag === 'C' ? 'critical' : flagClass) : '';
-                      
-                      return `
-                        <tr>
-                          <td>
-                            ${test.test_name}
-                            ${test.note ? `<div class="test-note">${test.note}</div>` : ''}
-                          </td>
-                          <td class="test-value ${valueClass}">
-                            ${test.result} ${test.unit || ''}
-                            ${test.flag ? `<span class="test-flag ${flagClass}">${test.flag}</span>` : ''}
-                          </td>
-                          <td>${test.reference_range || '-'}</td>
-                          <td>
-                            ${test.in_range === false ? 
-                              '<span style="color: #dc2626;">⚠️ Out of range</span>' : 
-                              '<span style="color: #10b981;">✓ Normal</span>'}
-                          </td>
-                        </tr>
-                      `;
-                    }).join('')}
-                  </tbody>
-                </table>
-              ` : '<div class="no-results">No test results in this panel</div>'}
+            <div class="summary-item">
+              <div class="summary-value">${data.lab_info.successful_files || 0}</div>
+              <div class="summary-label">Successful</div>
             </div>
-          </div>
-        `).join('');
-      }).join('');
-
-      content.innerHTML = html;
-
-      // Add metadata if available
-      if (data.processingTime) {
-        content.innerHTML += `
-          <div style="text-align: center; color: #6b7280; font-size: 0.875rem; margin-top: 1rem;">
-            Processed in ${(data.processingTime / 1000).toFixed(1)} seconds
+            ${data.lab_info.facilities && data.lab_info.facilities.length > 0 ? `
+              <div class="summary-item">
+                <div class="summary-value">${data.lab_info.facilities.length}</div>
+                <div class="summary-label">Facilities</div>
+              </div>
+            ` : ''}
           </div>
         `;
       }
+
+      // Process each file's results
+      data.combined_results.forEach((fileData, index) => {
+        if (!fileData.lab_info && !fileData.results) {
+          return;
+        }
+
+        // Lab Info Card
+        if (fileData.lab_info && Object.keys(fileData.lab_info).some(key => fileData.lab_info[key])) {
+          html += `
+            <div class="card">
+              <div class="card-header">
+                Lab Information ${fileData.source_file ? `- ${fileData.source_file}` : ''}
+              </div>
+              <div class="card-body">
+                <div class="lab-info-grid">
+                  ${fileData.lab_info.facility ? `
+                    <div class="lab-info-item">
+                      <div class="lab-info-label">Facility</div>
+                      <div class="lab-info-value">${fileData.lab_info.facility}</div>
+                    </div>
+                  ` : ''}
+                  ${fileData.lab_info.date_collected ? `
+                    <div class="lab-info-item">
+                      <div class="lab-info-label">Date Collected</div>
+                      <div class="lab-info-value">${fileData.lab_info.date_collected}</div>
+                    </div>
+                  ` : ''}
+                  ${fileData.lab_info.date_reported ? `
+                    <div class="lab-info-item">
+                      <div class="lab-info-label">Date Reported</div>
+                      <div class="lab-info-value">${fileData.lab_info.date_reported}</div>
+                    </div>
+                  ` : ''}
+                  ${fileData.lab_info.accession_number ? `
+                    <div class="lab-info-item">
+                      <div class="lab-info-label">Accession Number</div>
+                      <div class="lab-info-value">${fileData.lab_info.accession_number}</div>
+                    </div>
+                  ` : ''}
+                  ${fileData.lab_info.fasting_status ? `
+                    <div class="lab-info-item">
+                      <div class="lab-info-label">Fasting Status</div>
+                      <div class="lab-info-value">${fileData.lab_info.fasting_status}</div>
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // Test Results Cards (grouped by category)
+        if (fileData.results && Array.isArray(fileData.results)) {
+          fileData.results.forEach((categoryGroup, catIndex) => {
+            if (!categoryGroup.tests || categoryGroup.tests.length === 0) return;
+
+            const categoryName = categoryGroup.category || 'Test Results';
+            const cardId = `card-${index}-${catIndex}`;
+            
+            // Collect all notes for this category
+            const notesArray = [];
+            categoryGroup.tests.forEach(test => {
+              if (test.notes && test.notes.trim()) {
+                notesArray.push({
+                  testName: test.name,
+                  note: test.notes
+                });
+              }
+            });
+            
+            html += `
+              <div class="card">
+                <div class="card-header">
+                  ${categoryName}
+                  ${fileData.source_file ? ` (${fileData.source_file})` : ''}
+                </div>
+                <div class="card-body">
+                  <table class="test-table">
+                    <thead>
+                      <tr>
+                        <th>Test Name</th>
+                        <th class="value-header">Result</th>
+                        <th>Unit</th>
+                        <th>Reference Range</th>
+                        <th class="flag-header">Flag</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${categoryGroup.tests.map(test => {
+                        const flag = test.flag ? test.flag.toLowerCase() : '';
+                        const valueClass = flag === 'h' ? 'high' : (flag === 'l' ? 'low' : '');
+                        
+                        return `
+                          <tr>
+                            <td class="test-name">${test.name || 'Unknown Test'}</td>
+                            <td class="test-value ${valueClass}">
+                              ${test.value || '-'}
+                            </td>
+                            <td class="test-unit">${test.unit || ''}</td>
+                            <td class="test-range">${test.reference_range || '-'}</td>
+                            <td class="test-flag">
+                              ${test.flag ? `<span class="flag-indicator ${flag}">${test.flag}</span>` : '-'}
+                            </td>
+                          </tr>
+                        `;
+                      }).join('')}
+                    </tbody>
+                  </table>
+                  ${notesArray.length > 0 ? `
+                    <div class="notes-section">
+                      <button class="notes-toggle" onclick="toggleNotes('${cardId}')">
+                        <span>Notes (${notesArray.length})</span>
+                        <span class="notes-toggle-icon">▼</span>
+                      </button>
+                      <div id="${cardId}-notes" class="notes-content">
+                        ${notesArray.map(item => `
+                          <div class="note-item">
+                            ${item.testName ? `<strong>${item.testName}:</strong> ` : ''}${item.note}
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+            `;
+          });
+        }
+      });
+
+      // Add processing time if available
+      if (data.processing_time) {
+        html += `
+          <div style="text-align: center; color: #6b7280; font-size: 0.875rem; margin-top: 1rem;">
+            Processed in ${(data.processing_time / 1000).toFixed(1)} seconds
+          </div>
+        `;
+      }
+
+      content.innerHTML = html;
     }
 
-    window.togglePanel = function(header) {
-      const body = header.nextElementSibling;
-      const toggle = header.querySelector('.panel-toggle');
-      if (body.style.display === 'none') {
-        body.style.display = 'block';
-        toggle.textContent = '▼';
-      } else {
-        body.style.display = 'none';
-        toggle.textContent = '▶';
+    function displayFileResults(fileResults) {
+      let html = '';
+
+      fileResults.forEach((file, fileIndex) => {
+        if (!file.success) {
+          html += `<div class="error-message">
+            <strong>${file.filename}</strong> - Failed: ${file.error || 'Unknown error'}
+          </div>`;
+          return;
+        }
+
+        if (file.data) {
+          // Process each file's data similar to aggregated results
+          const fileData = file.data;
+          
+          // Lab Info Card
+          if (fileData.lab_info && Object.keys(fileData.lab_info).some(key => fileData.lab_info[key])) {
+            html += `
+              <div class="card">
+                <div class="card-header">
+                  Lab Information - ${file.filename}
+                </div>
+                <div class="card-body">
+                  <div class="lab-info-grid">
+                    ${Object.entries(fileData.lab_info).map(([key, value]) => {
+                      if (!value) return '';
+                      const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                      return `
+                        <div class="lab-info-item">
+                          <div class="lab-info-label">${label}</div>
+                          <div class="lab-info-value">${value}</div>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          // Test Results
+          if (fileData.results && Array.isArray(fileData.results)) {
+            fileData.results.forEach((categoryGroup, catIndex) => {
+              if (!categoryGroup.tests || categoryGroup.tests.length === 0) return;
+              
+              const cardId = `file-${fileIndex}-cat-${catIndex}`;
+              html += createCategoryCard(categoryGroup, file.filename, cardId);
+            });
+          }
+        }
+      });
+
+      content.innerHTML = html || '<div class="no-results">No valid results to display</div>';
+    }
+
+    function createCategoryCard(categoryGroup, filename, cardId) {
+      const categoryName = categoryGroup.category || 'Test Results';
+      
+      // Collect notes
+      const notesArray = [];
+      categoryGroup.tests.forEach(test => {
+        if (test.notes && test.notes.trim()) {
+          notesArray.push({
+            testName: test.name,
+            note: test.notes
+          });
+        }
+      });
+      
+      return `
+        <div class="card">
+          <div class="card-header">
+            ${categoryName} - ${filename}
+          </div>
+          <div class="card-body">
+            <table class="test-table">
+              <thead>
+                <tr>
+                  <th>Test Name</th>
+                  <th class="value-header">Result</th>
+                  <th>Unit</th>
+                  <th>Reference Range</th>
+                  <th class="flag-header">Flag</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${categoryGroup.tests.map(test => {
+                  const flag = test.flag ? test.flag.toLowerCase() : '';
+                  const valueClass = flag === 'h' ? 'high' : (flag === 'l' ? 'low' : '');
+                  
+                  return `
+                    <tr>
+                      <td class="test-name">${test.name || 'Unknown Test'}</td>
+                      <td class="test-value ${valueClass}">
+                        ${test.value || '-'}
+                      </td>
+                      <td class="test-unit">${test.unit || ''}</td>
+                      <td class="test-range">${test.reference_range || '-'}</td>
+                      <td class="test-flag">
+                        ${test.flag ? `<span class="flag-indicator ${flag}">${test.flag}</span>` : '-'}
+                      </td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+            ${notesArray.length > 0 ? `
+              <div class="notes-section">
+                <button class="notes-toggle" onclick="toggleNotes('${cardId}')">
+                  <span>Notes (${notesArray.length})</span>
+                  <span class="notes-toggle-icon">▼</span>
+                </button>
+                <div id="${cardId}-notes" class="notes-content">
+                  ${notesArray.map(item => `
+                    <div class="note-item">
+                      ${item.testName ? `<strong>${item.testName}:</strong> ` : ''}${item.note}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    // Global toggle function for notes
+    window.toggleNotes = function(cardId) {
+      const notesContent = document.getElementById(`${cardId}-notes`);
+      const toggleBtn = notesContent?.previousElementSibling;
+      
+      if (notesContent && toggleBtn) {
+        notesContent.classList.toggle('expanded');
+        toggleBtn.classList.toggle('expanded');
       }
     };
 
     function exportToCSV(data) {
-      const rows = [['File', 'Panel', 'Test Name', 'Result', 'Unit', 'Reference Range', 'Status', 'Flag', 'Note']];
+      const rows = [['Source File', 'Category', 'Test Name', 'Result', 'Unit', 'Reference Range', 'Flag', 'Notes']];
       
-      data.results.forEach(file => {
-        if (file.result && file.result.success && file.result.panels) {
-          file.result.panels.forEach(panel => {
-            if (panel.tests) {
-              panel.tests.forEach(test => {
-                rows.push([
-                  file.filename,
-                  panel.panel_name || 'Unknown Panel',
-                  test.test_name || '',
-                  test.result || '',
-                  test.unit || '',
-                  test.reference_range || '',
-                  test.in_range === false ? 'Out of range' : 'Normal',
-                  test.flag || '',
-                  test.note || ''
-                ]);
-              });
-            }
-          });
-        }
-      });
+      // Export aggregated results
+      if (data.combined_results) {
+        data.combined_results.forEach(fileData => {
+          const sourceFile = fileData.source_file || 'Unknown';
+          
+          if (fileData.results && Array.isArray(fileData.results)) {
+            fileData.results.forEach(categoryGroup => {
+              const category = categoryGroup.category || 'Uncategorized';
+              
+              if (categoryGroup.tests) {
+                categoryGroup.tests.forEach(test => {
+                  rows.push([
+                    sourceFile,
+                    category,
+                    test.name || '',
+                    test.value || '',
+                    test.unit || '',
+                    test.reference_range || '',
+                    test.flag || '',
+                    test.notes || ''
+                  ]);
+                });
+              }
+            });
+          }
+        });
+      }
+      
+      // Export file results
+      else if (data.file_results) {
+        data.file_results.forEach(file => {
+          if (file.success && file.data && file.data.results) {
+            file.data.results.forEach(categoryGroup => {
+              const category = categoryGroup.category || 'Uncategorized';
+              
+              if (categoryGroup.tests) {
+                categoryGroup.tests.forEach(test => {
+                  rows.push([
+                    file.filename,
+                    category,
+                    test.name || '',
+                    test.value || '',
+                    test.unit || '',
+                    test.reference_range || '',
+                    test.flag || '',
+                    test.notes || ''
+                  ]);
+                });
+              }
+            });
+          }
+        });
+      }
 
       const csv = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
       const blob = new Blob([csv], { type: 'text/csv' });
