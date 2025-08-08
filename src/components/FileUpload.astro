@@ -1,4 +1,6 @@
 ---
+import Loader from './Loader.astro';
+
 export interface Props {
   id?: string;
   maxFiles?: number;
@@ -49,8 +51,7 @@ const {
   
   <!-- Loading spinner -->
   <div id={`${id}-loading`} class="loading-container hidden">
-    <div class="loading-spinner"></div>
-    <p class="loading-text">Processing your lab results...</p>
+    <Loader text="Processing your lab results..." />
   </div>
 </div>
 
@@ -235,26 +236,6 @@ const {
 
   .loading-container {
     margin-top: 2rem;
-    text-align: center;
-  }
-
-  .loading-spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid #e5e7eb;
-    border-top-color: #3b82f6;
-    border-radius: 50%;
-    margin: 0 auto 1rem;
-    animation: spin 1s linear infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .loading-text {
-    color: #6b7280;
-    font-size: 0.875rem;
   }
 
   .hidden {
@@ -262,7 +243,7 @@ const {
   }
 </style>
 
-<script define:vars={{ id, maxFiles, maxSizePerFile }}>
+<script is:inline define:vars={{ id, maxFiles, maxSizePerFile }}>
   function initFileUpload(id, maxFiles, maxSizePerFile) {
     const uploadArea = document.getElementById(id);
     const fileInput = document.getElementById(`${id}-input`);

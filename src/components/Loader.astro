@@ -1,0 +1,89 @@
+---
+export interface Props {
+  text?: string;
+  class?: string;
+}
+
+const { 
+  text = 'Loading...', 
+  class: className = ''
+} = Astro.props;
+---
+
+<div class={`loader-wrapper ${className}`}>
+  <div class="custom-loader">
+    <!-- Drop SVG (inner, static) - larger to match logo proportions -->
+    <svg class="loader-drop" width="90" height="100" viewBox="0 0 375 375">
+      <defs>
+        <clipPath id="dropClip">
+          <path d="M 112.136719 82 L 262.886719 82 L 262.886719 293.414062 L 112.136719 293.414062 Z"/>
+        </clipPath>
+      </defs>
+      <g clip-rule="nonzero" clip-path="url(#dropClip)">
+        <path d="M 187.511719 82 C 157.363281 141.441406 112.136719 172.566406 112.136719 217.851562 C 112.136719 259.53125 145.890625 293.328125 187.511719 293.328125 C 229.132812 293.328125 262.886719 259.53125 262.886719 217.851562 C 262.886719 172.566406 217.660156 142.378906 187.511719 82 Z" 
+              fill="#6b7280"/>
+      </g>
+    </svg>
+    
+    <!-- Ring SVG (outer, rotating) - using exact logo paths -->
+    <svg class="loader-ring" width="120" height="120" viewBox="0 0 375 375">
+      <defs>
+        <clipPath id="ringClip">
+          <path d="M 2.941406 154.410156 C 16.390625 79.390625 73.914062 19.980469 148.460938 4.109375 C 223.003906 -11.761719 299.738281 19.074219 342.578125 82.109375 C 385.417969 145.144531 385.835938 227.839844 343.640625 291.308594 C 301.445312 354.777344 225.027344 386.390625 150.324219 371.277344 C 135.101562 368.199219 125.253906 353.359375 128.335938 338.132812 C 131.414062 322.910156 146.253906 313.066406 161.476562 316.144531 C 213.769531 326.722656 267.261719 304.59375 296.796875 260.167969 C 326.335938 215.738281 326.042969 157.851562 296.054688 113.726562 C 266.066406 69.601562 212.351562 48.019531 160.171875 59.125 C 107.988281 70.234375 67.726562 111.824219 58.308594 164.339844 C 56.535156 174.230469 49.621094 182.421875 40.167969 185.832031 C 30.71875 189.242188 20.164062 187.347656 12.484375 180.867188 C 4.808594 174.386719 1.167969 164.300781 2.941406 154.410156 Z"/>
+        </clipPath>
+      </defs>
+      <g clip-rule="nonzero" clip-path="url(#ringClip)">
+        <rect x="0" y="0" width="375" height="375" fill="#6b7280"/>
+      </g>
+    </svg>
+  </div>
+  <p class="loader-text">{text}</p>
+</div>
+
+<style>
+  .loader-wrapper {
+    text-align: center;
+  }
+
+  .custom-loader {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .loader-drop {
+    position: absolute;
+    width: 90px;
+    height: 100px;
+    z-index: 2;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+
+  .loader-ring {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
+    opacity: 0.9;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loader-text {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+</style>
