@@ -214,17 +214,45 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
-    // Forward the request to the API Gateway
-    const apiResponse = await fetch(GCP_LAB_EXTRACT_API_GATEWAY_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': GCP_LAB_EXTRACT_API_KEY,
-        // Forward the referer for API key restrictions
-        'Referer': request.headers.get('Referer') || 'https://www.trackyourlabs.com/',
-      },
-      body: JSON.stringify(body),
-    });
+    // Forward the request to the API Gateway with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 290000); // 290 seconds (just under 5 minutes)
+    
+    let apiResponse: Response;
+    try {
+      apiResponse = await fetch(GCP_LAB_EXTRACT_API_GATEWAY_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': GCP_LAB_EXTRACT_API_KEY,
+          // Forward the referer for API key restrictions
+          'Referer': request.headers.get('Referer') || 'https://www.trackyourlabs.com/',
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+    } catch (fetchError: any) {
+      clearTimeout(timeoutId);
+      if (fetchError.name === 'AbortError') {
+        console.error('API Gateway request timeout after 290 seconds');
+        const errorResponse: ErrorResponse = { 
+          error: 'Request timeout',
+          message: 'The processing is taking longer than expected. Please try with a smaller file or fewer pages.'
+        };
+        return new Response(
+          JSON.stringify(errorResponse),
+          {
+            status: 504,
+            headers: {
+              ...corsHeaders,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+      }
+      throw fetchError;
+    }
+    clearTimeout(timeoutId);
 
     // Get the response from the API
     const responseData = await apiResponse.text();
