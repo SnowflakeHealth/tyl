@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import FileUpload from '../components/FileUpload.astro';
 import ResultsTable from '../components/ResultsTable.astro';
+import LabResultsDebug from '../components/LabResultsDebug.astro';
 
 export const prerender = false;
 ---
@@ -21,7 +22,13 @@ export const prerender = false;
           
           <FileUpload />
           
-          <ResultsTable />
+          <!-- Debug view for now -->
+          <LabResultsDebug />
+          
+          <!-- Original table view (hidden for debugging) -->
+          <div style="display: none;">
+            <ResultsTable />
+          </div>
         </div>
       </div>
     </div>

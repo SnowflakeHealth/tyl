@@ -1,0 +1,158 @@
+---
+// Debug component to display raw JSON results
+---
+
+<div id="lab-results-debug" class="results-container hidden">
+  <div class="results-header">
+    <h2>Lab Results (Debug)</h2>
+    <button id="clear-results" class="clear-btn">Clear Results</button>
+  </div>
+  
+  <div id="results-content" class="json-display">
+    <!-- JSON will be inserted here -->
+  </div>
+</div>
+
+<style>
+  .results-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .results-header h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .clear-btn {
+    padding: 0.5rem 1rem;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .clear-btn:hover {
+    background: #dc2626;
+  }
+
+  .json-display {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 1.5rem;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 600px;
+    overflow-y: auto;
+    color: #1f2937;
+  }
+
+  .error-message {
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #fecaca;
+  }
+
+  .processing-info {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('lab-results-debug');
+    const resultsContent = document.getElementById('results-content');
+    const clearBtn = document.getElementById('clear-results');
+    
+    if (!container || !resultsContent || !clearBtn) return;
+    
+    // Listen for lab results
+    window.addEventListener('lab-results', (event: any) => {
+      container.classList.remove('hidden');
+      
+      const data = event.detail;
+      
+      // Display the raw response
+      if (data.error) {
+        resultsContent.innerHTML = `
+          <div class="error-message">
+            <strong>Error:</strong> ${data.error}
+            ${data.message ? `<br><strong>Details:</strong> ${data.message}` : ''}
+          </div>
+        `;
+      } else {
+        // Check if we have rawResponse from a specific result
+        let displayData = data;
+        
+        // If we have results array with rawResponse, extract it
+        if (data.results && data.results.length > 0) {
+          const firstResult = data.results[0];
+          if (firstResult.result && firstResult.result.rawResponse) {
+            // Try to parse and prettify the rawResponse
+            try {
+              const parsedRaw = JSON.parse(firstResult.result.rawResponse);
+              displayData = parsedRaw;
+            } catch {
+              // If not valid JSON, display as-is
+              displayData = firstResult.result.rawResponse;
+            }
+          }
+        }
+        
+        // Pretty print the JSON
+        let jsonStr;
+        if (typeof displayData === 'string') {
+          // If it's already a string, try to parse and re-stringify for formatting
+          try {
+            const parsed = JSON.parse(displayData);
+            jsonStr = JSON.stringify(parsed, null, 2);
+          } catch {
+            jsonStr = displayData; // Display as-is if not valid JSON
+          }
+        } else {
+          jsonStr = JSON.stringify(displayData, null, 2);
+        }
+        
+        resultsContent.textContent = jsonStr;
+        
+        // Add processing info if available
+        if (data.processingTime) {
+          const processingInfo = document.createElement('div');
+          processingInfo.className = 'processing-info';
+          processingInfo.textContent = `Processed in ${(data.processingTime / 1000).toFixed(1)} seconds`;
+          resultsContent.appendChild(processingInfo);
+        }
+      }
+    });
+    
+    // Clear results
+    clearBtn.addEventListener('click', () => {
+      resultsContent.innerHTML = '';
+      container.classList.add('hidden');
+    });
+  });
+</script>
