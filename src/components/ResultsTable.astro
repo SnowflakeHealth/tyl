@@ -1,0 +1,419 @@
+---
+export interface Props {
+  id?: string;
+}
+
+const { id = 'results-table' } = Astro.props;
+---
+
+<div id={id} class="results-container hidden">
+  <div class="results-header">
+    <h2>Lab Results</h2>
+    <button id={`${id}-clear`} class="clear-btn" type="button">Clear Results</button>
+  </div>
+  
+  <div id={`${id}-content`} class="results-content">
+    <!-- Results will be dynamically inserted here -->
+  </div>
+
+  <div class="results-actions">
+    <button id={`${id}-export`} class="export-btn" type="button">
+      Export to CSV
+    </button>
+  </div>
+</div>
+
+<style>
+  .results-container {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .results-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .clear-btn {
+    padding: 0.5rem 1rem;
+    background: #f3f4f6;
+    color: #374151;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .clear-btn:hover {
+    background: #e5e7eb;
+  }
+
+  .results-content {
+    min-height: 200px;
+  }
+
+  .panel {
+    margin-bottom: 2rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    padding: 1rem;
+    background: #f9fafb;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .panel-header:hover {
+    background: #f3f4f6;
+  }
+
+  .panel-body {
+    padding: 1rem;
+  }
+
+  .test-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .test-table th {
+    text-align: left;
+    padding: 0.75rem;
+    background: #f9fafb;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .test-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .test-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .test-value {
+    font-weight: 500;
+  }
+
+  .test-value.high {
+    color: #dc2626;
+    font-weight: 600;
+  }
+
+  .test-value.low {
+    color: #2563eb;
+    font-weight: 600;
+  }
+
+  .test-value.critical {
+    color: #dc2626;
+    font-weight: 700;
+    background: #fef2f2;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .test-flag {
+    display: inline-block;
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+
+  .test-flag.high {
+    background: #fef2f2;
+    color: #dc2626;
+  }
+
+  .test-flag.low {
+    background: #eff6ff;
+    color: #2563eb;
+  }
+
+  .test-flag.critical {
+    background: #dc2626;
+    color: white;
+  }
+
+  .test-note {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 0.25rem;
+  }
+
+  .results-actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+
+  .export-btn {
+    padding: 0.75rem 1.5rem;
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .export-btn:hover {
+    background: #059669;
+  }
+
+  .error-message {
+    padding: 1rem;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #991b1b;
+    margin-bottom: 1rem;
+  }
+
+  .no-results {
+    text-align: center;
+    color: #6b7280;
+    padding: 2rem;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 640px) {
+    .results-container {
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    .results-header {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .test-table {
+      font-size: 0.875rem;
+    }
+
+    .test-table th,
+    .test-table td {
+      padding: 0.5rem;
+    }
+
+    .panel-header {
+      font-size: 0.875rem;
+    }
+
+    .results-actions {
+      justify-content: center;
+    }
+  }
+</style>
+
+<script define:vars={{ id }}>
+  function initResultsTable(id) {
+    const container = document.getElementById(id);
+    const content = document.getElementById(`${id}-content`);
+    const clearBtn = document.getElementById(`${id}-clear`);
+    const exportBtn = document.getElementById(`${id}-export`);
+    
+    if (!container || !content || !clearBtn || !exportBtn) return;
+
+    let currentResults = null;
+
+    // Listen for lab results
+    window.addEventListener('lab-results', (event) => {
+      const data = event.detail;
+      currentResults = data;
+      displayResults(data);
+      container.classList.remove('hidden');
+    });
+
+    clearBtn.addEventListener('click', () => {
+      content.innerHTML = '';
+      container.classList.add('hidden');
+      currentResults = null;
+    });
+
+    exportBtn.addEventListener('click', () => {
+      if (!currentResults) return;
+      exportToCSV(currentResults);
+    });
+
+    function displayResults(data) {
+      if (!data) {
+        content.innerHTML = '<div class="no-results">No data received</div>';
+        return;
+      }
+
+      // Handle errors
+      if (data.error) {
+        content.innerHTML = `<div class="error-message">${data.error}</div>`;
+        return;
+      }
+
+      // Handle response from API
+      if (!data.results || data.results.length === 0) {
+        content.innerHTML = '<div class="no-results">No results found. Please try uploading your lab files again.</div>';
+        return;
+      }
+
+      const html = data.results.map((file, fileIndex) => {
+        if (!file.result || !file.result.success) {
+          return `<div class="error-message">
+            <strong>${file.filename}</strong> - Failed to process: ${file.result?.errors?.join(', ') || 'Unknown error'}
+          </div>`;
+        }
+
+        if (!file.result.panels || file.result.panels.length === 0) {
+          return `<div class="panel">
+            <div class="panel-header">${file.filename} - No lab results found</div>
+          </div>`;
+        }
+
+        return file.result.panels.map((panel, panelIndex) => `
+          <div class="panel">
+            <div class="panel-header" onclick="togglePanel(this)">
+              <span>
+                <strong>${panel.panel_name || 'Lab Panel'}</strong>
+                ${panel.date ? ` - ${panel.date}` : ''}
+                ${panel.provider ? ` (${panel.provider})` : ''}
+              </span>
+              <span class="panel-toggle">▼</span>
+            </div>
+            <div class="panel-body" id="panel-${fileIndex}-${panelIndex}">
+              ${panel.tests && panel.tests.length > 0 ? `
+                <table class="test-table">
+                  <thead>
+                    <tr>
+                      <th>Test Name</th>
+                      <th>Result</th>
+                      <th>Reference Range</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${panel.tests.map(test => {
+                      const flagClass = test.flag ? test.flag.toLowerCase() : '';
+                      const valueClass = test.in_range === false ? (test.flag === 'C' ? 'critical' : flagClass) : '';
+                      
+                      return `
+                        <tr>
+                          <td>
+                            ${test.test_name}
+                            ${test.note ? `<div class="test-note">${test.note}</div>` : ''}
+                          </td>
+                          <td class="test-value ${valueClass}">
+                            ${test.result} ${test.unit || ''}
+                            ${test.flag ? `<span class="test-flag ${flagClass}">${test.flag}</span>` : ''}
+                          </td>
+                          <td>${test.reference_range || '-'}</td>
+                          <td>
+                            ${test.in_range === false ? 
+                              '<span style="color: #dc2626;">⚠️ Out of range</span>' : 
+                              '<span style="color: #10b981;">✓ Normal</span>'}
+                          </td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              ` : '<div class="no-results">No test results in this panel</div>'}
+            </div>
+          </div>
+        `).join('');
+      }).join('');
+
+      content.innerHTML = html;
+
+      // Add metadata if available
+      if (data.processingTime) {
+        content.innerHTML += `
+          <div style="text-align: center; color: #6b7280; font-size: 0.875rem; margin-top: 1rem;">
+            Processed in ${(data.processingTime / 1000).toFixed(1)} seconds
+          </div>
+        `;
+      }
+    }
+
+    window.togglePanel = function(header) {
+      const body = header.nextElementSibling;
+      const toggle = header.querySelector('.panel-toggle');
+      if (body.style.display === 'none') {
+        body.style.display = 'block';
+        toggle.textContent = '▼';
+      } else {
+        body.style.display = 'none';
+        toggle.textContent = '▶';
+      }
+    };
+
+    function exportToCSV(data) {
+      const rows = [['File', 'Panel', 'Test Name', 'Result', 'Unit', 'Reference Range', 'Status', 'Flag', 'Note']];
+      
+      data.results.forEach(file => {
+        if (file.result && file.result.success && file.result.panels) {
+          file.result.panels.forEach(panel => {
+            if (panel.tests) {
+              panel.tests.forEach(test => {
+                rows.push([
+                  file.filename,
+                  panel.panel_name || 'Unknown Panel',
+                  test.test_name || '',
+                  test.result || '',
+                  test.unit || '',
+                  test.reference_range || '',
+                  test.in_range === false ? 'Out of range' : 'Normal',
+                  test.flag || '',
+                  test.note || ''
+                ]);
+              });
+            }
+          });
+        }
+      });
+
+      const csv = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lab-results-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initResultsTable(id);
+  });
+</script>

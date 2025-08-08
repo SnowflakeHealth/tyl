@@ -8,14 +8,35 @@ Implementation plan for extracting lab test results from PDF and image files usi
 ```mermaid
 graph LR
     A[User] --> B[FileUpload Component]
-    B --> C[Astro API Endpoint]
-    C --> D[Google Cloud Function]
-    D --> E[Vertex AI - Gemini 2.5]
+    B --> C[Cloudflare Worker]
+    C --> D[API Gateway]
+    D --> E[Google Cloud Function]
+    E --> F[Vertex AI - Gemini 2.5]
+    F --> E
     E --> D
     D --> C
-    C --> F[ResultsTable Component]
-    F --> A
+    C --> B
+    B --> G[ResultsTable Component]
+    G --> A
 ```
+
+## Implementation Status
+
+### ✅ Completed
+1. **Backend Repository Setup** - Created at `/Users/theyoonery/Code/tyl-lab/`
+2. **Google Cloud Function** - Deployed with Gemini 2.0 Flash integration
+3. **API Gateway** - Configured with API key authentication
+4. **Cloudflare Worker Integration** - Astro API route proxies to API Gateway
+5. **API Key Management** - Secure storage in Cloudflare Worker environment variables
+6. **FileUpload Component** - Multi-file support with validation and loading states
+7. **ResultsTable Component** - Dynamic display with CSV export functionality
+8. **Vertex AI Permissions** - Service account granted aiplatform.user role
+9. **End-to-End Testing** - Full flow working from UI to Gemini extraction
+
+### 📋 Deployment Notes
+- API Gateway URL and API key stored as Cloudflare Worker secrets
+- After deployment, secrets must be re-added via `wrangler secret put` or dashboard
+- Worker hosts both Astro site and API endpoint in single deployment
 
 ## Repository Structure
 
@@ -1093,11 +1114,12 @@ const { id = 'results-table' } = Astro.props;
 </script>
 ```
 
-#### 3. Create `src/pages/api/extract-labs.ts`
+#### 3. Update `src/pages/api/extract-labs.ts` to use Cloudflare Worker
 ```typescript
 import type { APIRoute } from 'astro';
 
-const GCP_FUNCTION_URL = import.meta.env.GCP_FUNCTION_URL || 'https://us-central1-your-project.cloudfunctions.net/extractLabs';
+// Use Cloudflare Worker as proxy (API key is stored securely in Worker)
+const WORKER_URL = import.meta.env.PUBLIC_WORKER_URL || 'https://tyl-www.workers.dev/api/extract-labs';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -1132,8 +1154,8 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // Forward to GCP function
-    const response = await fetch(GCP_FUNCTION_URL, {
+    // Forward to Cloudflare Worker (which proxies to API Gateway)
+    const response = await fetch(WORKER_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

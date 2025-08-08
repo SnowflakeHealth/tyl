@@ -2,23 +2,26 @@
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import FileUpload from '../components/FileUpload.astro';
+import ResultsTable from '../components/ResultsTable.astro';
 
 export const prerender = false;
 ---
 
-<Layout title="Home">
+<Layout title="Track Your Labs - Upload Lab Results">
 
   <main class="flex-1">
     <!-- Hero Section -->
     <div class="min-h-screen bg-base-100 pt-16">
       <div class="text-center">
-        <div class="max-w-5xl mx-auto">
+        <div class="max-w-5xl mx-auto px-4">
           <h1 class="text-5xl font-bold mb-4">Track Your Labs</h1>
           <p class="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-12">
             No spreadsheets. No typing.
           </p>
           
           <FileUpload />
+          
+          <ResultsTable />
         </div>
       </div>
     </div>

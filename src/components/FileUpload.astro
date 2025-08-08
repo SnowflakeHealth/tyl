@@ -1,9 +1,15 @@
 ---
 export interface Props {
   id?: string;
+  maxFiles?: number;
+  maxSizePerFile?: number;
 }
 
-const { id = 'file-upload' } = Astro.props;
+const { 
+  id = 'file-upload',
+  maxFiles = 20,
+  maxSizePerFile = 50 * 1024 * 1024 // 50MB
+} = Astro.props;
 ---
 
 <div class="file-upload-container">
@@ -12,11 +18,17 @@ const { id = 'file-upload' } = Astro.props;
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
     </svg>
     
-    <h3 class="upload-title">Just drop your lab PDF here</h3>
+    <h3 class="upload-title">Drop your lab results here</h3>
     
-    <p class="upload-subtitle">Or click to browse files</p>
+    <p class="upload-subtitle">PDF or images • Up to {maxFiles} files • Max {maxSizePerFile / (1024 * 1024)}MB each</p>
     
-    <input type="file" id={`${id}-input`} accept=".pdf,application/pdf" class="hidden" />
+    <input 
+      type="file" 
+      id={`${id}-input`} 
+      accept=".pdf,image/png,image/jpeg,image/jpg,image/webp,image/heic,image/heif" 
+      class="hidden" 
+      multiple
+    />
     
     <div class="upload-features">
       <span>Always anonymous</span>
@@ -26,6 +38,20 @@ const { id = 'file-upload' } = Astro.props;
       <span>Results in 30 seconds</span>
     </div>
   </div>
+
+  <!-- File list -->
+  <div id={`${id}-file-list`} class="file-list hidden"></div>
+  
+  <!-- Upload button -->
+  <button id={`${id}-upload-btn`} class="upload-btn hidden" type="button">
+    Process Lab Results
+  </button>
+  
+  <!-- Loading spinner -->
+  <div id={`${id}-loading`} class="loading-container hidden">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Processing your lab results...</p>
+  </div>
 </div>
 
 <style>
@@ -34,7 +60,6 @@ const { id = 'file-upload' } = Astro.props;
     max-width: 600px;
     margin: 0 auto;
     padding: 0 1rem;
-    /* Prevent layout shift by ensuring container has stable dimensions */
     box-sizing: border-box;
   }
 
@@ -138,19 +163,118 @@ const { id = 'file-upload' } = Astro.props;
     }
   }
 
+  .file-list {
+    margin-top: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: #f9fafb;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .file-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .file-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .file-size {
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+
+  .file-remove {
+    cursor: pointer;
+    color: #ef4444;
+    font-weight: 500;
+    background: none;
+    border: none;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .file-remove:hover {
+    text-decoration: underline;
+  }
+
+  .upload-btn {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .upload-btn:hover {
+    background: #2563eb;
+  }
+
+  .upload-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .loading-container {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-text {
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+
   .hidden {
     display: none;
   }
 </style>
 
-<script>
-  function initFileUpload(id: string) {
+<script define:vars={{ id, maxFiles, maxSizePerFile }}>
+  function initFileUpload(id, maxFiles, maxSizePerFile) {
     const uploadArea = document.getElementById(id);
-    const fileInput = document.getElementById(`${id}-input`) as HTMLInputElement;
+    const fileInput = document.getElementById(`${id}-input`);
+    const fileList = document.getElementById(`${id}-file-list`);
+    const uploadBtn = document.getElementById(`${id}-upload-btn`);
+    const loadingContainer = document.getElementById(`${id}-loading`);
     
-    if (!uploadArea || !fileInput) return;
+    if (!uploadArea || !fileInput || !fileList || !uploadBtn || !loadingContainer) return;
     
-    // Enable transitions after initial render to prevent layout shift
+    let selectedFiles = [];
+
+    // Enable transitions after initial render
     setTimeout(() => {
       uploadArea.classList.add('transitions-ready');
     }, 100);
@@ -172,7 +296,7 @@ const { id = 'file-upload' } = Astro.props;
       e.preventDefault();
       uploadArea.classList.remove('dragover');
       
-      const files = (e as DragEvent).dataTransfer?.files;
+      const files = e.dataTransfer?.files;
       if (files && files.length > 0) {
         handleFiles(files);
       }
@@ -184,17 +308,164 @@ const { id = 'file-upload' } = Astro.props;
       }
     });
 
-    function handleFiles(files: FileList) {
-      const file = files[0];
-      if (file && file.type === 'application/pdf') {
-        console.log('PDF file selected:', file.name);
-      } else {
-        alert('Please upload a PDF file');
+    function handleFiles(files) {
+      const validTypes = [
+        'application/pdf',
+        'image/png',
+        'image/jpeg',
+        'image/jpg',
+        'image/webp',
+        'image/heic',
+        'image/heif'
+      ];
+      const newFiles = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Validate file type
+        if (!validTypes.includes(file.type)) {
+          alert(`${file.name} is not a valid file type. Please upload PDF or image files.`);
+          continue;
+        }
+
+        // Validate file size
+        if (file.size > maxSizePerFile) {
+          alert(`${file.name} exceeds the maximum size of ${maxSizePerFile / (1024 * 1024)}MB.`);
+          continue;
+        }
+
+        // Check max files limit
+        if (selectedFiles.length + newFiles.length >= maxFiles) {
+          alert(`Maximum ${maxFiles} files allowed.`);
+          break;
+        }
+
+        newFiles.push(file);
       }
+
+      if (newFiles.length > 0) {
+        selectedFiles = [...selectedFiles, ...newFiles];
+        updateFileList();
+      }
+    }
+
+    function updateFileList() {
+      if (selectedFiles.length === 0) {
+        fileList.classList.add('hidden');
+        uploadBtn.classList.add('hidden');
+        return;
+      }
+
+      fileList.classList.remove('hidden');
+      uploadBtn.classList.remove('hidden');
+
+      fileList.innerHTML = selectedFiles.map((file, index) => `
+        <div class="file-item">
+          <div class="file-info">
+            <span>${file.name}</span>
+            <span class="file-size">(${formatFileSize(file.size)})</span>
+          </div>
+          <button type="button" class="file-remove" data-index="${index}">Remove</button>
+        </div>
+      `).join('');
+
+      // Add remove handlers
+      fileList.querySelectorAll('.file-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = parseInt(e.target.dataset.index);
+          selectedFiles.splice(index, 1);
+          updateFileList();
+        });
+      });
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    uploadBtn.addEventListener('click', async () => {
+      if (selectedFiles.length === 0) return;
+
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = 'Processing...';
+      loadingContainer.classList.remove('hidden');
+      uploadArea.classList.add('hidden');
+      fileList.classList.add('hidden');
+      uploadBtn.classList.add('hidden');
+
+      try {
+        // Convert files to base64
+        const fileData = await Promise.all(selectedFiles.map(async (file) => {
+          const content = await fileToBase64(file);
+          return {
+            filename: file.name,
+            content: content.split(',')[1], // Remove data:type;base64, prefix
+            mimeType: file.type
+          };
+        }));
+
+        // Send to API (Cloudflare Worker)
+        const response = await fetch('/api/extract-labs', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            files: fileData,
+            requestId: generateRequestId(),
+            timestamp: Date.now()
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // Dispatch custom event with results
+        window.dispatchEvent(new CustomEvent('lab-results', { 
+          detail: data 
+        }));
+
+        // Reset form
+        selectedFiles = [];
+        updateFileList();
+        uploadBtn.textContent = 'Process Lab Results';
+        loadingContainer.classList.add('hidden');
+        uploadArea.classList.remove('hidden');
+      } catch (error) {
+        console.error('Upload error:', error);
+        alert(`Failed to process files: ${error.message}`);
+        uploadBtn.textContent = 'Process Lab Results';
+        loadingContainer.classList.add('hidden');
+        uploadArea.classList.remove('hidden');
+        fileList.classList.remove('hidden');
+        uploadBtn.classList.remove('hidden');
+      } finally {
+        uploadBtn.disabled = false;
+      }
+    });
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    function generateRequestId() {
+      return `req_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    initFileUpload('file-upload');
+    initFileUpload(id, maxFiles, maxSizePerFile);
   });
 </script>
