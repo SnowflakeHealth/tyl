@@ -106,23 +106,8 @@
           </div>
         `;
       } else {
-        // Check if we have rawResponse from a specific result
+        // Display the aggregated data directly
         let displayData = data;
-        
-        // If we have results array with rawResponse, extract it
-        if (data.results && data.results.length > 0) {
-          const firstResult = data.results[0];
-          if (firstResult.result && firstResult.result.rawResponse) {
-            // Try to parse and prettify the rawResponse
-            try {
-              const parsedRaw = JSON.parse(firstResult.result.rawResponse);
-              displayData = parsedRaw;
-            } catch {
-              // If not valid JSON, display as-is
-              displayData = firstResult.result.rawResponse;
-            }
-          }
-        }
         
         // Pretty print the JSON
         let jsonStr;
