@@ -15,3 +15,26 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Override DaisyUI btn-primary with standard blue colors */
+.btn-primary {
+  background-color: #3b82f6 !important; /* Standard blue-500 */
+  border-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.btn-primary:hover {
+  background-color: #2563eb !important; /* Standard blue-600 */
+  border-color: #2563eb !important;
+}
+
+.btn-primary:active,
+.btn-primary:focus {
+  background-color: #1d4ed8 !important; /* Standard blue-700 */
+  border-color: #1d4ed8 !important;
+}
+
+.btn-primary:disabled {
+  background-color: #9ca3af !important; /* Gray-400 for disabled state */
+  border-color: #9ca3af !important;
+}

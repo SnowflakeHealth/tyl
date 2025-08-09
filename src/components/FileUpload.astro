@@ -22,7 +22,7 @@ const {
     
     <h3 class="upload-title">Drop your lab results here</h3>
     
-    <p class="upload-subtitle">PDF or images • Up to {maxFiles} files • Max {maxSizePerFile / (1024 * 1024)}MB each</p>
+    <p class="upload-subtitle">PDF or images • Up to {maxFiles} files</p>
     
     <input 
       type="file" 
@@ -45,7 +45,7 @@ const {
   <div id={`${id}-file-list`} class="file-list hidden"></div>
   
   <!-- Upload button -->
-  <button id={`${id}-upload-btn`} class="upload-btn hidden" type="button">
+  <button id={`${id}-upload-btn`} class="btn btn-primary btn-block hidden" type="button">
     Process Lab Results
   </button>
   
@@ -168,7 +168,7 @@ const {
     margin-top: 1rem;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
-    max-height: 300px;
+    max-height: 240px; /* Approximately 5 rows */
     overflow-y: auto;
   }
 
@@ -181,27 +181,10 @@ const {
     padding: 0.75rem 1rem;
   }
 
-  .upload-btn {
-    margin-top: 1rem;
+  .btn-block {
     width: 100%;
-    padding: 0.75rem 1.5rem;
-    background: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .upload-btn:hover {
-    background: #2563eb;
-  }
-
-  .upload-btn:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
+    margin-top: 1rem;
+    margin-bottom: 5rem; /* Added comfortable padding below button */
   }
 
   .loading-container {
@@ -323,6 +306,9 @@ const {
           </tbody>
         </table>
       `;
+
+      // Scroll the upload area to the top of viewport
+      uploadArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function formatFileSize(bytes) {
@@ -376,6 +362,12 @@ const {
         window.dispatchEvent(new CustomEvent('lab-results', { 
           detail: data 
         }));
+
+        // Hide the entire file upload container after successful processing
+        const uploadContainer = document.querySelector('.file-upload-container');
+        if (uploadContainer) {
+          uploadContainer.classList.add('hidden');
+        }
 
         // Reset form
         selectedFiles = [];
