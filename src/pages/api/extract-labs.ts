@@ -104,9 +104,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
-    if (body.files.length > 20) {
+    if (body.files.length > 50) {
       const errorResponse: ErrorResponse = { 
-        error: 'Maximum 20 files allowed' 
+        error: 'Maximum 50 files allowed' 
       };
       return new Response(
         JSON.stringify(errorResponse),
