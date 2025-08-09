@@ -8,7 +8,10 @@ import LabResultsDebug from '../components/LabResultsDebug.astro';
 export const prerender = false;
 ---
 
-<Layout title="Track Your Labs - Upload Lab Results">
+<Layout 
+  title="Track Your Labs - Turn lab PDFs into insights"
+  description="Upload your lab results and instantly see trends, track changes over time, and understand your health data. No spreadsheets, no typing. HIPAA-compliant and secure."
+>
 
   <main class="flex-1">
     <!-- Hero Section -->
@@ -17,7 +20,7 @@ export const prerender = false;
         <div class="max-w-5xl mx-auto px-4">
           <h1 class="text-5xl font-bold mb-4">Track Your Labs</h1>
           <p class="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-12">
-            No spreadsheets. No typing.
+            Turn lab PDFs into insights. Automatically.
           </p>
           
           <FileUpload />
