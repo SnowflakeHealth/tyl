@@ -475,29 +475,28 @@ const { id = 'results-table' } = Astro.props;
         `;
       }
 
-      // Aggregate tests by category/panel across all files
+      // Aggregate tests by normalized category across all files
       const aggregatedByCategory = {};
-      const categoryNotes = {}; // Track all unique notes per category
       
       data.combined_results.forEach((fileData) => {
         if (fileData.results && Array.isArray(fileData.results)) {
           fileData.results.forEach((category) => {
             if (!category.tests || category.tests.length === 0) return;
             
-            // Normalize category name to handle variations (e.g., "LIPID PANEL" vs "Lipid Panel")
-            const categoryName = (category.category || 'Test Results').toUpperCase();
-            
-            if (!aggregatedByCategory[categoryName]) {
-              aggregatedByCategory[categoryName] = {
-                displayName: category.category || 'Test Results', // Keep original casing for display
-                tests: [],
-                notes: []
-              };
-            }
-            
-            // Add all tests from this category with their dates
+            // Group tests by their normalized category
             category.tests.forEach(test => {
-              aggregatedByCategory[categoryName].tests.push({
+              // Use normalized_category if available, otherwise fall back to original category
+              const normalizedCat = test.normalized_category || category.category || 'Other';
+              
+              if (!aggregatedByCategory[normalizedCat]) {
+                aggregatedByCategory[normalizedCat] = {
+                  displayName: normalizedCat,
+                  tests: []
+                };
+              }
+              
+              // Add test with its date
+              aggregatedByCategory[normalizedCat].tests.push({
                 name: test.name,
                 normalized_name: test.normalized_name || test.name,
                 value: test.value || '-',
@@ -509,17 +508,49 @@ const { id = 'results-table' } = Astro.props;
                 source_file: fileData.source_file || 'Unknown'
               });
             });
-            
-            // Collect category notes (avoid duplicates)
-            if (category.notes && !aggregatedByCategory[categoryName].notes.includes(category.notes)) {
-              aggregatedByCategory[categoryName].notes.push(category.notes);
-            }
           });
         }
       });
 
-      // Create cards grouped by category/panel
-      Object.entries(aggregatedByCategory).forEach(([categoryName, categoryData], catIndex) => {
+      // Define category order for better user experience (matching the backend categories)
+      const categoryOrder = [
+        'Blood',
+        'Metabolic',
+        'Heart',
+        'Electrolytes',
+        'Kidney',
+        'Liver',
+        'Pancreas',
+        'Thyroid',
+        'Nutrients',
+        'Male Health',
+        'Immune Regulation',
+        'Autoimmunity',
+        'Stress & Aging',
+        'Biological Age',
+        'Environmental Toxins',
+        'Urine',
+        'Other'
+      ];
+      
+      // Sort categories by defined order
+      const sortedCategories = Object.entries(aggregatedByCategory).sort((a, b) => {
+        const indexA = categoryOrder.indexOf(a[0]);
+        const indexB = categoryOrder.indexOf(b[0]);
+        
+        // If both are in the order list, sort by that order
+        if (indexA !== -1 && indexB !== -1) {
+          return indexA - indexB;
+        }
+        // If only one is in the order list, it comes first
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+        // Otherwise, sort alphabetically
+        return a[0].localeCompare(b[0]);
+      });
+      
+      // Create cards grouped by category
+      sortedCategories.forEach(([_, categoryData], catIndex) => {
         // Sort tests first by normalized name, then by date (descending)
         categoryData.tests.sort((a, b) => {
           // First sort by normalized name
@@ -604,48 +635,44 @@ const { id = 'results-table' } = Astro.props;
                 </tbody>
               </table>
               ${(() => {
-                // Collect all notes (both category-level and test-level)
-                const allNotes = [];
+                // Collect test-specific notes grouped by test name
+                const notesByTest = {};
                 
-                // Add category notes if present (now an array)
-                if (categoryData.notes && categoryData.notes.length > 0) {
-                  categoryData.notes.forEach(note => {
-                    allNotes.push({
-                      type: 'category',
-                      note: note
-                    });
-                  });
-                }
-                
-                // Add individual test notes
+                // Group notes by unique test name
                 categoryData.tests.forEach(test => {
                   if (test.notes && test.notes.trim()) {
-                    // Check if this note is already in the list (avoid duplicates)
-                    const noteExists = allNotes.some(n => n.note === test.notes);
-                    if (!noteExists) {
-                      allNotes.push({
-                        type: 'test',
-                        testName: test.normalized_name,
-                        note: test.notes
-                      });
+                    const testName = test.normalized_name || test.name;
+                    if (!notesByTest[testName]) {
+                      notesByTest[testName] = new Set();
                     }
+                    // Use Set to automatically handle duplicates
+                    notesByTest[testName].add(test.notes);
                   }
                 });
                 
-                // Only show notes section if there are notes
-                if (allNotes.length > 0) {
+                // Count total unique notes
+                const totalNotesCount = Object.values(notesByTest).reduce((sum, notesSet) => sum + notesSet.size, 0);
+                
+                // Only show notes section if there are test-specific notes
+                if (totalNotesCount > 0) {
                   return `
                     <div class="notes-section">
                       <button class="notes-toggle" onclick="toggleNotes('${cardId}')">
-                        <span>Notes (${allNotes.length})</span>
+                        <span>Notes (${totalNotesCount})</span>
                         <span class="notes-toggle-icon">▼</span>
                       </button>
                       <div id="${cardId}-notes" class="notes-content">
-                        ${allNotes.map(item => `
-                          <div class="note-item">
-                            ${item.testName ? `<strong>${item.testName}:</strong> ` : ''}${item.note}
-                          </div>
-                        `).join('')}
+                        ${Object.entries(notesByTest).map(([testName, notesSet]) => {
+                          const notesArray = Array.from(notesSet);
+                          return `
+                            <div class="note-item">
+                              <strong>${testName}</strong>
+                              <div style="margin-left: 1rem; margin-top: 0.25rem;">
+                                ${notesArray.join('<br>')}
+                              </div>
+                            </div>
+                          `;
+                        }).join('')}
                       </div>
                     </div>
                   `;
@@ -809,7 +836,7 @@ const { id = 'results-table' } = Astro.props;
     };
 
     function exportToCSV(data) {
-      const rows = [['Source File', 'Date', 'Category', 'Test Name', 'Normalized Name', 'Result', 'Unit', 'Reference Range', 'Flag', 'Notes']];
+      const rows = [['Source File', 'Date', 'Original Category', 'Normalized Category', 'Test Name', 'Normalized Name', 'Result', 'Unit', 'Reference Range', 'Flag', 'Notes']];
       
       // Export aggregated results with all fields
       if (data.combined_results) {
@@ -827,6 +854,7 @@ const { id = 'results-table' } = Astro.props;
                     sourceFile,
                     testDate,
                     categoryName,
+                    test.normalized_category || '',
                     test.name || '',
                     test.normalized_name || '',
                     test.value || '',
