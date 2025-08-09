@@ -308,6 +308,48 @@ const { id = 'results-table' } = Astro.props;
     display: none;
   }
 
+  /* Test group visual indicators - IBM Design Library colorblind-safe palette */
+  .test-group-0 td:first-child {
+    border-left: 3px solid #6094eb; /* Blue - R:96 G:148 B:235 */
+    padding-left: 1rem;
+  }
+  
+  .test-group-1 td:first-child {
+    border-left: 3px solid #8a5ed6; /* Purple - R:138 G:94 B:214 */
+    padding-left: 1rem;
+  }
+  
+  .test-group-2 td:first-child {
+    border-left: 3px solid #d74a87; /* Pink/Magenta - R:215 G:74 B:135 */
+    padding-left: 1rem;
+  }
+  
+  .test-group-3 td:first-child {
+    border-left: 3px solid #ee7836; /* Orange - R:238 G:120 B:54 */
+    padding-left: 1rem;
+  }
+  
+  .test-group-4 td:first-child {
+    border-left: 3px solid #f0cc3e; /* Yellow - R:240 G:204 B:62 */
+    padding-left: 1rem;
+  }
+  
+  /* Bold the first row (most recent) of each test group */
+  .test-group-first td.test-name {
+    font-weight: 600;
+  }
+  
+  /* Make non-first rows in a group have lighter text */
+  .test-table tbody tr:not(.test-group-first) td {
+    color: #6b7280; /* gray-500 */
+  }
+  
+  /* Keep flag colors consistent even in secondary rows */
+  .test-table tbody tr:not(.test-group-first) .test-value.high,
+  .test-table tbody tr:not(.test-group-first) .test-value.low {
+    color: #dc2626; /* Keep red for high/low values */
+  }
+
   /* Mobile responsiveness */
   @media (max-width: 640px) {
     .results-container {
@@ -377,11 +419,7 @@ const { id = 'results-table' } = Astro.props;
         return;
       }
 
-      // Fallback to file-by-file display if not aggregated
-      if (data.file_results) {
-        displayFileResults(data.file_results);
-        return;
-      }
+      // No longer using file_results - all data is in combined_results
 
       content.innerHTML = '<div class="no-results">No results found. Please try uploading your lab files again.</div>';
     }
@@ -393,15 +431,20 @@ const { id = 'results-table' } = Astro.props;
       if (data.lab_info) {
         // Count total unique tests and total results across all files
         const uniqueTests = new Set();
+        const uniqueNormalizedTests = new Set();
         let totalResults = 0;
         
         data.combined_results.forEach(fileData => {
+          // Handle results structure (from extraction)
           if (fileData.results && Array.isArray(fileData.results)) {
-            fileData.results.forEach(categoryGroup => {
-              if (categoryGroup.tests) {
-                categoryGroup.tests.forEach(test => {
+            fileData.results.forEach(category => {
+              if (category.tests) {
+                category.tests.forEach(test => {
                   if (test.name) {
                     uniqueTests.add(test.name);
+                    if (test.normalized_name) {
+                      uniqueNormalizedTests.add(test.normalized_name);
+                    }
                     totalResults++;
                   }
                 });
@@ -432,120 +475,183 @@ const { id = 'results-table' } = Astro.props;
         `;
       }
 
-      // Aggregate tests by category across all files
-      const aggregatedCategories = {};
+      // Aggregate tests by category/panel across all files
+      const aggregatedByCategory = {};
+      const categoryNotes = {}; // Track all unique notes per category
       
       data.combined_results.forEach((fileData) => {
         if (fileData.results && Array.isArray(fileData.results)) {
-          fileData.results.forEach((categoryGroup) => {
-            if (!categoryGroup.tests || categoryGroup.tests.length === 0) return;
+          fileData.results.forEach((category) => {
+            if (!category.tests || category.tests.length === 0) return;
             
-            const categoryName = categoryGroup.category || 'Test Results';
+            // Normalize category name to handle variations (e.g., "LIPID PANEL" vs "Lipid Panel")
+            const categoryName = (category.category || 'Test Results').toUpperCase();
             
-            if (!aggregatedCategories[categoryName]) {
-              aggregatedCategories[categoryName] = [];
+            if (!aggregatedByCategory[categoryName]) {
+              aggregatedByCategory[categoryName] = {
+                displayName: category.category || 'Test Results', // Keep original casing for display
+                tests: [],
+                notes: []
+              };
             }
             
-            // Add tests with date information
-            categoryGroup.tests.forEach(test => {
-              aggregatedCategories[categoryName].push({
-                ...test,
-                date_collected: fileData.lab_info?.date_collected || ''
+            // Add all tests from this category with their dates
+            category.tests.forEach(test => {
+              aggregatedByCategory[categoryName].tests.push({
+                name: test.name,
+                normalized_name: test.normalized_name || test.name,
+                value: test.value || '-',
+                unit: test.unit || '',
+                reference_range: test.reference_range || '-',
+                flag: test.flag || '',
+                notes: test.notes || '',
+                date: fileData.lab_info?.date_collected || fileData.lab_info?.date_reported || '',
+                source_file: fileData.source_file || 'Unknown'
               });
             });
+            
+            // Collect category notes (avoid duplicates)
+            if (category.notes && !aggregatedByCategory[categoryName].notes.includes(category.notes)) {
+              aggregatedByCategory[categoryName].notes.push(category.notes);
+            }
           });
         }
       });
 
-      // Create cards for each aggregated category
-      Object.entries(aggregatedCategories).forEach(([categoryName, tests], catIndex) => {
-        // Sort tests by name first, then by date (ascending - oldest first)
-        tests.sort((a, b) => {
-          const nameCompare = (a.name || '').localeCompare(b.name || '');
+      // Create cards grouped by category/panel
+      Object.entries(aggregatedByCategory).forEach(([categoryName, categoryData], catIndex) => {
+        // Sort tests first by normalized name, then by date (descending)
+        categoryData.tests.sort((a, b) => {
+          // First sort by normalized name
+          const nameCompare = (a.normalized_name || a.name).localeCompare(b.normalized_name || b.name);
           if (nameCompare !== 0) return nameCompare;
           
-          // Parse dates for proper chronological sorting
-          const dateA = a.date_collected ? new Date(a.date_collected.split(' ')[0]) : new Date(0);
-          const dateB = b.date_collected ? new Date(b.date_collected.split(' ')[0]) : new Date(0);
-          return dateA - dateB; // Ascending order (oldest to newest)
+          // Then sort by date (descending - newest first)
+          const dateA = a.date ? new Date(a.date.split(' ')[0]) : new Date(0);
+          const dateB = b.date ? new Date(b.date.split(' ')[0]) : new Date(0);
+          return dateB - dateA;
         });
         
         const cardId = `card-${catIndex}`;
         
-        // Collect all notes for this category
-        const notesArray = [];
-        tests.forEach(test => {
-          if (test.notes && test.notes.trim()) {
-            notesArray.push({
-              testName: test.name,
-              date: test.date_collected,
-              note: test.notes
-            });
-          }
-        });
-        
         html += `
           <div class="card">
             <div class="card-header">
-              ${categoryName}
+              ${categoryData.displayName}
             </div>
             <div class="card-body">
               <table class="table table-zebra test-table">
                 <thead>
                   <tr>
                     <th>Test</th>
-                    <th class="date-header">Date</th>
                     <th class="value-header">Result</th>
                     <th>Unit</th>
                     <th class="range-header">Reference Range</th>
                     <th class="flag-header">Flag</th>
+                    <th class="date-header">Date</th>
                   </tr>
                 </thead>
                 <tbody>
-                  ${tests.map(test => {
-                    const flag = test.flag ? test.flag.toLowerCase() : '';
-                    const valueClass = (flag === 'h' || flag === 'high') ? 'high' : ((flag === 'l' || flag === 'low') ? 'low' : '');
-                    const flagClass = (flag === 'h' || flag === 'high') ? 'h' : ((flag === 'l' || flag === 'low') ? 'l' : '');
+                  ${(() => {
+                    let currentTestName = '';
+                    let testGroupIndex = -1;
+                    let isFirstInGroup = true;
                     
-                    // Format date to remove time
-                    const formatDate = (dateStr) => {
-                      if (!dateStr) return '-';
-                      const date = dateStr.split(' ')[0];
-                      return date || dateStr;
-                    };
-                    
-                    return `
-                      <tr>
-                        <td class="test-name">${test.name || 'Unknown Test'}</td>
-                        <td class="test-date">${formatDate(test.date_collected)}</td>
-                        <td class="test-value ${valueClass}">
-                          ${test.value || '-'}
-                        </td>
-                        <td class="test-unit">${test.unit || ''}</td>
-                        <td class="test-range">${test.reference_range || '-'}</td>
-                        <td class="test-flag">
-                          ${test.flag ? `<span class="flag-indicator ${flagClass}">${test.flag}</span>` : '-'}
-                        </td>
-                      </tr>
-                    `;
-                  }).join('')}
+                    return categoryData.tests.map(test => {
+                      const flag = test.flag ? test.flag.toLowerCase() : '';
+                      const valueClass = (flag === 'h' || flag === 'high') ? 'high' : ((flag === 'l' || flag === 'low') ? 'low' : '');
+                      const flagClass = (flag === 'h' || flag === 'high') ? 'h' : ((flag === 'l' || flag === 'low') ? 'l' : '');
+                      
+                      // Check if this is a new test group
+                      const testName = test.normalized_name || test.name;
+                      if (testName !== currentTestName) {
+                        currentTestName = testName;
+                        testGroupIndex = (testGroupIndex + 1) % 5; // Cycle through 0-4 (5 colors)
+                        isFirstInGroup = true;
+                      } else {
+                        isFirstInGroup = false;
+                      }
+                      
+                      // Format date to remove time
+                      const formatDate = (dateStr) => {
+                        if (!dateStr) return '-';
+                        const date = dateStr.split(' ')[0];
+                        return date || dateStr;
+                      };
+                      
+                      // Build class list for the row
+                      const rowClasses = [`test-group-${testGroupIndex}`];
+                      if (isFirstInGroup) {
+                        rowClasses.push('test-group-first');
+                      }
+                      
+                      return `
+                        <tr class="${rowClasses.join(' ')}">
+                          <td class="test-name">${test.normalized_name}</td>
+                          <td class="test-value ${valueClass}">
+                            ${test.value || '-'}
+                          </td>
+                          <td class="test-unit">${test.unit || ''}</td>
+                          <td class="test-range">${test.reference_range || '-'}</td>
+                          <td class="test-flag">
+                            ${test.flag ? `<span class="flag-indicator ${flagClass}">${test.flag}</span>` : '-'}
+                          </td>
+                          <td class="test-date">${formatDate(test.date)}</td>
+                        </tr>
+                      `;
+                    }).join('');
+                  })()}
                 </tbody>
               </table>
-              ${notesArray.length > 0 ? `
-                <div class="notes-section">
-                  <button class="notes-toggle" onclick="toggleNotes('${cardId}')">
-                    <span>Notes (${notesArray.length})</span>
-                    <span class="notes-toggle-icon">▼</span>
-                  </button>
-                  <div id="${cardId}-notes" class="notes-content">
-                    ${notesArray.map(item => `
-                      <div class="note-item">
-                        ${item.testName ? `<strong>${item.testName}${item.date ? ` (${item.date})` : ''}:</strong> ` : ''}${item.note}
+              ${(() => {
+                // Collect all notes (both category-level and test-level)
+                const allNotes = [];
+                
+                // Add category notes if present (now an array)
+                if (categoryData.notes && categoryData.notes.length > 0) {
+                  categoryData.notes.forEach(note => {
+                    allNotes.push({
+                      type: 'category',
+                      note: note
+                    });
+                  });
+                }
+                
+                // Add individual test notes
+                categoryData.tests.forEach(test => {
+                  if (test.notes && test.notes.trim()) {
+                    // Check if this note is already in the list (avoid duplicates)
+                    const noteExists = allNotes.some(n => n.note === test.notes);
+                    if (!noteExists) {
+                      allNotes.push({
+                        type: 'test',
+                        testName: test.normalized_name,
+                        note: test.notes
+                      });
+                    }
+                  }
+                });
+                
+                // Only show notes section if there are notes
+                if (allNotes.length > 0) {
+                  return `
+                    <div class="notes-section">
+                      <button class="notes-toggle" onclick="toggleNotes('${cardId}')">
+                        <span>Notes (${allNotes.length})</span>
+                        <span class="notes-toggle-icon">▼</span>
+                      </button>
+                      <div id="${cardId}-notes" class="notes-content">
+                        ${allNotes.map(item => `
+                          <div class="note-item">
+                            ${item.testName ? `<strong>${item.testName}:</strong> ` : ''}${item.note}
+                          </div>
+                        `).join('')}
                       </div>
-                    `).join('')}
-                  </div>
-                </div>
-              ` : ''}
+                    </div>
+                  `;
+                }
+                return '';
+              })()}
             </div>
           </div>
         `;
@@ -603,13 +709,13 @@ const { id = 'results-table' } = Astro.props;
             `;
           }
 
-          // Test Results
-          if (fileData.results && Array.isArray(fileData.results)) {
-            fileData.results.forEach((categoryGroup, catIndex) => {
-              if (!categoryGroup.tests || categoryGroup.tests.length === 0) return;
+          // Test Results - Handle panels structure
+          if (fileData.panels && Array.isArray(fileData.panels)) {
+            fileData.panels.forEach((panel, catIndex) => {
+              if (!panel.tests || panel.tests.length === 0) return;
               
               const cardId = `file-${fileIndex}-cat-${catIndex}`;
-              html += createCategoryCard(categoryGroup, file.filename, cardId);
+              html += createCategoryCard(panel, file.filename, cardId);
             });
           }
         }
@@ -618,16 +724,16 @@ const { id = 'results-table' } = Astro.props;
       content.innerHTML = html || '<div class="no-results">No valid results to display</div>';
     }
 
-    function createCategoryCard(categoryGroup, filename, cardId) {
-      const categoryName = categoryGroup.category || 'Test Results';
+    function createCategoryCard(panel, filename, cardId) {
+      const panelName = panel.panel_name || 'Test Results';
       
       // Collect notes
       const notesArray = [];
-      categoryGroup.tests.forEach(test => {
-        if (test.notes && test.notes.trim()) {
+      panel.tests.forEach(test => {
+        if (test.note && test.note.trim()) {
           notesArray.push({
-            testName: test.name,
-            note: test.notes
+            testName: test.test_name,
+            note: test.note
           });
         }
       });
@@ -635,13 +741,14 @@ const { id = 'results-table' } = Astro.props;
       return `
         <div class="card">
           <div class="card-header">
-            ${categoryName} - ${filename}
+            ${panelName} - ${filename}
           </div>
           <div class="card-body">
             <table class="test-table">
               <thead>
                 <tr>
                   <th>Test Name</th>
+                  <th>Normalized Name</th>
                   <th class="value-header">Result</th>
                   <th>Unit</th>
                   <th>Reference Range</th>
@@ -649,15 +756,16 @@ const { id = 'results-table' } = Astro.props;
                 </tr>
               </thead>
               <tbody>
-                ${categoryGroup.tests.map(test => {
+                ${panel.tests.map(test => {
                   const flag = test.flag ? test.flag.toLowerCase() : '';
                   const valueClass = flag === 'h' ? 'high' : (flag === 'l' ? 'low' : '');
                   
                   return `
                     <tr>
-                      <td class="test-name">${test.name || 'Unknown Test'}</td>
+                      <td class="test-name">${test.test_name || 'Unknown Test'}</td>
+                      <td class="test-name" style="font-size: 0.75rem; color: #6b7280;">${test.normalized_name || '-'}</td>
                       <td class="test-value ${valueClass}">
-                        ${test.value || '-'}
+                        ${test.result || '-'}
                       </td>
                       <td class="test-unit">${test.unit || ''}</td>
                       <td class="test-range">${test.reference_range || '-'}</td>
@@ -701,49 +809,26 @@ const { id = 'results-table' } = Astro.props;
     };
 
     function exportToCSV(data) {
-      const rows = [['Source File', 'Category', 'Test Name', 'Result', 'Unit', 'Reference Range', 'Flag', 'Notes']];
+      const rows = [['Source File', 'Date', 'Category', 'Test Name', 'Normalized Name', 'Result', 'Unit', 'Reference Range', 'Flag', 'Notes']];
       
-      // Export aggregated results
+      // Export aggregated results with all fields
       if (data.combined_results) {
         data.combined_results.forEach(fileData => {
           const sourceFile = fileData.source_file || 'Unknown';
           
           if (fileData.results && Array.isArray(fileData.results)) {
-            fileData.results.forEach(categoryGroup => {
-              const category = categoryGroup.category || 'Uncategorized';
+            fileData.results.forEach(category => {
+              const categoryName = category.category || 'Uncategorized';
+              const testDate = fileData.lab_info?.date_collected || fileData.lab_info?.date_reported || '';
               
-              if (categoryGroup.tests) {
-                categoryGroup.tests.forEach(test => {
+              if (category.tests) {
+                category.tests.forEach(test => {
                   rows.push([
                     sourceFile,
-                    category,
+                    testDate,
+                    categoryName,
                     test.name || '',
-                    test.value || '',
-                    test.unit || '',
-                    test.reference_range || '',
-                    test.flag || '',
-                    test.notes || ''
-                  ]);
-                });
-              }
-            });
-          }
-        });
-      }
-      
-      // Export file results
-      else if (data.file_results) {
-        data.file_results.forEach(file => {
-          if (file.success && file.data && file.data.results) {
-            file.data.results.forEach(categoryGroup => {
-              const category = categoryGroup.category || 'Uncategorized';
-              
-              if (categoryGroup.tests) {
-                categoryGroup.tests.forEach(test => {
-                  rows.push([
-                    file.filename,
-                    category,
-                    test.name || '',
+                    test.normalized_name || '',
                     test.value || '',
                     test.unit || '',
                     test.reference_range || '',
