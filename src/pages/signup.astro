@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+
+export const prerender = true;
+---
+
+<Layout 
+  title="Sign Up - Track Your Labs"
+  description="Join the waitlist for Track Your Labs - Connect your health data and get actionable insights."
+  noSidebar={true}
+>
+  <div class="min-h-screen flex flex-col">
+    <!-- Header with centered logo -->
+    <header class="w-full pt-8 pb-4">
+      <div class="flex justify-center">
+        <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <img src="/tyl_logo.svg" alt="Track Your Labs Logo" class="w-10 h-10" />
+          <span class="text-2xl font-bold">Track Your Labs</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero Section with Waitlist -->
+    <main class="flex-1 flex items-center justify-center px-4">
+      <div class="hero">
+        <div class="hero-content text-center">
+          <div class="max-w-2xl">
+            <h1 class="text-5xl font-bold mb-6">Your Health Data, Connected</h1>
+            
+            <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+              Track Your Labs is building a comprehensive platform that turns scattered health data into actionable insights. 
+              Connect labs, wearables, nutrition apps, and more in one intelligent dashboard.
+            </p>
+            
+            <p class="text-lg text-gray-600 mb-10 leading-relaxed">
+              Be among the first to experience personalized health tracking that actually helps you optimize your wellbeing.
+            </p>
+            
+            <!-- Waitlist Widget Container -->
+            <div class="flex justify-center">
+              <div id="getWaitlistContainer" data-waitlist_id="30718" data-widget_type="WIDGET_1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <Footer />
+  </div>
+
+  <!-- Waitlist Widget Assets -->
+  <link rel="stylesheet" type="text/css" href="https://prod-waitlist-widget.s3.us-east-2.amazonaws.com/getwaitlist.min.css"/>
+  <script src="https://prod-waitlist-widget.s3.us-east-2.amazonaws.com/getwaitlist.min.js"></script>
+
+  <style>
+    /* Optional: Custom styling for the waitlist widget */
+    #getWaitlistContainer {
+      max-width: 400px;
+      width: 100%;
+    }
+    
+    /* Ensure the widget form looks good on mobile */
+    @media (max-width: 640px) {
+      #getWaitlistContainer {
+        max-width: 100%;
+      }
+    }
+  </style>
+</Layout>

@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+
+export const prerender = true;
+---
+
+<Layout 
+  title="Welcome to Track Your Labs!"
+  description="You've successfully joined the Track Your Labs waitlist."
+  noSidebar={true}
+>
+  <div class="min-h-screen flex flex-col">
+    <!-- Header with centered logo -->
+    <header class="w-full pt-8 pb-4">
+      <div class="flex justify-center">
+        <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <img src="/tyl_logo.svg" alt="Track Your Labs Logo" class="w-10 h-10" />
+          <span class="text-2xl font-bold">Track Your Labs</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Success Message -->
+    <main class="flex-1 flex items-center justify-center px-4">
+      <div class="hero">
+        <div class="hero-content">
+          <div class="max-w-2xl">
+            <h1 class="text-5xl font-bold mb-4 text-center">You're on the list!</h1>
+            
+            <h2 class="text-2xl text-gray-700 mb-8 text-center">
+              Thanks for joining the Track Your Labs waitlist
+            </h2>
+            
+            <p class="text-lg text-gray-600 mb-8 leading-relaxed text-left">
+              You're officially signed up for early access to Track Your Labs – the comprehensive health data platform that connects your labs, wearables, nutrition, and more in one intelligent dashboard.
+            </p>
+
+            <div class="bg-gray-50 rounded-lg p-6 mb-8 text-left">
+              <h3 class="text-lg font-semibold mb-4 text-gray-800">What happens next:</h3>
+              <ul class="space-y-3 text-gray-600">
+                <li class="flex items-start gap-3">
+                  <!-- Heroicon: envelope -->
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0 mt-0.5" style="color: #111827;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                  <span>We'll email you as soon as your account is ready</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <!-- Heroicon: sparkles -->
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0 mt-0.5" style="color: #111827;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a1.5 1.5 0 00-1.006-1.006L15.75 7.5l1.035-.259a1.5 1.5 0 001.006-1.006L18 5.25l.259 1.035a1.5 1.5 0 001.006 1.006L20.25 7.5l-1.035.259a1.5 1.5 0 00-1.006 1.006zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                  </svg>
+                  <span>You'll be among the first to experience personalized health insights</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <!-- Heroicon: chart-bar -->
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0 mt-0.5" style="color: #111827;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                  </svg>
+                  <span>Get ready to see your health data like never before</span>
+                </li>
+              </ul>
+            </div>
+            
+            <p class="text-gray-600 mb-6 text-left">
+              While you wait, don't forget you can use our free tool to convert lab PDFs anytime at <a href="/" class="text-blue-600 hover:underline">trackyourlabs.com</a>
+            </p>
+            
+            <p class="text-gray-600 mb-8 text-left">
+              Questions? Email us at <a href="mailto:hello@trackyourlabs.com" class="text-blue-600 hover:underline">hello@trackyourlabs.com</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <Footer />
+  </div>
+</Layout>
