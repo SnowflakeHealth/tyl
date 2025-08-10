@@ -254,7 +254,7 @@ const { id = 'results-table' } = Astro.props;
     border: 1px solid #d1d5db;
     border-radius: 8px;
     padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
     display: flex;
     justify-content: space-around;
     text-align: center;
@@ -275,6 +275,24 @@ const { id = 'results-table' } = Astro.props;
     font-size: 0.875rem;
     color: #6b7280;
     margin-top: 0.25rem;
+  }
+
+  /* Privacy notice */
+  .privacy-notice {
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+
+  .privacy-notice svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
   }
 
   /* Actions */
@@ -501,6 +519,12 @@ const { id = 'results-table' } = Astro.props;
               <div class="summary-value">${totalResults}</div>
               <div class="summary-label">Results</div>
             </div>
+          </div>
+          <div class="privacy-notice">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+            <span>Your data vanishes when you close or refresh this page • Nothing saved or tracked • Export to keep results</span>
           </div>
         `;
       }
