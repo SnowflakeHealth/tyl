@@ -27,6 +27,11 @@ binding = "METRICS"
 id = "185d0c5e3911496fb27594d932a5dcdb"
 preview_id = "a81fa5b2a0204ce085c8638c2f268027"
 
+# Rate Limiting Configuration
+# Rate limiting is implemented via Cloudflare WAF rules configured in the dashboard.
+# See CLOUDFLARE_WAF_RATE_LIMITING.md for configuration details.
+# WAF provides edge-level protection without requiring application code.
+
 # Observability
 [observability.logs]
 enabled = true

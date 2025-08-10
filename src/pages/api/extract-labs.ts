@@ -22,23 +22,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const runtime = (locals as any).runtime;
   const env = runtime?.env || {};
   
-  // Debug logging
-  console.log('Runtime object:', runtime ? 'exists' : 'undefined');
-  console.log('Env object:', env ? 'exists' : 'undefined');
-  console.log('Env keys:', Object.keys(env));
-  
   const GCP_LAB_EXTRACT_API_KEY = env.GCP_LAB_EXTRACT_API_KEY;
   const GCP_LAB_EXTRACT_API_GATEWAY_URL = env.GCP_LAB_EXTRACT_API_GATEWAY_URL;
-  
-  console.log('API Key exists:', !!GCP_LAB_EXTRACT_API_KEY);
-  console.log('Gateway URL exists:', !!GCP_LAB_EXTRACT_API_GATEWAY_URL);
 
   // CORS headers for your domains
   const allowedOrigins = [
     'https://www.trackyourlabs.com',
-    'https://trackyourlabs.com',
-    'http://localhost:4321',
-    'http://localhost:3000'
+    'https://trackyourlabs.com'
   ];
 
   const origin = request.headers.get('Origin') || '';
@@ -197,7 +187,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Check if API credentials are available
     if (!GCP_LAB_EXTRACT_API_KEY || !GCP_LAB_EXTRACT_API_GATEWAY_URL) {
-      console.error('Missing API credentials in environment variables');
       const errorResponse: ErrorResponse = { 
         error: 'API configuration error',
         message: 'The service is not properly configured. Please contact support.'
@@ -234,7 +223,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
     } catch (fetchError: any) {
       clearTimeout(timeoutId);
       if (fetchError.name === 'AbortError') {
-        console.error('API Gateway request timeout after 290 seconds');
         const errorResponse: ErrorResponse = { 
           error: 'Request timeout',
           message: 'The processing is taking longer than expected. Please try with a smaller file or fewer pages.'
@@ -268,14 +256,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
         status: apiResponse.status 
       };
     }
-
-    // Log for debugging (no PHI)
-    console.log('Request processed:', {
-      requestId: body.requestId,
-      fileCount: body.files.length,
-      status: apiResponse.status,
-      timestamp: new Date().toISOString()
-    });
 
     // Track metrics if processing was successful
     if (apiResponse.status === 200 && jsonResponse) {
@@ -321,16 +301,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
             const currentResults = await METRICS.get('total_results_generated');
             await METRICS.put('total_results_generated', String((parseInt(currentResults || '0') + resultsCount)));
           }
-          
-          console.log('Metrics updated:', { filesCount, resultsCount });
         }
       } catch (metricsError) {
-        // Don't fail the request if metrics fail
-        console.error('Failed to update metrics:', metricsError);
+        // Don't fail the request if metrics fail - silently continue
       }
     }
 
-    // Return the response with CORS headers
+    // Return response with CORS headers
     return new Response(
       JSON.stringify(jsonResponse),
       {
@@ -343,8 +320,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
       }
     );
   } catch (error) {
-    console.error('API error:', error);
-    
     const errorResponse: ErrorResponse = { 
       error: 'Internal server error',
       message: error instanceof Error ? error.message : 'Unknown error'
@@ -367,9 +342,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 export const OPTIONS: APIRoute = async ({ request }) => {
   const allowedOrigins = [
     'https://www.trackyourlabs.com',
-    'https://trackyourlabs.com',
-    'http://localhost:4321',
-    'http://localhost:3000'
+    'https://trackyourlabs.com'
   ];
 
   const origin = request.headers.get('Origin') || '';
