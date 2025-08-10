@@ -38,9 +38,7 @@ export const prerender = true;
             </p>
             
             <!-- Waitlist Widget Container -->
-            <div class="flex justify-start">
-              <div id="getWaitlistContainer" data-waitlist_id="30718" data-widget_type="WIDGET_1"></div>
-            </div>
+            <div id="getWaitlistContainer" data-waitlist_id="30718" data-widget_type="WIDGET_1"></div>
           </div>
         </div>
       </div>
@@ -51,21 +49,19 @@ export const prerender = true;
 
   <!-- Waitlist Widget Assets -->
   <link rel="stylesheet" type="text/css" href="https://prod-waitlist-widget.s3.us-east-2.amazonaws.com/getwaitlist.min.css"/>
-  <script src="https://prod-waitlist-widget.s3.us-east-2.amazonaws.com/getwaitlist.min.js"></script>
+  <script is:inline src="https://prod-waitlist-widget.s3.us-east-2.amazonaws.com/getwaitlist.min.js"></script>
 
   <style>
     /* Optional: Custom styling for the waitlist widget */
     #getWaitlistContainer {
       max-width: 400px;
       width: 100%;
-      margin-left: -16px; /* Compensate for widget's internal padding */
     }
     
     /* Ensure the widget form looks good on mobile */
     @media (max-width: 640px) {
       #getWaitlistContainer {
         max-width: 100%;
-        margin-left: -16px;
       }
     }
   </style>
