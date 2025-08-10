@@ -7,13 +7,13 @@ export const prerender = true;
 
 <Layout 
   title="Sign Up - Track Your Labs"
-  description="Join the waitlist for Track Your Labs - Connect your health data and get actionable insights."
+  description="Join the waitlist - See what all your health data means in one simple view."
   noSidebar={true}
 >
   <div class="min-h-screen flex flex-col">
-    <!-- Header with centered logo -->
+    <!-- Header with logo -->
     <header class="w-full pt-8 pb-4">
-      <div class="flex justify-center">
+      <div class="max-w-2xl mx-auto">
         <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <img src="/tyl_logo.svg" alt="Track Your Labs Logo" class="w-10 h-10" />
           <span class="text-2xl font-bold">Track Your Labs</span>
@@ -22,23 +22,23 @@ export const prerender = true;
     </header>
 
     <!-- Hero Section with Waitlist -->
-    <main class="flex-1 flex items-center justify-center px-4">
+    <main class="flex-1 flex items-center justify-center">
       <div class="hero">
-        <div class="hero-content text-center">
+        <div class="hero-content">
           <div class="max-w-2xl">
-            <h1 class="text-5xl font-bold mb-6">Your Health Data, Connected</h1>
+            <h1 class="text-5xl font-bold mb-6 text-left">Your Health Data, Connected</h1>
             
             <p class="text-lg text-gray-600 mb-8 leading-relaxed text-left">
-              Track Your Labs is building a comprehensive platform that turns scattered health data into actionable insights. 
-              Connect labs, wearables, nutrition apps, and more in one intelligent dashboard.
+              We're building the easiest way to understand all your health data. Labs, wearables, nutrition 
+              apps—everything in one place, finally making sense.
             </p>
             
             <p class="text-lg text-gray-600 mb-10 leading-relaxed text-left">
-              Be among the first to experience personalized health tracking that actually helps you optimize your wellbeing.
+              Join to see what's working for your health.
             </p>
             
             <!-- Waitlist Widget Container -->
-            <div class="flex justify-center">
+            <div class="flex justify-start">
               <div id="getWaitlistContainer" data-waitlist_id="30718" data-widget_type="WIDGET_1"></div>
             </div>
           </div>
@@ -58,12 +58,14 @@ export const prerender = true;
     #getWaitlistContainer {
       max-width: 400px;
       width: 100%;
+      margin-left: -16px; /* Compensate for widget's internal padding */
     }
     
     /* Ensure the widget form looks good on mobile */
     @media (max-width: 640px) {
       #getWaitlistContainer {
         max-width: 100%;
+        margin-left: -16px;
       }
     }
   </style>
