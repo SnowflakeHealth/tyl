@@ -419,6 +419,16 @@ const { id = 'results-table' } = Astro.props;
       exportToCSV(currentResults);
     });
 
+    function escapeHtml(unsafe) {
+      if (unsafe == null) return '';
+      return String(unsafe)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     function displayResults(data) {
       if (!data) {
         content.innerHTML = '<div class="no-results">No data received</div>';
@@ -427,7 +437,7 @@ const { id = 'results-table' } = Astro.props;
 
       // Handle errors
       if (data.error) {
-        content.innerHTML = `<div class="error-message"><strong>Error:</strong> ${data.error}</div>`;
+        content.innerHTML = `<div class="error-message"><strong>Error:</strong> ${escapeHtml(data.error)}</div>`;
         return;
       }
 
@@ -588,7 +598,7 @@ const { id = 'results-table' } = Astro.props;
         html += `
           <div class="card">
             <div class="card-header">
-              ${categoryData.displayName}
+              ${escapeHtml(categoryData.displayName)}
             </div>
             <div class="card-body">
               <table class="table table-zebra test-table">
@@ -638,16 +648,16 @@ const { id = 'results-table' } = Astro.props;
                       
                       return `
                         <tr class="${rowClasses.join(' ')}">
-                          <td class="test-name">${test.normalized_name}</td>
+                          <td class="test-name">${escapeHtml(test.normalized_name || '')}</td>
                           <td class="test-value ${valueClass}">
-                            ${test.value || '-'}
+                            ${escapeHtml(test.value || '-')}
                           </td>
-                          <td class="test-unit">${test.unit || ''}</td>
-                          <td class="test-range">${test.reference_range || '-'}</td>
+                          <td class="test-unit">${escapeHtml(test.unit || '')}</td>
+                          <td class="test-range">${escapeHtml(test.reference_range || '-')}</td>
                           <td class="test-flag">
-                            ${test.flag ? `<span class="flag-indicator ${flagClass}">${test.flag}</span>` : '-'}
+                            ${test.flag ? `<span class="flag-indicator ${flagClass}">${escapeHtml(test.flag)}</span>` : '-'}
                           </td>
-                          <td class="test-date">${formatDate(test.date)}</td>
+                          <td class="test-date">${escapeHtml(formatDate(test.date))}</td>
                         </tr>
                       `;
                     }).join('');
@@ -686,9 +696,9 @@ const { id = 'results-table' } = Astro.props;
                           const notesArray = Array.from(notesSet);
                           return `
                             <div class="note-item">
-                              <strong>${testName}</strong>
+                              <strong>${escapeHtml(testName)}</strong>
                               <div style="margin-left: 1rem; margin-top: 0.25rem;">
-                                ${notesArray.join('<br>')}
+                                ${notesArray.map(note => escapeHtml(note)).join('<br>')}
                               </div>
                             </div>
                           `;
@@ -714,134 +724,6 @@ const { id = 'results-table' } = Astro.props;
       }
 
       content.innerHTML = html;
-    }
-
-    function displayFileResults(fileResults) {
-      let html = '';
-
-      fileResults.forEach((file, fileIndex) => {
-        if (!file.success) {
-          html += `<div class="error-message">
-            <strong>${file.filename}</strong> - Failed: ${file.error || 'Unknown error'}
-          </div>`;
-          return;
-        }
-
-        if (file.data) {
-          // Process each file's data similar to aggregated results
-          const fileData = file.data;
-          
-          // Lab Info Card
-          if (fileData.lab_info && Object.keys(fileData.lab_info).some(key => fileData.lab_info[key])) {
-            html += `
-              <div class="card">
-                <div class="card-header">
-                  Lab Information - ${file.filename}
-                </div>
-                <div class="card-body">
-                  <div class="lab-info-grid">
-                    ${Object.entries(fileData.lab_info).map(([key, value]) => {
-                      if (!value) return '';
-                      const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                      return `
-                        <div class="lab-info-item">
-                          <div class="lab-info-label">${label}</div>
-                          <div class="lab-info-value">${value}</div>
-                        </div>
-                      `;
-                    }).join('')}
-                  </div>
-                </div>
-              </div>
-            `;
-          }
-
-          // Test Results - Handle panels structure
-          if (fileData.panels && Array.isArray(fileData.panels)) {
-            fileData.panels.forEach((panel, catIndex) => {
-              if (!panel.tests || panel.tests.length === 0) return;
-              
-              const cardId = `file-${fileIndex}-cat-${catIndex}`;
-              html += createCategoryCard(panel, file.filename, cardId);
-            });
-          }
-        }
-      });
-
-      content.innerHTML = html || '<div class="no-results">No valid results to display</div>';
-    }
-
-    function createCategoryCard(panel, filename, cardId) {
-      const panelName = panel.panel_name || 'Test Results';
-      
-      // Collect notes
-      const notesArray = [];
-      panel.tests.forEach(test => {
-        if (test.note && test.note.trim()) {
-          notesArray.push({
-            testName: test.test_name,
-            note: test.note
-          });
-        }
-      });
-      
-      return `
-        <div class="card">
-          <div class="card-header">
-            ${panelName} - ${filename}
-          </div>
-          <div class="card-body">
-            <table class="test-table">
-              <thead>
-                <tr>
-                  <th>Test Name</th>
-                  <th>Normalized Name</th>
-                  <th class="value-header">Result</th>
-                  <th>Unit</th>
-                  <th>Reference Range</th>
-                  <th class="flag-header">Flag</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${panel.tests.map(test => {
-                  const flag = test.flag ? test.flag.toLowerCase() : '';
-                  const valueClass = flag === 'h' ? 'high' : (flag === 'l' ? 'low' : '');
-                  
-                  return `
-                    <tr>
-                      <td class="test-name">${test.test_name || 'Unknown Test'}</td>
-                      <td class="test-name" style="font-size: 0.75rem; color: #6b7280;">${test.normalized_name || '-'}</td>
-                      <td class="test-value ${valueClass}">
-                        ${test.result || '-'}
-                      </td>
-                      <td class="test-unit">${test.unit || ''}</td>
-                      <td class="test-range">${test.reference_range || '-'}</td>
-                      <td class="test-flag">
-                        ${test.flag ? `<span class="flag-indicator ${flag}">${test.flag}</span>` : '-'}
-                      </td>
-                    </tr>
-                  `;
-                }).join('')}
-              </tbody>
-            </table>
-            ${notesArray.length > 0 ? `
-              <div class="notes-section">
-                <button class="notes-toggle" onclick="toggleNotes('${cardId}')">
-                  <span>Notes (${notesArray.length})</span>
-                  <span class="notes-toggle-icon">▼</span>
-                </button>
-                <div id="${cardId}-notes" class="notes-content">
-                  ${notesArray.map(item => `
-                    <div class="note-item">
-                      ${item.testName ? `<strong>${item.testName}:</strong> ` : ''}${item.note}
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
-            ` : ''}
-          </div>
-        </div>
-      `;
     }
 
     // Global toggle function for notes

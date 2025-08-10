@@ -294,18 +294,28 @@ const {
       fileList.classList.remove('hidden');
       uploadBtn.classList.remove('hidden');
 
-      fileList.innerHTML = `
-        <table class="table table-zebra file-table">
-          <tbody>
-            ${selectedFiles.map((file) => `
-              <tr>
-                <td>${file.name}</td>
-                <td class="text-right">${formatFileSize(file.size)}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
+      // Create table using DOM methods to avoid XSS
+      const table = document.createElement('table');
+      table.className = 'table table-zebra file-table';
+      const tbody = document.createElement('tbody');
+      
+      selectedFiles.forEach(file => {
+        const tr = document.createElement('tr');
+        const td1 = document.createElement('td');
+        const td2 = document.createElement('td');
+        
+        td1.textContent = file.name; // Safe - textContent automatically escapes
+        td2.className = 'text-right';
+        td2.textContent = formatFileSize(file.size);
+        
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tbody.appendChild(tr);
+      });
+      
+      table.appendChild(tbody);
+      fileList.innerHTML = ''; // Clear existing content
+      fileList.appendChild(table);
 
       // Scroll the upload area to the top of viewport
       uploadArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
