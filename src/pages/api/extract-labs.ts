@@ -277,6 +277,59 @@ export const POST: APIRoute = async ({ request, locals }) => {
       timestamp: new Date().toISOString()
     });
 
+    // Track metrics if processing was successful
+    if (apiResponse.status === 200 && jsonResponse) {
+      try {
+        const METRICS = env.METRICS;
+        if (METRICS) {
+          // Track files processed
+          const filesCount = body.files.length;
+          const currentFiles = await METRICS.get('total_files_processed');
+          await METRICS.put('total_files_processed', String((parseInt(currentFiles || '0') + filesCount)));
+          
+          // Track results generated - count total test results
+          let resultsCount = 0;
+          
+          // Check multiple possible data structures
+          if (jsonResponse.combined_results && Array.isArray(jsonResponse.combined_results)) {
+            // Structure from combined results
+            jsonResponse.combined_results.forEach((item: any) => {
+              if (item.results && Array.isArray(item.results)) {
+                item.results.forEach((category: any) => {
+                  if (category.tests && Array.isArray(category.tests)) {
+                    resultsCount += category.tests.length;
+                  }
+                });
+              }
+            });
+          } else if (jsonResponse.files && Array.isArray(jsonResponse.files)) {
+            // Alternative structure from files
+            jsonResponse.files.forEach((file: any) => {
+              if (file.tests && Array.isArray(file.tests)) {
+                resultsCount += file.tests.length;
+              } else if (file.results && Array.isArray(file.results)) {
+                file.results.forEach((category: any) => {
+                  if (category.tests && Array.isArray(category.tests)) {
+                    resultsCount += category.tests.length;
+                  }
+                });
+              }
+            });
+          }
+          
+          if (resultsCount > 0) {
+            const currentResults = await METRICS.get('total_results_generated');
+            await METRICS.put('total_results_generated', String((parseInt(currentResults || '0') + resultsCount)));
+          }
+          
+          console.log('Metrics updated:', { filesCount, resultsCount });
+        }
+      } catch (metricsError) {
+        // Don't fail the request if metrics fail
+        console.error('Failed to update metrics:', metricsError);
+      }
+    }
+
     // Return the response with CORS headers
     return new Response(
       JSON.stringify(jsonResponse),

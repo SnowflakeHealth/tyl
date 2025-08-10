@@ -1,0 +1,84 @@
+---
+// Simple metrics display component
+// Can be included anywhere to show live metrics
+---
+
+<div id="metrics-display" class="metrics-display hidden">
+  <span class="metric-item">
+    <span class="metric-label">Files:</span> 
+    <span id="metric-files" class="metric-value">0</span>
+  </span>
+  <span class="metric-item">
+    <span class="metric-label">Results:</span> 
+    <span id="metric-results" class="metric-value">0</span>
+  </span>
+  <span class="metric-item">
+    <span class="metric-label">Views:</span> 
+    <span id="metric-views" class="metric-value">0</span>
+  </span>
+</div>
+
+<style>
+  .metrics-display {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0.5rem 1rem;
+    background: #f9fafb;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .metric-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .metric-label {
+    font-weight: 500;
+  }
+
+  .metric-value {
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .metrics-display.hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  // Fetch and display metrics
+  async function loadMetrics() {
+    try {
+      const response = await fetch('/api/metrics');
+      if (response.ok) {
+        const data = await response.json();
+        
+        const filesEl = document.getElementById('metric-files');
+        const resultsEl = document.getElementById('metric-results');
+        const viewsEl = document.getElementById('metric-views');
+        const displayEl = document.getElementById('metrics-display');
+        
+        if (filesEl) filesEl.textContent = data.total_files_processed.toLocaleString();
+        if (resultsEl) resultsEl.textContent = data.total_results_generated.toLocaleString();
+        if (viewsEl) viewsEl.textContent = data.total_results_displayed.toLocaleString();
+        
+        // Show the display if we have data
+        if (displayEl && (data.total_files_processed > 0 || data.total_results_generated > 0)) {
+          displayEl.classList.remove('hidden');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load metrics:', error);
+    }
+  }
+
+  // Load metrics on page load
+  document.addEventListener('DOMContentLoaded', loadMetrics);
+  
+  // Optionally refresh metrics periodically (every 30 seconds)
+  setInterval(loadMetrics, 30000);
+</script>

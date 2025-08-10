@@ -21,6 +21,12 @@ ENVIRONMENT = "production"
 # GCP_LAB_EXTRACT_API_KEY = "set-in-dashboard"
 # GCP_LAB_EXTRACT_API_GATEWAY_URL = "set-in-dashboard"
 
+# KV Namespaces
+[[kv_namespaces]]
+binding = "METRICS"
+id = "185d0c5e3911496fb27594d932a5dcdb"
+preview_id = "a81fa5b2a0204ce085c8638c2f268027"
+
 # Observability
 [observability.logs]
 enabled = true

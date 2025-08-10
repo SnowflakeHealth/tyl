@@ -387,11 +387,31 @@ const { id = 'results-table' } = Astro.props;
     let currentResults = null;
 
     // Listen for lab results
-    window.addEventListener('lab-results', (event) => {
+    window.addEventListener('lab-results', async (event) => {
       const data = event.detail;
       currentResults = data;
       displayResults(data);
       container.classList.remove('hidden');
+      
+      // Track that results were displayed (only once per session)
+      const sessionKey = 'results_tracked_' + Date.now();
+      if (!sessionStorage.getItem(sessionKey)) {
+        sessionStorage.setItem(sessionKey, 'true');
+        try {
+          await fetch('/api/metrics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              metric: 'total_results_displayed',
+              increment: 1 
+            })
+          });
+          console.log('Results display tracked');
+        } catch (error) {
+          // Don't interrupt user experience if metrics fail
+          console.error('Failed to track metrics:', error);
+        }
+      }
     });
 
     exportBtn.addEventListener('click', () => {
