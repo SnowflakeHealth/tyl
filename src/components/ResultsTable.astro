@@ -199,13 +199,16 @@ const { id = 'results-table' } = Astro.props;
   .test-flag {
     text-align: center;
     font-weight: 600;
+    overflow: visible !important;
+    text-overflow: clip !important;
   }
 
   .test-chart {
     text-align: center;
     padding: 0.25rem 0.5rem;
-    overflow: visible;
+    overflow: visible !important;
     max-width: none;
+    text-overflow: clip !important;
   }
 
   .test-chart svg {
@@ -402,7 +405,8 @@ const { id = 'results-table' } = Astro.props;
     text-align: center;
     padding: 0.625rem 0.25rem;
     white-space: nowrap;
-    overflow: visible;
+    overflow: visible !important;
+    text-overflow: clip !important;
   }
 
   /* Ensure collapsed rows maintain their stripe color when shown */
@@ -426,8 +430,18 @@ const { id = 'results-table' } = Astro.props;
     animation: slideDown 0.2s ease;
   }
 
-  /* Mobile responsiveness */
-  @media (max-width: 640px) {
+  /* Responsive design with progressive column hiding */
+  
+  /* Tablet - hide Reference Range column */
+  @media (max-width: 1024px) {
+    .test-table th:nth-child(5),
+    .test-table td:nth-child(5) {
+      display: none;
+    }
+  }
+  
+  /* Small Tablet - hide Flag, Unit, and Chart columns */
+  @media (max-width: 768px) {
     .results-container {
       margin-top: 2rem;
     }
@@ -443,6 +457,24 @@ const { id = 'results-table' } = Astro.props;
     .test-table th,
     .test-table td {
       padding: 0.5rem 0.75rem;
+    }
+    
+    /* Hide Unit column */
+    .test-table th:nth-child(4),
+    .test-table td:nth-child(4) {
+      display: none;
+    }
+    
+    /* Hide Flag column */
+    .test-table th:nth-child(6),
+    .test-table td:nth-child(6) {
+      display: none;
+    }
+    
+    /* Hide Chart column */
+    .test-table th:nth-child(8),
+    .test-table td:nth-child(8) {
+      display: none;
     }
 
     .results-summary {
