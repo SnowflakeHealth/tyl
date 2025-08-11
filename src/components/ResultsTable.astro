@@ -37,8 +37,13 @@ const { id = 'results-table' } = Astro.props;
     background: white;
     border: 1px solid #d1d5db;
     border-radius: 8px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
+    margin-top: 1.5rem;
     overflow: hidden;
+  }
+  
+  .card:first-child {
+    margin-top: 0;
   }
 
   .card-header {
@@ -55,6 +60,7 @@ const { id = 'results-table' } = Astro.props;
 
   .card-body {
     padding: 0;
+    margin: 0;
   }
 
   /* Lab info styles */
@@ -89,7 +95,11 @@ const { id = 'results-table' } = Astro.props;
   .test-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
   }
+  
 
   .test-table thead {
     background: #f3f4f6;
@@ -137,12 +147,18 @@ const { id = 'results-table' } = Astro.props;
     padding: 0.625rem 1rem;
     font-size: 0.875rem;
     vertical-align: top;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .test-name {
     font-weight: 500;
     color: #111827;
     text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .test-date {
@@ -156,6 +172,8 @@ const { id = 'results-table' } = Astro.props;
     font-weight: 600;
     color: #111827;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .test-value.high,
@@ -173,6 +191,9 @@ const { id = 'results-table' } = Astro.props;
     color: #6b7280;
     font-size: 0.875rem;
     text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .test-flag {
@@ -183,6 +204,8 @@ const { id = 'results-table' } = Astro.props;
   .test-chart {
     text-align: center;
     padding: 0.25rem 0.5rem;
+    overflow: visible;
+    max-width: none;
   }
 
   .test-chart svg {
@@ -204,51 +227,33 @@ const { id = 'results-table' } = Astro.props;
     color: #dc2626;
   }
 
-  /* Notes accordion */
-  .notes-section {
-    border-top: 1px solid #e5e7eb;
-    margin: 0;
+  /* Notes table - no borders */
+  .notes-table {
+    margin-top: 0;
+    margin-bottom: 0;
   }
-
-  .notes-toggle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    background: #fafafa;
-    border: none;
-    cursor: pointer;
-    font-size: 0.875rem;
+  
+  .notes-table tbody tr {
+    border-bottom: none !important;
+  }
+  
+  .notes-header-row:hover {
+    background-color: #f9fafb;
+  }
+  
+  .notes-chevron {
+    display: inline-block;
+    font-size: 0.75rem;
     color: #6b7280;
-    text-align: left;
-    transition: background 0.2s;
+    user-select: none;
   }
-
-  .notes-toggle:hover {
-    background: #f3f4f6;
-  }
-
-  .notes-toggle-icon {
-    transition: transform 0.2s;
-  }
-
-  .notes-toggle.expanded .notes-toggle-icon {
-    transform: rotate(180deg);
-  }
-
-  .notes-content {
-    padding: 0.75rem 1rem;
-    font-size: 0.813rem;
-    color: #6b7280;
-    line-height: 1.5;
-    background: #fafafa;
+  
+  .notes-detail-row {
     display: none;
-    text-align: left;
   }
-
-  .notes-content.expanded {
-    display: block;
+  
+  .notes-detail-row.show {
+    display: table-row;
   }
 
   .note-item {
@@ -337,30 +342,25 @@ const { id = 'results-table' } = Astro.props;
     display: none;
   }
 
-  /* Test group visual indicators - IBM Design Library colorblind-safe palette */
-  .test-group-0 td:first-child {
-    border-left: 3px solid #6094eb; /* Blue - R:96 G:148 B:235 */
-    padding-left: 1rem;
+  /* Simple row borders without zebra striping - medium gray */
+  .test-table tbody tr {
+    border-bottom: 1px solid #d1d5db;
   }
   
-  .test-group-1 td:first-child {
-    border-left: 3px solid #8a5ed6; /* Purple - R:138 G:94 B:214 */
-    padding-left: 1rem;
+  /* Dashed borders only for collapsed (hidden) rows within the same test group */
+  .test-table tbody tr.test-group-collapsed.show {
+    border-bottom: 1px dashed #e5e7eb;
   }
   
-  .test-group-2 td:first-child {
-    border-left: 3px solid #d74a87; /* Pink/Magenta - R:215 G:74 B:135 */
-    padding-left: 1rem;
+  /* Dashed border for first row ONLY when it has expanded children visible */
+  .test-table tbody tr.test-group-first.test-group-expandable.has-expanded-children {
+    border-bottom: 1px dashed #e5e7eb;
   }
   
-  .test-group-3 td:first-child {
-    border-left: 3px solid #ee7836; /* Orange - R:238 G:120 B:54 */
-    padding-left: 1rem;
-  }
-  
-  .test-group-4 td:first-child {
-    border-left: 3px solid #f0cc3e; /* Yellow - R:240 G:204 B:62 */
-    padding-left: 1rem;
+  /* Keep solid medium border for last row in group and single rows */
+  .test-table tbody tr.test-group-last,
+  .test-table tbody tr:not(.test-group-collapsed):not(.test-group-expandable) {
+    border-bottom: 1px solid #d1d5db;
   }
   
   /* Bold the first row (most recent) of each test group */
@@ -377,6 +377,53 @@ const { id = 'results-table' } = Astro.props;
   .test-table tbody tr:not(.test-group-first) .test-value.high,
   .test-table tbody tr:not(.test-group-first) .test-value.low {
     color: #dc2626; /* Keep red for high/low values */
+  }
+
+  /* Accordion styles */
+  .test-group-collapsed {
+    display: none;
+  }
+
+  .test-group-expandable:hover {
+    background-color: #f9fafb;
+  }
+
+  .test-group-chevron {
+    display: inline-block;
+    margin-right: 0.5rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+    user-select: none;
+  }
+  
+  /* Chevron column styling */
+  .test-chevron {
+    width: 20px;
+    text-align: center;
+    padding: 0.625rem 0.25rem;
+    white-space: nowrap;
+    overflow: visible;
+  }
+
+  /* Ensure collapsed rows maintain their stripe color when shown */
+  .test-group-collapsed.show {
+    display: table-row;
+  }
+
+  /* Animation for smooth expand/collapse */
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .test-group-collapsed.show {
+    animation: slideDown 0.2s ease;
   }
 
   /* Mobile responsiveness */
@@ -768,16 +815,17 @@ const { id = 'results-table' } = Astro.props;
               ${escapeHtml(categoryData.displayName)}
             </div>
             <div class="card-body">
-              <table class="table table-zebra test-table">
+              <table class="table test-table">
                 <thead>
                   <tr>
-                    <th>Test</th>
-                    <th class="value-header">Result</th>
-                    <th>Unit</th>
-                    <th class="range-header">Reference Range</th>
-                    <th class="flag-header">Flag</th>
-                    <th class="date-header">Date</th>
-                    <th class="chart-header">Chart</th>
+                    <th style="width: 30px;"></th>
+                    <th style="width: 180px;">Test</th>
+                    <th class="value-header" style="width: 90px;">Result</th>
+                    <th style="width: 70px;">Unit</th>
+                    <th class="range-header" style="width: 140px;">Reference Range</th>
+                    <th class="flag-header" style="width: 50px;">Flag</th>
+                    <th class="date-header" style="width: 110px;">Date</th>
+                    <th class="chart-header" style="width: 180px;">Chart</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -786,6 +834,8 @@ const { id = 'results-table' } = Astro.props;
                     let testGroupIndex = -1;
                     let isFirstInGroup = true;
                     let testGroupData = [];
+                    let testGroupId = '';
+                    let testGroupCount = 0;
                     
                     return categoryData.tests.map((test, testIndex) => {
                       const flag = test.flag ? test.flag.toLowerCase() : '';
@@ -807,16 +857,21 @@ const { id = 'results-table' } = Astro.props;
                       
                       // Check if this is a new test group
                       const testName = test.normalized_name || test.name;
+                      let isLastInGroup = false;
+                      
                       if (testName !== currentTestName) {
                         currentTestName = testName;
                         testGroupIndex = (testGroupIndex + 1) % 5; // Cycle through 0-4 (5 colors)
                         isFirstInGroup = true;
+                        testGroupId = `test-group-${catIndex}-${testIndex}`;
                         
                         // Collect all data points for this test group
                         testGroupData = [];
+                        testGroupCount = 0;
                         for (let i = testIndex; i < categoryData.tests.length; i++) {
                           const t = categoryData.tests[i];
                           if ((t.normalized_name || t.name) === testName) {
+                            testGroupCount++;
                             if (t.date && t.value && t.value !== '-') {
                               testGroupData.push({
                                 date: t.date.split(' ')[0],
@@ -832,6 +887,12 @@ const { id = 'results-table' } = Astro.props;
                         isFirstInGroup = false;
                       }
                       
+                      // Check if this is the last row in the group
+                      const nextTest = categoryData.tests[testIndex + 1];
+                      if (!nextTest || (nextTest.normalized_name || nextTest.name) !== testName) {
+                        isLastInGroup = true;
+                      }
+                      
                       // Format date to remove time
                       const formatDate = (dateStr) => {
                         if (!dateStr) return '-';
@@ -839,10 +900,23 @@ const { id = 'results-table' } = Astro.props;
                         return date || dateStr;
                       };
                       
-                      // Build class list for the row
-                      const rowClasses = [`test-group-${testGroupIndex}`];
+                      // Build class list for the row  
+                      const rowClasses = [];
+                      const hasMultipleResults = testGroupCount > 1;
+                      
                       if (isFirstInGroup) {
                         rowClasses.push('test-group-first');
+                        if (hasMultipleResults) {
+                          rowClasses.push('test-group-expandable');
+                        }
+                      } else if (hasMultipleResults) {
+                        rowClasses.push('test-group-collapsed');
+                        rowClasses.push(`${testGroupId}-child`);
+                      }
+                      
+                      // Add last-in-group class for proper border styling
+                      if (isLastInGroup) {
+                        rowClasses.push('test-group-last');
                       }
                       
                       // Generate sparkline only for first row of test group with multiple results
@@ -860,14 +934,32 @@ const { id = 'results-table' } = Astro.props;
                         sparklineCell = `<td class="test-chart">${sparkline}</td>`;
                       }
                       
+                      // Add chevron in separate column for expandable groups
+                      let chevronCell = '<td class="test-chevron"></td>';
+                      if (isFirstInGroup && hasMultipleResults) {
+                        chevronCell = `<td class="test-chevron">
+                          <span class="test-group-chevron" id="${testGroupId}-chevron">▶</span>
+                        </td>`;
+                      }
+                      
+                      const clickHandler = isFirstInGroup && hasMultipleResults ? 
+                        `onclick="toggleTestGroup('${testGroupId}')" style="cursor: pointer;"` : '';
+                      
+                      // Add title attributes for tooltips
+                      const testNameTooltip = test.normalized_name || '';
+                      const valueTooltip = processedValue;
+                      const rangeTooltip = test.reference_range || '-';
+                      const unitTooltip = test.unit || '';
+                      
                       return `
-                        <tr class="${rowClasses.join(' ')}">
-                          <td class="test-name">${escapeHtml(test.normalized_name || '')}</td>
-                          <td class="test-value ${valueClass}">
+                        <tr class="${rowClasses.join(' ')}" ${clickHandler}>
+                          ${chevronCell}
+                          <td class="test-name" title="${escapeHtml(testNameTooltip)}">${escapeHtml(test.normalized_name || '')}</td>
+                          <td class="test-value ${valueClass}" title="${escapeHtml(valueTooltip)}">
                             ${escapeHtml(processedValue)}
                           </td>
-                          <td class="test-unit">${escapeHtml(test.unit || '')}</td>
-                          <td class="test-range">${escapeHtml(test.reference_range || '-')}</td>
+                          <td class="test-unit" title="${escapeHtml(unitTooltip)}">${escapeHtml(test.unit || '')}</td>
+                          <td class="test-range" title="${escapeHtml(rangeTooltip)}">${escapeHtml(test.reference_range || '-')}</td>
                           <td class="test-flag">
                             ${test.flag ? `<span class="flag-indicator ${flagClass}">${escapeHtml(test.flag)}</span>` : '-'}
                           </td>
@@ -879,53 +971,56 @@ const { id = 'results-table' } = Astro.props;
                   })()}
                 </tbody>
               </table>
-              ${(() => {
-                // Collect test-specific notes grouped by test name
-                const notesByTest = {};
-                
-                // Group notes by unique test name
-                categoryData.tests.forEach(test => {
-                  if (test.notes && test.notes.trim()) {
-                    const testName = test.normalized_name || test.name;
-                    if (!notesByTest[testName]) {
-                      notesByTest[testName] = new Set();
-                    }
-                    // Use Set to automatically handle duplicates
-                    notesByTest[testName].add(test.notes);
-                  }
-                });
-                
-                // Count total unique notes
-                const totalNotesCount = Object.values(notesByTest).reduce((sum, notesSet) => sum + notesSet.size, 0);
-                
-                // Only show notes section if there are test-specific notes
-                if (totalNotesCount > 0) {
-                  return `
-                    <div class="notes-section">
-                      <button class="notes-toggle" onclick="toggleNotes('${cardId}')">
-                        <span>Notes (${totalNotesCount})</span>
-                        <span class="notes-toggle-icon">▼</span>
-                      </button>
-                      <div id="${cardId}-notes" class="notes-content">
-                        ${Object.entries(notesByTest).map(([testName, notesSet]) => {
-                          const notesArray = Array.from(notesSet);
-                          return `
-                            <div class="note-item">
-                              <strong>${escapeHtml(testName)}</strong>
-                              <div style="margin-left: 1rem; margin-top: 0.25rem;">
-                                ${notesArray.map(note => escapeHtml(note)).join('<br>')}
-                              </div>
-                            </div>
-                          `;
-                        }).join('')}
-                      </div>
-                    </div>
-                  `;
-                }
-                return '';
-              })()}
             </div>
           </div>
+          ${(() => {
+            // Collect test-specific notes grouped by test name
+            const notesByTest = {};
+            
+            // Group notes by unique test name
+            categoryData.tests.forEach(test => {
+              if (test.notes && test.notes.trim()) {
+                const testName = test.normalized_name || test.name;
+                if (!notesByTest[testName]) {
+                  notesByTest[testName] = new Set();
+                }
+                // Use Set to automatically handle duplicates
+                notesByTest[testName].add(test.notes);
+              }
+            });
+            
+            // Count total unique notes
+            const totalNotesCount = Object.values(notesByTest).reduce((sum, notesSet) => sum + notesSet.size, 0);
+            
+            // Only show notes section if there are test-specific notes
+            if (totalNotesCount > 0) {
+              const notesId = `notes-${cardId}`;
+              return `
+                <table class="table test-table notes-table">
+                  <tbody>
+                    <tr class="notes-header-row" onclick="toggleNotes('${notesId}')" style="cursor: pointer;">
+                      <td style="width: 30px;" class="test-chevron">
+                        <span class="notes-chevron" id="${notesId}-chevron">▶</span>
+                      </td>
+                      <td colspan="7" style="color: #6b7280; font-size: 0.813rem;">Notes (${totalNotesCount})</td>
+                    </tr>
+                    ${Object.entries(notesByTest).map(([testName, notesSet]) => {
+                      const notesArray = Array.from(notesSet);
+                      return notesArray.map(note => `
+                        <tr class="notes-detail-row ${notesId}-child test-group-collapsed">
+                          <td style="width: 30px;"></td>
+                          <td colspan="7" style="color: #6b7280; font-size: 0.813rem; padding-left: 1rem;">
+                            <strong>${escapeHtml(testName)}</strong>: ${escapeHtml(note)}
+                          </td>
+                        </tr>
+                      `).join('');
+                    }).join('')}
+                  </tbody>
+                </table>
+              `;
+            }
+            return '';
+          })()}
         `;
       });
 
@@ -941,14 +1036,62 @@ const { id = 'results-table' } = Astro.props;
       content.innerHTML = html;
     }
 
-    // Global toggle function for notes
-    window.toggleNotes = function(cardId) {
-      const notesContent = document.getElementById(`${cardId}-notes`);
-      const toggleBtn = notesContent?.previousElementSibling;
+    // Global toggle function for notes (using same pattern as test groups)
+    window.toggleNotes = function(notesId) {
+      const childRows = document.querySelectorAll(`.${notesId}-child`);
+      const chevron = document.getElementById(`${notesId}-chevron`);
       
-      if (notesContent && toggleBtn) {
-        notesContent.classList.toggle('expanded');
-        toggleBtn.classList.toggle('expanded');
+      if (childRows.length > 0) {
+        const isExpanded = childRows[0].classList.contains('show');
+        
+        childRows.forEach(row => {
+          if (isExpanded) {
+            row.classList.remove('show');
+          } else {
+            row.classList.add('show');
+          }
+        });
+        
+        if (chevron) {
+          if (isExpanded) {
+            chevron.textContent = '▶';
+          } else {
+            chevron.textContent = '▼';
+          }
+        }
+      }
+    };
+
+    // Global toggle function for test groups
+    window.toggleTestGroup = function(groupId) {
+      const childRows = document.querySelectorAll(`.${groupId}-child`);
+      const chevron = document.getElementById(`${groupId}-chevron`);
+      const parentRow = chevron ? chevron.closest('tr') : null;
+      
+      if (childRows.length > 0) {
+        const isExpanded = childRows[0].classList.contains('show');
+        
+        childRows.forEach(row => {
+          if (isExpanded) {
+            row.classList.remove('show');
+          } else {
+            row.classList.add('show');
+          }
+        });
+        
+        if (chevron) {
+          if (isExpanded) {
+            chevron.textContent = '▶';
+            if (parentRow) {
+              parentRow.classList.remove('has-expanded-children');
+            }
+          } else {
+            chevron.textContent = '▼';
+            if (parentRow) {
+              parentRow.classList.add('has-expanded-children');
+            }
+          }
+        }
       }
     };
 
