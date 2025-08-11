@@ -44,10 +44,18 @@ const {
   <!-- File list -->
   <div id={`${id}-file-list`} class="file-list hidden"></div>
   
+  <!-- File count -->
+  <div id={`${id}-file-count`} class="file-count hidden"></div>
+  
   <!-- Upload button -->
   <button id={`${id}-upload-btn`} class="btn btn-primary btn-block hidden" type="button">
-    Process Lab Results
+    Upload your labs — free & private
   </button>
+  
+  <!-- Microcopy below button -->
+  <p id={`${id}-microcopy`} class="upload-microcopy hidden">
+    No signup required. Your data vanishes when you close this page.
+  </p>
   
   <!-- Loading spinner -->
   <div id={`${id}-loading`} class="loading-container hidden">
@@ -181,10 +189,24 @@ const {
     padding: 0.75rem 1rem;
   }
 
+  .file-count {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+    text-align: center;
+  }
+
   .btn-block {
     width: 100%;
     margin-top: 1rem;
-    margin-bottom: 5rem; /* Added comfortable padding below button */
+  }
+
+  .upload-microcopy {
+    margin-top: 0.75rem;
+    margin-bottom: 5rem; /* Added comfortable padding below microcopy */
+    font-size: 0.875rem;
+    color: #6b7280;
+    text-align: center;
   }
 
   .loading-container {
@@ -201,10 +223,12 @@ const {
     const uploadArea = document.getElementById(id);
     const fileInput = document.getElementById(`${id}-input`);
     const fileList = document.getElementById(`${id}-file-list`);
+    const fileCount = document.getElementById(`${id}-file-count`);
     const uploadBtn = document.getElementById(`${id}-upload-btn`);
+    const uploadMicrocopy = document.getElementById(`${id}-microcopy`);
     const loadingContainer = document.getElementById(`${id}-loading`);
     
-    if (!uploadArea || !fileInput || !fileList || !uploadBtn || !loadingContainer) return;
+    if (!uploadArea || !fileInput || !fileList || !fileCount || !uploadBtn || !loadingContainer) return;
     
     let selectedFiles = [];
 
@@ -287,12 +311,16 @@ const {
     function updateFileList() {
       if (selectedFiles.length === 0) {
         fileList.classList.add('hidden');
+        fileCount.classList.add('hidden');
         uploadBtn.classList.add('hidden');
+        uploadMicrocopy.classList.add('hidden');
         return;
       }
 
       fileList.classList.remove('hidden');
+      fileCount.classList.remove('hidden');
       uploadBtn.classList.remove('hidden');
+      uploadMicrocopy.classList.remove('hidden');
 
       // Create table using DOM methods to avoid XSS
       const table = document.createElement('table');
@@ -316,9 +344,16 @@ const {
       table.appendChild(tbody);
       fileList.innerHTML = ''; // Clear existing content
       fileList.appendChild(table);
+      
+      // Update file count
+      const fileText = selectedFiles.length === 1 ? 'file' : 'files';
+      fileCount.textContent = `${selectedFiles.length} ${fileText} selected`;
 
-      // Scroll the upload area to the top of viewport
-      uploadArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Scroll the upload area to align with top of Sign Up button
+      const yOffset = -16; // Small offset to align with top of Sign Up button (1rem = 16px)
+      const element = uploadArea;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
 
     function formatFileSize(bytes) {
@@ -336,6 +371,10 @@ const {
       uploadArea.classList.add('hidden');
       fileList.classList.add('hidden');
       uploadBtn.classList.add('hidden');
+      uploadMicrocopy.classList.add('hidden');
+      
+      // Scroll to top when processing starts (instant)
+      window.scrollTo({ top: 0 });
 
       try {
         // Convert files to base64
@@ -389,7 +428,7 @@ const {
         // Reset form
         selectedFiles = [];
         updateFileList();
-        uploadBtn.textContent = 'Process Lab Results';
+        uploadBtn.textContent = 'Upload your labs — free & private';
         loadingContainer.classList.add('hidden');
         uploadArea.classList.remove('hidden');
       } catch (error) {
@@ -406,11 +445,12 @@ const {
         // Show error with better UX
         showErrorMessage(errorMessage);
         
-        uploadBtn.textContent = 'Process Lab Results';
+        uploadBtn.textContent = 'Upload your labs — free & private';
         loadingContainer.classList.add('hidden');
         uploadArea.classList.remove('hidden');
         fileList.classList.remove('hidden');
         uploadBtn.classList.remove('hidden');
+        uploadMicrocopy.classList.remove('hidden');
       } finally {
         uploadBtn.disabled = false;
       }

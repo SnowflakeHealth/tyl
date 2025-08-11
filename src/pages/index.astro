@@ -18,12 +18,22 @@ export const prerender = false;
     <div class="min-h-screen bg-base-100 pt-16">
       <div class="text-center">
         <div class="max-w-5xl mx-auto px-4">
-          <h1 class="text-5xl font-bold mb-4">Track Your Labs</h1>
+          <h1 class="text-5xl font-bold mb-4">All your lab results. Instantly organized.</h1>
           <p class="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-12">
-            See what your labs really mean. Instantly.
+            From cholesterol to hormones to vitamins — upload any test, from any lab, in any format. HIPAA-compliant and private.
           </p>
           
           <FileUpload />
+          
+          <!-- Disabled CTA button -->
+          <div id="cta-button-container" class="cta-container">
+            <button class="btn btn-primary btn-lg" disabled>
+              Upload your labs — free & private
+            </button>
+            <p class="cta-microcopy">
+              No signup required. Your data vanishes when you close this page.
+            </p>
+          </div>
           
           <!-- Marketing Copy Section -->
           <div id="marketing-section" class="marketing-section">
@@ -217,20 +227,44 @@ export const prerender = false;
       font-size: 0.875rem;
     }
   }
+  .cta-container {
+    max-width: 600px;
+    margin: 2rem auto 3rem;
+    text-align: center;
+  }
+
+  .cta-container button {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    border-radius: 8px;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .cta-microcopy {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .cta-container.hidden {
+    display: none;
+  }
 </style>
 
 <script>
-  // Listen for file selection events and results to hide marketing section
+  // Listen for file selection events and results to hide marketing section and CTA
   document.addEventListener('DOMContentLoaded', () => {
     const marketingSection = document.getElementById('marketing-section');
+    const ctaContainer = document.getElementById('cta-button-container');
     const fileList = document.getElementById('file-upload-file-list');
     const loadingContainer = document.getElementById('file-upload-loading');
     const resultsContainer = document.getElementById('results-table');
     
     if (!marketingSection) return;
     
-    function updateMarketingVisibility() {
-      // Hide marketing if any of these conditions are true:
+    function updateVisibility() {
+      // Hide marketing and CTA if any of these conditions are true:
       // 1. File list is visible with content
       // 2. Loading spinner is visible
       // 3. Results are visible
@@ -246,10 +280,19 @@ export const prerender = false;
           marketingSection.classList.remove('hidden');
         }
       }
+      
+      // Hide CTA when files are added
+      if (ctaContainer) {
+        if (fileList && !fileList.classList.contains('hidden') && fileList.innerHTML.trim() !== '') {
+          ctaContainer.classList.add('hidden');
+        } else if (!shouldHide) {
+          ctaContainer.classList.remove('hidden');
+        }
+      }
     }
     
     // Create observers for all relevant elements
-    const observer = new MutationObserver(updateMarketingVisibility);
+    const observer = new MutationObserver(updateVisibility);
     
     // Observe file list
     if (fileList) {
@@ -279,7 +322,8 @@ export const prerender = false;
     
     // Also listen for the lab-results event
     window.addEventListener('lab-results', () => {
-      marketingSection.classList.add('hidden');
+      if (marketingSection) marketingSection.classList.add('hidden');
+      if (ctaContainer) ctaContainer.classList.add('hidden');
     });
   });
 </script>

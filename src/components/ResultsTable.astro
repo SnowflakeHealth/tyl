@@ -411,6 +411,11 @@ const { id = 'results-table' } = Astro.props;
       displayResults(data);
       container.classList.remove('hidden');
       
+      // Scroll to top instantly when results appear
+      setTimeout(() => {
+        window.scrollTo({ top: 0 });
+      }, 100);
+      
       // Track that results were displayed (only once per session)
       const sessionKey = 'results_tracked_' + Date.now();
       if (!sessionStorage.getItem(sessionKey)) {
@@ -762,9 +767,10 @@ const { id = 'results-table' } = Astro.props;
     };
 
     function exportToCSV(data) {
-      const rows = [['Source File', 'Date', 'Original Category', 'Normalized Category', 'Test Name', 'Normalized Name', 'Result', 'Unit', 'Reference Range', 'Flag', 'Notes']];
+      const headers = [['Source File', 'Date', 'Original Category', 'Normalized Category', 'Test Name', 'Normalized Name', 'Result', 'Unit', 'Reference Range', 'Flag', 'Notes']];
+      const dataRows = [];
       
-      // Export aggregated results with all fields
+      // Collect all data rows first
       if (data.combined_results) {
         data.combined_results.forEach(fileData => {
           const sourceFile = fileData.source_file || 'Unknown';
@@ -776,7 +782,7 @@ const { id = 'results-table' } = Astro.props;
               
               if (category.tests) {
                 category.tests.forEach(test => {
-                  rows.push([
+                  dataRows.push([
                     sourceFile,
                     testDate,
                     categoryName,
@@ -795,6 +801,50 @@ const { id = 'results-table' } = Astro.props;
           }
         });
       }
+
+      // Sort data rows by: 1) Normalized Category, 2) Normalized Name, 3) Date
+      dataRows.sort((a, b) => {
+        // First sort by normalized category (index 3)
+        const catA = (a[3] || '').toLowerCase().trim();
+        const catB = (b[3] || '').toLowerCase().trim();
+        if (catA !== catB) {
+          // Put empty categories at the end
+          if (!catA) return 1;
+          if (!catB) return -1;
+          return catA.localeCompare(catB);
+        }
+        
+        // Then sort by normalized name (index 5)
+        const nameA = (a[5] || '').toLowerCase().trim();
+        const nameB = (b[5] || '').toLowerCase().trim();
+        if (nameA !== nameB) {
+          // Put empty names at the end
+          if (!nameA) return 1;
+          if (!nameB) return -1;
+          return nameA.localeCompare(nameB);
+        }
+        
+        // Finally sort by date (index 1)
+        // Parse dates to ensure proper chronological sorting
+        const dateA = a[1] || '';
+        const dateB = b[1] || '';
+        if (dateA !== dateB) {
+          // Try to parse as dates for proper chronological sorting
+          const parsedA = Date.parse(dateA);
+          const parsedB = Date.parse(dateB);
+          if (!isNaN(parsedA) && !isNaN(parsedB)) {
+            return parsedA - parsedB;
+          }
+          // Fallback to string comparison if date parsing fails
+          return dateA.localeCompare(dateB);
+        }
+        
+        // If everything else is equal, maintain original order
+        return 0;
+      });
+
+      // Combine headers with sorted data
+      const rows = [...headers, ...dataRows];
 
       const csv = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
       const blob = new Blob([csv], { type: 'text/csv' });
