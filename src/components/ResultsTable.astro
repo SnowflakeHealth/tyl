@@ -652,6 +652,19 @@ const { id = 'results-table' } = Astro.props;
                       const valueClass = (flag === 'h' || flag === 'high') ? 'high' : ((flag === 'l' || flag === 'low') ? 'low' : '');
                       const flagClass = (flag === 'h' || flag === 'high') ? 'h' : ((flag === 'l' || flag === 'low') ? 'l' : '');
                       
+                      // Process value to remove flag if it's already in the flag column
+                      let processedValue = test.value || '-';
+                      if (test.flag && processedValue !== '-') {
+                        // Remove H, L, High, or Low from before or after the value if flag exists
+                        // Pattern handles: "H 140", "140 H", "H140", "140H", "H  140", "140  H", etc.
+                        processedValue = processedValue
+                          .replace(/^\s*(H|L|High|Low)\s+/i, '') // Remove from beginning with spaces
+                          .replace(/\s+(H|L|High|Low)\s*$/i, '') // Remove from end with spaces
+                          .replace(/^(H|L|High|Low)(?=\d)/i, '') // Remove flag directly before number
+                          .replace(/(?<=\d)(H|L|High|Low)$/i, '') // Remove flag directly after number
+                          .trim();
+                      }
+                      
                       // Check if this is a new test group
                       const testName = test.normalized_name || test.name;
                       if (testName !== currentTestName) {
@@ -679,7 +692,7 @@ const { id = 'results-table' } = Astro.props;
                         <tr class="${rowClasses.join(' ')}">
                           <td class="test-name">${escapeHtml(test.normalized_name || '')}</td>
                           <td class="test-value ${valueClass}">
-                            ${escapeHtml(test.value || '-')}
+                            ${escapeHtml(processedValue)}
                           </td>
                           <td class="test-unit">${escapeHtml(test.unit || '')}</td>
                           <td class="test-range">${escapeHtml(test.reference_range || '-')}</td>
@@ -782,6 +795,19 @@ const { id = 'results-table' } = Astro.props;
               
               if (category.tests) {
                 category.tests.forEach(test => {
+                  // Process value to remove flag if it's already in the flag column
+                  let processedValue = test.value || '';
+                  if (test.flag && processedValue) {
+                    // Remove H, L, High, or Low from before or after the value if flag exists
+                    // Pattern handles: "H 140", "140 H", "H140", "140H", "H  140", "140  H", etc.
+                    processedValue = processedValue
+                      .replace(/^\s*(H|L|High|Low)\s+/i, '') // Remove from beginning with spaces
+                      .replace(/\s+(H|L|High|Low)\s*$/i, '') // Remove from end with spaces
+                      .replace(/^(H|L|High|Low)(?=\d)/i, '') // Remove flag directly before number
+                      .replace(/(?<=\d)(H|L|High|Low)$/i, '') // Remove flag directly after number
+                      .trim();
+                  }
+                  
                   dataRows.push([
                     sourceFile,
                     testDate,
@@ -789,7 +815,7 @@ const { id = 'results-table' } = Astro.props;
                     test.normalized_category || '',
                     test.name || '',
                     test.normalized_name || '',
-                    test.value || '',
+                    processedValue,
                     test.unit || '',
                     test.reference_range || '',
                     test.flag || '',
