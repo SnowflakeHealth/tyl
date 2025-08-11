@@ -116,7 +116,8 @@ const { id = 'results-table' } = Astro.props;
   }
 
   .test-table th.date-header,
-  .test-table th.flag-header {
+  .test-table th.flag-header,
+  .test-table th.chart-header {
     text-align: center;
   }
 
@@ -177,6 +178,16 @@ const { id = 'results-table' } = Astro.props;
   .test-flag {
     text-align: center;
     font-weight: 600;
+  }
+
+  .test-chart {
+    text-align: center;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .test-chart svg {
+    display: inline-block;
+    vertical-align: middle;
   }
 
   .flag-indicator {
@@ -394,6 +405,7 @@ const { id = 'results-table' } = Astro.props;
   }
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script is:inline define:vars={{ id }}>
   function initResultsTable(id) {
     const container = document.getElementById(id);
@@ -452,6 +464,115 @@ const { id = 'results-table' } = Astro.props;
         .replace(/'/g, "&#039;");
     }
 
+    function createLabSparkline(data, options = {}) {
+      const {
+        width = 160,
+        height = 30,
+        padding = 2,
+        flag = null,
+        startDate = null,
+        endDate = null,
+        strokeWidth = 1.5
+      } = options;
+      
+      // Set colors based on flag
+      let gradientStart, strokeColor;
+      if (flag === 'h' || flag === 'l') {
+        gradientStart = '#f85149';
+        strokeColor = '#f85149';
+      } else {
+        gradientStart = '#40c463';
+        strokeColor = '#40c463';
+      }
+      
+      // Create SVG container
+      const svg = d3.create('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('viewBox', `0 0 ${width} ${height}`);
+      
+      // Create gradient
+      const gradientId = `gradient-${Math.random().toString(36).substring(2, 11)}`;
+      const defs = svg.append('defs');
+      const gradient = defs.append('linearGradient')
+        .attr('id', gradientId)
+        .attr('x1', '0%').attr('y1', '0%')
+        .attr('x2', '0%').attr('y2', '100%');
+      
+      gradient.append('stop')
+        .attr('offset', '0%')
+        .attr('stop-color', gradientStart)
+        .attr('stop-opacity', 0.6);
+      
+      gradient.append('stop')
+        .attr('offset', '100%')
+        .attr('stop-color', '#ffffff')
+        .attr('stop-opacity', 0);
+      
+      // Set up scales
+      let xScale, yScale;
+      
+      if (startDate && endDate && data[0]?.date) {
+        // Time-based scale
+        xScale = d3.scaleTime()
+          .domain([new Date(startDate), new Date(endDate)])
+          .range([padding, width - padding]);
+        
+        const values = data.map(d => parseFloat(d.value) || 0);
+        yScale = d3.scaleLinear()
+          .domain([0, d3.max(values)])
+          .range([height - padding, padding]);
+      } else {
+        // Index-based scale for simple arrays
+        xScale = d3.scaleLinear()
+          .domain([0, data.length - 1])
+          .range([padding, width - padding]);
+        
+        const values = data.map(d => parseFloat(d.value || d) || 0);
+        yScale = d3.scaleLinear()
+          .domain([0, d3.max(values)])
+          .range([height - padding, padding]);
+      }
+      
+      // Line and area generators
+      const line = d3.line()
+        .x((d, i) => {
+          if (startDate && endDate && d.date) {
+            return xScale(new Date(d.date));
+          }
+          return xScale(i);
+        })
+        .y(d => yScale(parseFloat(d.value || d) || 0))
+        .curve(d3.curveCardinal.tension(0.2));
+      
+      const area = d3.area()
+        .x((d, i) => {
+          if (startDate && endDate && d.date) {
+            return xScale(new Date(d.date));
+          }
+          return xScale(i);
+        })
+        .y0(height - padding)
+        .y1(d => yScale(parseFloat(d.value || d) || 0))
+        .curve(d3.curveCardinal.tension(0.2));
+      
+      // Draw area and line
+      svg.append('path')
+        .datum(data)
+        .attr('d', area)
+        .attr('fill', `url(#${gradientId})`);
+      
+      svg.append('path')
+        .datum(data)
+        .attr('d', line)
+        .attr('fill', 'none')
+        .attr('stroke', strokeColor)
+        .attr('stroke-width', strokeWidth)
+        .attr('stroke-linecap', 'round');
+      
+      return svg.node().outerHTML;
+    }
+
     function displayResults(data) {
       if (!data) {
         content.innerHTML = '<div class="no-results">No data received</div>';
@@ -479,6 +600,23 @@ const { id = 'results-table' } = Astro.props;
 
     function displayAggregatedResults(data) {
       let html = '';
+      
+      // Calculate global date range across all tests for consistent sparkline scales
+      let globalStartDate = null;
+      let globalEndDate = null;
+      
+      data.combined_results.forEach(fileData => {
+        const date = fileData.lab_info?.date_collected || fileData.lab_info?.date_reported;
+        if (date) {
+          const dateObj = new Date(date.split(' ')[0]);
+          if (!globalStartDate || dateObj < globalStartDate) {
+            globalStartDate = dateObj;
+          }
+          if (!globalEndDate || dateObj > globalEndDate) {
+            globalEndDate = dateObj;
+          }
+        }
+      });
 
       // Display summary if available
       if (data.lab_info) {
@@ -639,6 +777,7 @@ const { id = 'results-table' } = Astro.props;
                     <th class="range-header">Reference Range</th>
                     <th class="flag-header">Flag</th>
                     <th class="date-header">Date</th>
+                    <th class="chart-header">Chart</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -646,8 +785,9 @@ const { id = 'results-table' } = Astro.props;
                     let currentTestName = '';
                     let testGroupIndex = -1;
                     let isFirstInGroup = true;
+                    let testGroupData = [];
                     
-                    return categoryData.tests.map(test => {
+                    return categoryData.tests.map((test, testIndex) => {
                       const flag = test.flag ? test.flag.toLowerCase() : '';
                       const valueClass = (flag === 'h' || flag === 'high') ? 'high' : ((flag === 'l' || flag === 'low') ? 'low' : '');
                       const flagClass = (flag === 'h' || flag === 'high') ? 'h' : ((flag === 'l' || flag === 'low') ? 'l' : '');
@@ -671,6 +811,23 @@ const { id = 'results-table' } = Astro.props;
                         currentTestName = testName;
                         testGroupIndex = (testGroupIndex + 1) % 5; // Cycle through 0-4 (5 colors)
                         isFirstInGroup = true;
+                        
+                        // Collect all data points for this test group
+                        testGroupData = [];
+                        for (let i = testIndex; i < categoryData.tests.length; i++) {
+                          const t = categoryData.tests[i];
+                          if ((t.normalized_name || t.name) === testName) {
+                            if (t.date && t.value && t.value !== '-') {
+                              testGroupData.push({
+                                date: t.date.split(' ')[0],
+                                value: t.value,
+                                flag: t.flag
+                              });
+                            }
+                          } else {
+                            break;
+                          }
+                        }
                       } else {
                         isFirstInGroup = false;
                       }
@@ -688,6 +845,21 @@ const { id = 'results-table' } = Astro.props;
                         rowClasses.push('test-group-first');
                       }
                       
+                      // Generate sparkline only for first row of test group with multiple results
+                      let sparklineCell = '<td class="test-chart"></td>';
+                      if (isFirstInGroup && testGroupData.length > 1 && globalStartDate && globalEndDate) {
+                        // Determine flag for coloring (use most recent flag or any H/L flag in the group)
+                        const hasAbnormalFlag = testGroupData.some(d => d.flag && (d.flag.toLowerCase() === 'h' || d.flag.toLowerCase() === 'l'));
+                        const sparklineFlag = hasAbnormalFlag ? 'h' : null;
+                        
+                        const sparkline = createLabSparkline(testGroupData, {
+                          flag: sparklineFlag,
+                          startDate: globalStartDate.toISOString().split('T')[0],
+                          endDate: globalEndDate.toISOString().split('T')[0]
+                        });
+                        sparklineCell = `<td class="test-chart">${sparkline}</td>`;
+                      }
+                      
                       return `
                         <tr class="${rowClasses.join(' ')}">
                           <td class="test-name">${escapeHtml(test.normalized_name || '')}</td>
@@ -700,6 +872,7 @@ const { id = 'results-table' } = Astro.props;
                             ${test.flag ? `<span class="flag-indicator ${flagClass}">${escapeHtml(test.flag)}</span>` : '-'}
                           </td>
                           <td class="test-date">${escapeHtml(formatDate(test.date))}</td>
+                          ${sparklineCell}
                         </tr>
                       `;
                     }).join('');
