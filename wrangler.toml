@@ -7,7 +7,8 @@ compatibility_flags = ["nodejs_compat"]
 limits = { cpu_ms = 300000 }
 
 routes = [
-  { pattern = "www.trackyourlabs.com", custom_domain = true }
+  { pattern = "www.trackyourlabs.com", custom_domain = true },
+  { pattern = "trackyourlabs.com", custom_domain = true }
 ]
 
 [assets]

@@ -36,6 +36,9 @@ const { title, description = 'All your lab results. Instantly organized. From ch
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     
+    <!-- Canonical URL -->
+    <link rel="canonical" href={`https://www.trackyourlabs.com${Astro.url.pathname}`} />
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
