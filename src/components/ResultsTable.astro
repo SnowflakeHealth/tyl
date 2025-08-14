@@ -11,9 +11,15 @@ const { id = 'results-table' } = Astro.props;
     <!-- Results will be dynamically inserted here -->
   </div>
 
-  <div class="results-actions">
-    <button id={`${id}-export`} class="btn btn-primary" type="button">
-      Export to CSV
+  <div class="results-actions" id={`${id}-actions`} style="display: none;">
+    <button id={`${id}-copy-summary`} class="btn btn-outline btn-sm" type="button">
+      Copy Summary
+    </button>
+    <button id={`${id}-download-summary`} class="btn btn-outline btn-sm" type="button">
+      Download Summary
+    </button>
+    <button id={`${id}-export`} class="btn btn-primary btn-sm" type="button">
+      Export Lab Data
     </button>
   </div>
 </div>
@@ -483,6 +489,12 @@ const { id = 'results-table' } = Astro.props;
     }
   }
   
+  /* Spinner animation */
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
   /* Prose styling for markdown content - minimal */
   .prose {
     max-width: 600px;
@@ -518,7 +530,7 @@ const { id = 'results-table' } = Astro.props;
     margin-bottom: 1rem;
   }
   
-  .prose ul, .prose ol {
+  .prose ul {
     margin-left: 1.5rem;
   }
   
@@ -1144,50 +1156,27 @@ const { id = 'results-table' } = Astro.props;
         `;
       });
 
-      // Add processing time if available
-      if (data.processing_time) {
-        html += `
-          <div style="text-align: center; color: #6b7280; font-size: 0.875rem; margin-top: 1rem;">
-            Processed in ${(data.processing_time / 1000).toFixed(1)} seconds
-          </div>
-        `;
-      }
 
       content.innerHTML = html;
       
-      // Add AI summary button if available
+      // Show the Export Lab Data button immediately
+      const actionsDiv = document.getElementById(`${id}-actions`);
+      if (actionsDiv) {
+        actionsDiv.style.display = 'flex';
+        // Initially hide summary buttons until AI summary is ready
+        const copySummaryBtn = document.getElementById(`${id}-copy-summary`);
+        const downloadSummaryBtn = document.getElementById(`${id}-download-summary`);
+        if (copySummaryBtn) copySummaryBtn.style.display = 'none';
+        if (downloadSummaryBtn) downloadSummaryBtn.style.display = 'none';
+      }
+      
+      // Add AI summary - automatically request if available
       if (data.aiSummaryAvailable && !data.aiSummary) {
-        addAISummaryButton(data);
+        // Automatically request AI summary
+        requestAISummary(data);
       } else if (data.aiSummary) {
         displayAISummary(data.aiSummary);
       }
-    }
-    
-    function addAISummaryButton(data) {
-      const aiSection = document.createElement('div');
-      aiSection.className = 'ai-summary-section';
-      aiSection.innerHTML = `
-        <div class="ai-prompt-card" style="margin-top: 2rem; padding: 2rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px;">
-          <h3 style="font-size: 1.375rem; font-weight: 600; margin-bottom: 1rem;">👨‍⚕️ Your Personalized Health Summary Available</h3>
-          <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem; color: #4b5563;">
-            <li style="margin-bottom: 0.5rem;">✓ Plain-language explanations of your results</li>
-            <li style="margin-bottom: 0.5rem;">✓ Gentle guidance on areas needing attention</li>
-            <li style="margin-bottom: 0.5rem;">✓ Clear next steps backed by recent research</li>
-          </ul>
-          <button id="ai-summary-btn" class="btn btn-primary" style="width: 100%;">
-            Get My Personalized Health Summary (1-5 min)
-          </button>
-          <p style="margin-top: 1rem; font-size: 0.875rem; color: #6b7280; text-align: center;">
-            🔒 HIPAA-compliant processing with zero data retention
-          </p>
-        </div>
-      `;
-      content.appendChild(aiSection);
-      
-      // Attach event listener to button
-      document.getElementById('ai-summary-btn').addEventListener('click', () => {
-        requestAISummary(data);
-      });
     }
     
     // Helper function to generate CSV data for AI (without notes, original category, and test name columns)
@@ -1261,16 +1250,51 @@ const { id = 'results-table' } = Astro.props;
     }
     
     async function requestAISummary(originalData) {
-      const btn = document.getElementById('ai-summary-btn');
-      const originalButtonText = btn.textContent;
-      btn.disabled = true;
-      
       // Store original files for resubmission
       window.currentLabFiles = originalData.files || [];
       
+      // Show loading card
+      const loadingDiv = document.createElement('div');
+      loadingDiv.id = 'ai-summary-loading';
+      loadingDiv.innerHTML = `
+        <div class="card" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            LABS ANALYSIS
+          </div>
+          <div class="card-body" style="padding: 2rem;">
+            <div style="margin-bottom: 1.5rem;">
+              <progress id="ai-progress-bar" class="progress w-full" value="0" max="60" style="height: 8px;"></progress>
+            </div>
+            <div id="ai-loading-status" style="color: #6b7280; font-size: 0.875rem; text-align: center;">
+              Preparing your personalized summary...
+            </div>
+            <div id="ai-loading-timer" style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem; text-align: center;">
+              0:00
+            </div>
+          </div>
+        </div>
+        <style>
+          #ai-progress-bar::-webkit-progress-value {
+            background-color: #111827;
+            transition: width 0.5s ease;
+          }
+          #ai-progress-bar::-moz-progress-bar {
+            background-color: #111827;
+            transition: width 0.5s ease;
+          }
+          #ai-progress-bar {
+            background-color: #e5e7eb;
+          }
+        </style>
+      `;
+      content.appendChild(loadingDiv);
+      loadingDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
       // Progressive status updates
       const startTime = Date.now();
-      btn.innerHTML = '<span style="display: inline-block; margin-right: 0.5rem;">⏳</span> Preparing your personalized summary...';
+      const statusElement = document.getElementById('ai-loading-status');
+      const timerElement = document.getElementById('ai-loading-timer');
+      const progressBar = document.getElementById('ai-progress-bar');
       
       const updateStatus = () => {
         const elapsed = Math.floor((Date.now() - startTime) / 1000);
@@ -1284,12 +1308,17 @@ const { id = 'results-table' } = Astro.props;
           "Writing your personalized summary..."
         ];
         
-        const messageIndex = Math.floor(elapsed / 30) % messages.length;
-        btn.innerHTML = `
-          <span style="display: inline-block; margin-right: 0.5rem;">⏳</span>
-          ${messages[messageIndex]} 
-          (${minutes}:${seconds.toString().padStart(2, '0')})
-        `;
+        const messageIndex = Math.floor(elapsed / 15) % messages.length;
+        if (statusElement) {
+          statusElement.textContent = messages[messageIndex];
+        }
+        if (timerElement) {
+          timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+        if (progressBar) {
+          // Progress bar fills over 60 seconds
+          progressBar.value = Math.min(elapsed, 60);
+        }
       };
       
       const statusInterval = setInterval(updateStatus, 1000);
@@ -1339,32 +1368,69 @@ const { id = 'results-table' } = Astro.props;
         const data = await response.json();
         
         if (data.aiSummary) {
-          displayAISummary(data.aiSummary);
-          // Hide the button section after successful generation
-          document.querySelector('.ai-summary-section').style.display = 'none';
+          // Accelerate progress bar to completion
+          const progressBar = document.getElementById('ai-progress-bar');
+          if (progressBar) {
+            progressBar.value = 60;
+            // Wait for animation to complete before removing
+            setTimeout(() => {
+              const loadingCard = document.getElementById('ai-summary-loading');
+              if (loadingCard) {
+                loadingCard.remove();
+              }
+              displayAISummary(data.aiSummary);
+            }, 500);
+          } else {
+            // If no progress bar, remove immediately
+            const loadingCard = document.getElementById('ai-summary-loading');
+            if (loadingCard) {
+              loadingCard.remove();
+            }
+            displayAISummary(data.aiSummary);
+          }
         } else if (data.aiSummaryError) {
-          btn.innerHTML = '❌ ' + data.aiSummaryError;
-          btn.disabled = false;
-          setTimeout(() => {
-            btn.innerHTML = originalButtonText;
-          }, 5000);
+          // Show error in the loading card
+          const loadingCard = document.getElementById('ai-summary-loading');
+          if (loadingCard) {
+            loadingCard.innerHTML = `
+              <div class="card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                  AI HEALTH SUMMARY
+                </div>
+                <div class="card-body" style="padding: 2rem; text-align: center; color: #dc2626;">
+                  <div style="margin-bottom: 1rem;">❌</div>
+                  <div>${data.aiSummaryError}</div>
+                </div>
+              </div>
+            `;
+          }
         }
       } catch (error) {
         clearInterval(statusInterval);
         console.error('Failed to generate AI analysis:', error);
         
-        let errorMessage = '❌ Failed to generate AI analysis';
+        let errorMessage = 'Failed to generate AI analysis';
         if (error.name === 'AbortError') {
-          errorMessage = '❌ Request timed out (20 minutes)';
+          errorMessage = 'Request timed out (20 minutes)';
         } else if (error.message) {
-          errorMessage = `❌ ${error.message}`;
+          errorMessage = error.message;
         }
         
-        btn.innerHTML = errorMessage;
-        btn.disabled = false;
-        setTimeout(() => {
-          btn.innerHTML = originalButtonText;
-        }, 5000);
+        // Show error in the loading card
+        const loadingCard = document.getElementById('ai-summary-loading');
+        if (loadingCard) {
+          loadingCard.innerHTML = `
+            <div class="card" style="margin-top: 1.5rem;">
+              <div class="card-header">
+                AI HEALTH SUMMARY
+              </div>
+              <div class="card-body" style="padding: 2rem; text-align: center; color: #dc2626;">
+                <div style="margin-bottom: 1rem;">❌</div>
+                <div>${errorMessage}</div>
+              </div>
+            </div>
+          `;
+        }
       }
     }
     
@@ -1375,28 +1441,42 @@ const { id = 'results-table' } = Astro.props;
       // Create container for AI summary
       const summaryDiv = document.createElement('div');
       summaryDiv.id = 'ai-summary-display';
-      summaryDiv.className = 'ai-summary-container';
-      summaryDiv.style.cssText = 'margin-top: 2rem; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;';
       
       summaryDiv.innerHTML = `
-        <div class="ai-summary-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f9fafb; border-bottom: 1px solid #e5e7eb;">
-          <div class="summary-meta" style="display: flex; gap: 1.5rem; font-size: 0.875rem; color: #6b7280;">
-            <span>Model: ${summary.model || 'GPT-5'}</span>
-            <span>Processing: ${summary.processingTime ? (summary.processingTime / 1000).toFixed(1) + 's' : 'N/A'}</span>
+        <div class="card" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            AI HEALTH SUMMARY
           </div>
-          <div class="summary-actions" style="display: flex; gap: 0.5rem;">
-            <button onclick="copyAISummary()" class="btn btn-sm btn-outline">Copy</button>
-            <button onclick="downloadAISummary()" class="btn btn-sm btn-outline">Download</button>
-            <button onclick="window.print()" class="btn btn-sm btn-outline">Print</button>
+          <div class="card-body" style="padding: 2rem;">
+            <div class="prose">
+              ${renderMarkdown(summary.content)}
+            </div>
           </div>
-        </div>
-        <div class="markdown-content prose prose-lg max-w-none" style="padding: 2rem; background: white;">
-          ${renderMarkdown(summary.content)}
         </div>
       `;
       
       content.appendChild(summaryDiv);
       summaryDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      // Show action buttons including summary buttons
+      const actionsDiv = document.getElementById(`${id}-actions`);
+      if (actionsDiv) {
+        actionsDiv.style.display = 'flex';
+      }
+      
+      // Show and connect summary buttons
+      const copySummaryBtn = document.getElementById(`${id}-copy-summary`);
+      const downloadSummaryBtn = document.getElementById(`${id}-download-summary`);
+      
+      if (copySummaryBtn) {
+        copySummaryBtn.style.display = 'inline-block';
+        copySummaryBtn.addEventListener('click', copyAISummary);
+      }
+      
+      if (downloadSummaryBtn) {
+        downloadSummaryBtn.style.display = 'inline-block';
+        downloadSummaryBtn.addEventListener('click', downloadAISummary);
+      }
     }
     
     // Markdown rendering with marked
