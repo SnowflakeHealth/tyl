@@ -482,9 +482,96 @@ const { id = 'results-table' } = Astro.props;
       gap: 1rem;
     }
   }
+  
+  /* Prose styling for markdown content - minimal */
+  .prose {
+    max-width: 600px;
+    text-align: left;
+    color: #111827;
+    font-size: 0.875rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .prose h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+  
+  .prose h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .prose h3 {
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .prose p {
+    margin-bottom: 1rem;
+  }
+  
+  .prose ul, .prose ol {
+    margin-left: 1.5rem;
+  }
+  
+  .prose strong {
+    font-weight: 600;
+  }
+  
+  .prose em {
+    font-style: italic;
+  }
+  
+  .prose code {
+    font-size: 0.875em;
+    font-family: monospace;
+  }
+  
+  .prose blockquote {
+    padding-left: 1rem;
+    margin-left: 0;
+  }
+  
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+  }
+  
+  .prose th {
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .prose td {
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .prose a {
+    text-decoration: underline;
+  }
+  
+  .prose hr {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 1.5rem 0;
+  }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
+
 <script is:inline define:vars={{ id }}>
   function initResultsTable(id) {
     const container = document.getElementById(id);
@@ -1066,6 +1153,303 @@ const { id = 'results-table' } = Astro.props;
       }
 
       content.innerHTML = html;
+      
+      // Add AI summary button if available
+      if (data.aiSummaryAvailable && !data.aiSummary) {
+        addAISummaryButton(data);
+      } else if (data.aiSummary) {
+        displayAISummary(data.aiSummary);
+      }
+    }
+    
+    function addAISummaryButton(data) {
+      const aiSection = document.createElement('div');
+      aiSection.className = 'ai-summary-section';
+      aiSection.innerHTML = `
+        <div class="ai-prompt-card" style="margin-top: 2rem; padding: 2rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px;">
+          <h3 style="font-size: 1.375rem; font-weight: 600; margin-bottom: 1rem;">👨‍⚕️ Your Personalized Health Summary Available</h3>
+          <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem; color: #4b5563;">
+            <li style="margin-bottom: 0.5rem;">✓ Plain-language explanations of your results</li>
+            <li style="margin-bottom: 0.5rem;">✓ Gentle guidance on areas needing attention</li>
+            <li style="margin-bottom: 0.5rem;">✓ Clear next steps backed by recent research</li>
+          </ul>
+          <button id="ai-summary-btn" class="btn btn-primary" style="width: 100%;">
+            Get My Personalized Health Summary (1-5 min)
+          </button>
+          <p style="margin-top: 1rem; font-size: 0.875rem; color: #6b7280; text-align: center;">
+            🔒 HIPAA-compliant processing with zero data retention
+          </p>
+        </div>
+      `;
+      content.appendChild(aiSection);
+      
+      // Attach event listener to button
+      document.getElementById('ai-summary-btn').addEventListener('click', () => {
+        requestAISummary(data);
+      });
+    }
+    
+    // Helper function to generate CSV data for AI (without notes, original category, and test name columns)
+    function generateCSVForAI(data) {
+      const headers = ['Source File', 'Date', 'Normalized Category', 'Normalized Name', 'Result', 'Unit', 'Reference Range', 'Flag'];
+      const rows = [headers];
+      
+      if (data.combined_results) {
+        data.combined_results.forEach(fileData => {
+          const sourceFile = fileData.source_file || 'Unknown';
+          
+          if (fileData.results && Array.isArray(fileData.results)) {
+            fileData.results.forEach(category => {
+              const testDate = fileData.lab_info?.date_collected || fileData.lab_info?.date_reported || '';
+              
+              if (category.tests) {
+                category.tests.forEach(test => {
+                  // Process value to remove flag if it's already in the flag column
+                  let processedValue = test.value || '';
+                  if (test.flag && processedValue) {
+                    processedValue = processedValue
+                      .replace(/^\s*(H|L|High|Low)\s+/i, '')
+                      .replace(/\s+(H|L|High|Low)\s*$/i, '')
+                      .replace(/^(H|L|High|Low)(?=\d)/i, '')
+                      .replace(/(?<=\d)(H|L|High|Low)$/i, '')
+                      .trim();
+                  }
+                  
+                  rows.push([
+                    sourceFile,
+                    testDate,
+                    test.normalized_category || category.category || 'Uncategorized',
+                    test.normalized_name || test.name || '',
+                    processedValue,
+                    test.unit || '',
+                    test.reference_range || '',
+                    test.flag || ''
+                  ]);
+                });
+              }
+            });
+          }
+        });
+      }
+      
+      // Sort data rows by: 1) Normalized Category, 2) Normalized Name, 3) Date
+      const dataRows = rows.slice(1);
+      dataRows.sort((a, b) => {
+        const catCompare = a[2].localeCompare(b[2]);
+        if (catCompare !== 0) return catCompare;
+        
+        const nameCompare = a[3].localeCompare(b[3]);
+        if (nameCompare !== 0) return nameCompare;
+        
+        return a[1].localeCompare(b[1]);
+      });
+      
+      // Combine headers with sorted data
+      const sortedRows = [headers, ...dataRows];
+      
+      // Convert to CSV string
+      return sortedRows.map(row => 
+        row.map(cell => {
+          const value = String(cell);
+          if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+            return `"${value.replace(/"/g, '""')}"`;
+          }
+          return value;
+        }).join(',')
+      ).join('\n');
+    }
+    
+    async function requestAISummary(originalData) {
+      const btn = document.getElementById('ai-summary-btn');
+      const originalButtonText = btn.textContent;
+      btn.disabled = true;
+      
+      // Store original files for resubmission
+      window.currentLabFiles = originalData.files || [];
+      
+      // Progressive status updates
+      const startTime = Date.now();
+      btn.innerHTML = '<span style="display: inline-block; margin-right: 0.5rem;">⏳</span> Preparing your personalized summary...';
+      
+      const updateStatus = () => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = elapsed % 60;
+        
+        const messages = [
+          "Reviewing your results carefully...",
+          "Looking up the latest medical research...",
+          "Finding patterns in your health data...",
+          "Writing your personalized summary..."
+        ];
+        
+        const messageIndex = Math.floor(elapsed / 30) % messages.length;
+        btn.innerHTML = `
+          <span style="display: inline-block; margin-right: 0.5rem;">⏳</span>
+          ${messages[messageIndex]} 
+          (${minutes}:${seconds.toString().padStart(2, '0')})
+        `;
+      };
+      
+      const statusInterval = setInterval(updateStatus, 1000);
+      
+      try {
+        // Generate CSV data for AI
+        const csvData = generateCSVForAI(originalData);
+        
+        // Create a single file with CSV data
+        const fileData = [{
+          filename: 'aggregated_lab_results.csv',
+          content: btoa(csvData), // Convert to base64
+          mimeType: 'text/csv'
+        }];
+        
+        // Add timeout to fetch request (20 minutes)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1200000); // 20 minutes
+        
+        console.log('Sending request to dedicated AI summary endpoint: /api/ai-summary');
+        console.log('Request body:', {
+          filesCount: fileData.length,
+          firstFileMimeType: fileData[0]?.mimeType,
+          requestId: originalData.requestId || generateRequestId()
+        });
+        
+        const response = await fetch('/api/ai-summary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            files: fileData,
+            requestId: originalData.requestId || generateRequestId()
+          }),
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        clearInterval(statusInterval);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('API Error Response:', errorText);
+          throw new Error(`API error: ${response.status} - ${errorText}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.aiSummary) {
+          displayAISummary(data.aiSummary);
+          // Hide the button section after successful generation
+          document.querySelector('.ai-summary-section').style.display = 'none';
+        } else if (data.aiSummaryError) {
+          btn.innerHTML = '❌ ' + data.aiSummaryError;
+          btn.disabled = false;
+          setTimeout(() => {
+            btn.innerHTML = originalButtonText;
+          }, 5000);
+        }
+      } catch (error) {
+        clearInterval(statusInterval);
+        console.error('Failed to generate AI analysis:', error);
+        
+        let errorMessage = '❌ Failed to generate AI analysis';
+        if (error.name === 'AbortError') {
+          errorMessage = '❌ Request timed out (20 minutes)';
+        } else if (error.message) {
+          errorMessage = `❌ ${error.message}`;
+        }
+        
+        btn.innerHTML = errorMessage;
+        btn.disabled = false;
+        setTimeout(() => {
+          btn.innerHTML = originalButtonText;
+        }, 5000);
+      }
+    }
+    
+    function displayAISummary(summary) {
+      // Store markdown for download
+      window.currentAISummaryMarkdown = summary.content;
+      
+      // Create container for AI summary
+      const summaryDiv = document.createElement('div');
+      summaryDiv.id = 'ai-summary-display';
+      summaryDiv.className = 'ai-summary-container';
+      summaryDiv.style.cssText = 'margin-top: 2rem; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;';
+      
+      summaryDiv.innerHTML = `
+        <div class="ai-summary-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f9fafb; border-bottom: 1px solid #e5e7eb;">
+          <div class="summary-meta" style="display: flex; gap: 1.5rem; font-size: 0.875rem; color: #6b7280;">
+            <span>Model: ${summary.model || 'GPT-5'}</span>
+            <span>Processing: ${summary.processingTime ? (summary.processingTime / 1000).toFixed(1) + 's' : 'N/A'}</span>
+          </div>
+          <div class="summary-actions" style="display: flex; gap: 0.5rem;">
+            <button onclick="copyAISummary()" class="btn btn-sm btn-outline">Copy</button>
+            <button onclick="downloadAISummary()" class="btn btn-sm btn-outline">Download</button>
+            <button onclick="window.print()" class="btn btn-sm btn-outline">Print</button>
+          </div>
+        </div>
+        <div class="markdown-content prose prose-lg max-w-none" style="padding: 2rem; background: white;">
+          ${renderMarkdown(summary.content)}
+        </div>
+      `;
+      
+      content.appendChild(summaryDiv);
+      summaryDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    // Markdown rendering with marked
+    function renderMarkdown(markdown) {
+      // Configure marked for better output
+      if (typeof marked !== 'undefined') {
+        marked.setOptions({
+          breaks: true,        // Convert \n to <br>
+          gfm: true,          // GitHub Flavored Markdown
+          headerIds: false,    // Don't add IDs to headers
+          mangle: false,       // Don't escape underscores
+          sanitize: false
+        });
+        
+        // Parse markdown to HTML - no sanitization needed for GPT-5 responses
+        return marked.parse(markdown);
+      } else {
+        // Fallback to basic conversion if marked isn't loaded
+        console.warn('Marked library not loaded, using basic markdown conversion');
+        return markdown
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\n/g, '<br>');
+      }
+    }
+    
+    window.copyAISummary = function(e) {
+      const content = window.currentAISummaryMarkdown || '';
+      navigator.clipboard.writeText(content).then(() => {
+        // Show toast or feedback
+        const btn = e?.target || document.querySelector('button[onclick*="copyAISummary"]');
+        if (btn) {
+          const originalText = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => {
+            btn.textContent = originalText;
+          }, 2000);
+        }
+      });
+    };
+    
+    window.downloadAISummary = function() {
+      const content = window.currentAISummaryMarkdown || '';
+      const blob = new Blob([content], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lab-analysis-${new Date().toISOString().split('T')[0]}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+    
+    function generateRequestId() {
+      return `req_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     }
 
     // Global toggle function for notes (using same pattern as test groups)
