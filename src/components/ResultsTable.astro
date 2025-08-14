@@ -500,7 +500,7 @@ const { id = 'results-table' } = Astro.props;
     max-width: 600px;
     text-align: left;
     color: #111827;
-    font-size: 0.875rem;
+    font-size: 1rem;
     margin-left: auto;
     margin-right: auto;
     line-height: 1.2;
@@ -1268,9 +1268,6 @@ const { id = 'results-table' } = Astro.props;
             <div id="ai-loading-status" style="color: #6b7280; font-size: 0.875rem; text-align: center;">
               Preparing your personalized summary...
             </div>
-            <div id="ai-loading-timer" style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem; text-align: center;">
-              0:00
-            </div>
           </div>
         </div>
         <style>
@@ -1293,13 +1290,10 @@ const { id = 'results-table' } = Astro.props;
       // Progressive status updates
       const startTime = Date.now();
       const statusElement = document.getElementById('ai-loading-status');
-      const timerElement = document.getElementById('ai-loading-timer');
       const progressBar = document.getElementById('ai-progress-bar');
       
       const updateStatus = () => {
         const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        const minutes = Math.floor(elapsed / 60);
-        const seconds = elapsed % 60;
         
         const messages = [
           "Reviewing your results carefully...",
@@ -1311,9 +1305,6 @@ const { id = 'results-table' } = Astro.props;
         const messageIndex = Math.floor(elapsed / 15) % messages.length;
         if (statusElement) {
           statusElement.textContent = messages[messageIndex];
-        }
-        if (timerElement) {
-          timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
         }
         if (progressBar) {
           // Progress bar fills over 60 seconds
