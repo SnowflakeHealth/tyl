@@ -10,6 +10,8 @@ interface ExtractRequest {
   files: FileData[];
   requestId?: string;
   timestamp?: number;
+  includeAISummary?: boolean;
+  requestType?: string;
 }
 
 interface ErrorResponse {
@@ -136,12 +138,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
         'image/jpg',
         'image/webp',
         'image/heic',
-        'image/heif'
+        'image/heif',
+        'text/csv',
+        'application/json'  // For backward compatibility with combined results
       ];
       
       if (!validTypes.includes(file.mimeType)) {
         const errorResponse: ErrorResponse = { 
-          error: `Invalid file type: ${file.mimeType}. Supported types: PDF and images.` 
+          error: `Invalid file type: ${file.mimeType}. Supported types: PDF, images, CSV, and JSON.` 
         };
         return new Response(
           JSON.stringify(errorResponse),
@@ -175,15 +179,26 @@ export const POST: APIRoute = async ({ request, locals }) => {
       }
     }
 
-    // Add request ID if not provided
-    if (!body.requestId) {
-      body.requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    // Create the body to forward, preserving all fields and adding defaults
+    const forwardBody = {
+      ...body,
+      requestId: body.requestId || `req_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+      timestamp: body.timestamp || Date.now()
+    };
+    
+    // Explicitly preserve these fields (don't use || for booleans/strings that could be falsy)
+    if ('requestType' in body) {
+      forwardBody.requestType = body.requestType;
     }
-
-    // Add timestamp if not provided
-    if (!body.timestamp) {
-      body.timestamp = Date.now();
+    if ('includeAISummary' in body) {
+      forwardBody.includeAISummary = body.includeAISummary;
     }
+    
+    console.log('Forwarding to GCF with:', {
+      requestType: forwardBody.requestType,
+      includeAISummary: forwardBody.includeAISummary,
+      filesCount: forwardBody.files.length
+    });
 
     // Check if API credentials are available
     if (!GCP_LAB_EXTRACT_API_KEY || !GCP_LAB_EXTRACT_API_GATEWAY_URL) {
@@ -217,7 +232,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
           // Forward the referer for API key restrictions
           'Referer': request.headers.get('Referer') || 'https://www.trackyourlabs.com/',
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify(forwardBody),
         signal: controller.signal,
       });
     } catch (fetchError: any) {
@@ -263,7 +278,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         const METRICS = env.METRICS;
         if (METRICS) {
           // Track files processed
-          const filesCount = body.files.length;
+          const filesCount = forwardBody.files.length;
           const currentFiles = await METRICS.get('total_files_processed');
           await METRICS.put('total_files_processed', String((parseInt(currentFiles || '0') + filesCount)));
           
