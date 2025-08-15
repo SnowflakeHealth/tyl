@@ -34,7 +34,7 @@ import ShoppingLayout from '../../layouts/ShoppingLayout.astro';
           
           <div class="mt-6">
             <h3 class="font-semibold mb-3">Nearby Lab Centers</h3>
-            <div id="nearby-labs" class="space-y-3">
+            <div id="nearby-labs" class="space-y-3 max-h-64 overflow-y-auto">
               <p class="text-gray-500 text-sm">Loading nearby locations...</p>
             </div>
           </div>
@@ -44,6 +44,35 @@ import ShoppingLayout from '../../layouts/ShoppingLayout.astro';
               Select a Location to Schedule
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Date/Time Selection (Hidden initially) -->
+    <div id="datetime-section" class="hidden mt-8">
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Select Date & Time</h2>
+        <div id="selected-location-info" class="mb-6 p-4 bg-blue-50 rounded-lg"></div>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-lg font-medium mb-3">Available Dates</h3>
+            <div id="date-picker" class="space-y-2"></div>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-medium mb-3">Available Times</h3>
+            <div id="time-slots" class="grid grid-cols-3 gap-2"></div>
+          </div>
+        </div>
+        
+        <div class="mt-6 flex gap-4">
+          <button id="back-to-location" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+            Back to Locations
+          </button>
+          <button id="confirm-appointment" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400" disabled>
+            Confirm Appointment
+          </button>
         </div>
       </div>
     </div>
@@ -74,72 +103,157 @@ import ShoppingLayout from '../../layouts/ShoppingLayout.astro';
       console.error('Error initializing map:', error);
     }
 
-    // Store user marker
-    let userMarker: any = null;
+    // Store lab markers
+    let labMarkers: any[] = [];
+    let selectedLocation: any = null;
+    let locations: any[] = [];
+    
 
-    // Get user's location
-    if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
+    // Fetch lab locations using Cloudflare geolocation (no user permission needed)
+    // The API will use the request's Cloudflare geolocation data
+    async function initializeLocations() {
+      const locationElement = document.getElementById('user-location');
+      const nearbyLabsElement = document.getElementById('nearby-labs');
+      
+      try {
+        if (locationElement) {
+          locationElement.textContent = 'Detecting location...';
+        }
         
-        // Update map center
-        map.flyTo({
-          center: [longitude, latitude],
-          zoom: 13,
-          essential: true
+        // Check if we're in dev mode (localhost)
+        const isDevMode = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        // Use Austin ZIP for dev mode, otherwise let API use Cloudflare geolocation
+        const requestBody = isDevMode 
+          ? { zipCode: '78723', city: 'Austin', state: 'TX', latitude: 30.2747, longitude: -97.6989 }
+          : {};
+        
+        // Fetch locations
+        const response = await fetch('/api/lab-locations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody)
         });
-
-        // Add/update user location marker
-        if (userMarker) {
-          userMarker.setLngLat([longitude, latitude]);
-        } else {
-          // Create custom marker element
+        
+        const data = await response.json();
+        
+        // Always use the user location data if available
+        if (data.userLocation) {
+          const { latitude, longitude, city, state } = data.userLocation;
+          
+          // Update location display
+          if (locationElement) {
+            const locationText = `${city || 'Your location'}, ${state || ''}`;
+            locationElement.textContent = isDevMode ? `${locationText} (Dev Mode)` : locationText;
+          }
+          
+          // Center map on user's approximate location
+          map.flyTo({
+            center: [longitude, latitude],
+            zoom: 10,
+            essential: true
+          });
+          
+          // Add a blue dot for user location
           const el = document.createElement('div');
           el.className = 'user-marker';
-          el.style.width = '20px';
-          el.style.height = '20px';
+          el.style.width = '12px';
+          el.style.height = '12px';
           el.style.borderRadius = '50%';
           el.style.backgroundColor = '#3B82F6';
-          el.style.border = '3px solid white';
+          el.style.border = '2px solid white';
           el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
-
-          userMarker = new mapboxgl.Marker(el)
+          
+          new mapboxgl.Marker(el)
             .setLngLat([longitude, latitude])
             .addTo(map);
+          
+          // Process locations if we have them
+          if (response.ok && data.locations && data.locations.length > 0) {
+            locations = data.locations;
+            displayLocations(latitude, longitude);
+          } else {
+            // Show appropriate message based on error or empty results
+            if (nearbyLabsElement) {
+              if (data.error) {
+                nearbyLabsElement.innerHTML = '<p class="text-amber-600 text-sm">Lab location service is currently unavailable. Please try again later.</p>';
+              } else {
+                nearbyLabsElement.innerHTML = '<p class="text-gray-500 text-sm">No lab locations found in your area.</p>';
+              }
+            }
+          }
+        } else {
+          // No location data at all
+          if (locationElement) {
+            locationElement.textContent = 'Location unavailable';
+          }
+          if (nearbyLabsElement) {
+            nearbyLabsElement.innerHTML = '<p class="text-gray-500 text-sm">Unable to determine your location.</p>';
+          }
         }
-
-        // Update location display
-        const locationElement = document.getElementById('user-location');
+      } catch (error) {
+        console.error('Error initializing locations:', error);
         if (locationElement) {
-          locationElement.textContent = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+          locationElement.textContent = 'Error detecting location';
         }
-
-        // Simulate nearby labs (in production, this would be an API call)
-        const nearbyLabsElement = document.getElementById('nearby-labs');
         if (nearbyLabsElement) {
-          nearbyLabsElement.innerHTML = `
-            <div class="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer">
-              <div class="font-medium">Quest Diagnostics</div>
-              <div class="text-sm text-gray-600">1.2 miles away</div>
-              <div class="text-sm text-gray-500">Mon-Fri: 7AM-5PM</div>
+          nearbyLabsElement.innerHTML = '<p class="text-red-500 text-sm">An error occurred while loading locations.</p>';
+        }
+      }
+    }
+    
+    // Function to display locations on map and sidebar
+    function displayLocations(userLat: number, userLon: number) {
+      const nearbyLabsElement = document.getElementById('nearby-labs');
+      
+      // Clear existing lab markers
+      labMarkers.forEach(marker => marker.remove());
+      labMarkers = [];
+      
+      // Display locations in sidebar
+      if (nearbyLabsElement) {
+        if (locations.length === 0) {
+          nearbyLabsElement.innerHTML = '<p class="text-gray-500 text-sm">No locations found nearby</p>';
+        } else {
+          nearbyLabsElement.innerHTML = locations.map((loc: any, index: number) => `
+            <div class="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer transition-colors" data-location-id="${loc.id}" data-index="${index}">
+              <div class="font-medium">${loc.name}</div>
+              <div class="text-sm text-gray-600">${loc.distance || 'Distance unknown'}</div>
+              ${loc.nextAvailable ? `<div class="text-sm text-gray-500">Next: ${new Date(loc.nextAvailable).toLocaleDateString()}</div>` : '<div class="text-sm text-gray-400">Check availability</div>'}
             </div>
-            <div class="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer">
-              <div class="font-medium">LabCorp</div>
-              <div class="text-sm text-gray-600">2.5 miles away</div>
-              <div class="text-sm text-gray-500">Mon-Fri: 6AM-4PM</div>
-            </div>
-            <div class="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer">
-              <div class="font-medium">Community Health Center</div>
-              <div class="text-sm text-gray-600">3.8 miles away</div>
-              <div class="text-sm text-gray-500">Mon-Sat: 8AM-6PM</div>
-            </div>
-          `;
-
+          `).join('');
+          
+          // Add markers to map
+          locations.forEach((loc: any) => {
+            const marker = new mapboxgl.Marker({ color: '#DC2626' })
+              .setLngLat([loc.longitude, loc.latitude])
+              .setPopup(new mapboxgl.Popup().setHTML(`
+                <div class="p-2">
+                  <div class="font-medium">${loc.name}</div>
+                  <div class="text-sm">${loc.address}</div>
+                </div>
+              `))
+              .addTo(map);
+            labMarkers.push(marker);
+          });
+          
+          // Fit map to show all markers
+          if (locations.length > 0) {
+            const bounds = new mapboxgl.LngLatBounds();
+            locations.forEach(loc => {
+              bounds.extend([loc.longitude, loc.latitude]);
+            });
+            bounds.extend([userLon, userLat]);
+            map.fitBounds(bounds, { padding: 50 });
+          }
+          
           // Add click handlers to lab cards
           const labCards = nearbyLabsElement.querySelectorAll('.border');
           labCards.forEach((card) => {
             card.addEventListener('click', () => {
+              const index = parseInt(card.getAttribute('data-index') || '0');
+              selectedLocation = locations[index];
+              
               // Remove previous selections
               labCards.forEach(c => c.classList.remove('border-blue-500', 'bg-blue-50'));
               // Add selection to clicked card
@@ -148,43 +262,160 @@ import ShoppingLayout from '../../layouts/ShoppingLayout.astro';
               const scheduleBtn = document.getElementById('schedule-btn') as HTMLButtonElement;
               if (scheduleBtn) {
                 scheduleBtn.disabled = false;
+                scheduleBtn.textContent = 'Continue to Select Date & Time';
+              }
+              
+              // Center map on selected location
+              if (selectedLocation) {
+                map.flyTo({
+                  center: [selectedLocation.longitude, selectedLocation.latitude],
+                  zoom: 15
+                });
               }
             });
           });
         }
-
-        // Add sample lab markers around user location
-        const labLocations = [
-          { lng: longitude + 0.01, lat: latitude + 0.008, name: 'Quest Diagnostics' },
-          { lng: longitude - 0.015, lat: latitude + 0.005, name: 'LabCorp' },
-          { lng: longitude + 0.005, lat: latitude - 0.012, name: 'Community Health Center' }
-        ];
-
-        labLocations.forEach(lab => {
-          new mapboxgl.Marker({ color: '#DC2626' })
-            .setLngLat([lab.lng, lab.lat])
-            .setPopup(new mapboxgl.Popup().setHTML(`<div class="font-medium">${lab.name}</div>`))
-            .addTo(map);
-        });
-      },
-      (error) => {
-        console.error('Error getting location:', error);
-        const locationElement = document.getElementById('user-location');
-        if (locationElement) {
-          locationElement.textContent = 'Location access denied';
-        }
-      }
-      );
-    } else {
-      const locationElement = document.getElementById('user-location');
-      if (locationElement) {
-        locationElement.textContent = 'Geolocation not supported';
       }
     }
+    
+    // Initialize on load
+    initializeLocations();
 
-    // Schedule button handler
+    // Schedule button handler - show date/time selection
     document.getElementById('schedule-btn')?.addEventListener('click', () => {
-      alert('Scheduling functionality coming soon!');
+      if (selectedLocation) {
+        // Show date/time section
+        const datetimeSection = document.getElementById('datetime-section');
+        const locationInfo = document.getElementById('selected-location-info');
+        
+        if (datetimeSection && locationInfo) {
+          datetimeSection.classList.remove('hidden');
+          locationInfo.innerHTML = `
+            <h3 class="font-semibold">${selectedLocation.name}</h3>
+            <p class="text-sm text-gray-600">${selectedLocation.address}</p>
+          `;
+          
+          // Display available dates
+          displayAvailableDates();
+          
+          // Scroll to date/time section
+          datetimeSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+    
+    // Function to display available dates
+    function displayAvailableDates() {
+      const datePicker = document.getElementById('date-picker');
+      if (datePicker && selectedLocation && selectedLocation.availability) {
+        const dates = Object.keys(selectedLocation.availability).sort();
+        
+        if (dates.length === 0) {
+          datePicker.innerHTML = '<p class="text-gray-500">No available dates</p>';
+        } else {
+          datePicker.innerHTML = dates.slice(0, 7).map(date => {
+            const dateObj = new Date(date + 'T00:00:00');
+            const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+            const monthDay = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            return `
+              <button class="date-btn w-full text-left p-3 border rounded-lg hover:bg-blue-50 transition-colors" data-date="${date}">
+                <span class="font-medium">${dayName}</span> - ${monthDay}
+              </button>
+            `;
+          }).join('');
+          
+          // Add click handlers to date buttons
+          document.querySelectorAll('.date-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              // Remove previous selection
+              document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('bg-blue-100', 'border-blue-500'));
+              // Add selection
+              btn.classList.add('bg-blue-100', 'border-blue-500');
+              // Display time slots for selected date
+              const selectedDate = btn.getAttribute('data-date');
+              if (selectedDate) {
+                displayTimeSlots(selectedDate);
+              }
+            });
+          });
+        }
+      }
+    }
+    
+    // Function to display time slots
+    function displayTimeSlots(date: string) {
+      const timeSlotsContainer = document.getElementById('time-slots');
+      if (timeSlotsContainer && selectedLocation && selectedLocation.availability) {
+        const slots = selectedLocation.availability[date] || [];
+        
+        if (slots.length === 0) {
+          timeSlotsContainer.innerHTML = '<p class="text-gray-500 col-span-3">No available time slots</p>';
+        } else {
+          // Filter out past slots if date is today
+          const now = new Date();
+          const filteredSlots = slots.filter((slot: any) => {
+            const slotTime = new Date(slot.start);
+            return slotTime > now;
+          });
+          
+          timeSlotsContainer.innerHTML = filteredSlots.slice(0, 12).map((slot: any) => {
+            const startTime = new Date(slot.start).toLocaleTimeString('en-US', { 
+              hour: 'numeric', 
+              minute: '2-digit',
+              hour12: true 
+            });
+            return `
+              <button class="time-btn p-2 border rounded-lg hover:bg-green-50 transition-colors text-sm" data-booking-key="${slot.booking_key}">
+                ${startTime}
+              </button>
+            `;
+          }).join('');
+          
+          // Add click handlers to time buttons
+          document.querySelectorAll('.time-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              // Remove previous selection
+              document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('bg-green-100', 'border-green-500'));
+              // Add selection
+              btn.classList.add('bg-green-100', 'border-green-500');
+              // Enable confirm button
+              const confirmBtn = document.getElementById('confirm-appointment') as HTMLButtonElement;
+              if (confirmBtn) {
+                confirmBtn.disabled = false;
+              }
+            });
+          });
+        }
+      }
+    }
+    
+    // Back to location button
+    document.getElementById('back-to-location')?.addEventListener('click', () => {
+      const datetimeSection = document.getElementById('datetime-section');
+      if (datetimeSection) {
+        datetimeSection.classList.add('hidden');
+      }
+    });
+    
+    // Confirm appointment button
+    document.getElementById('confirm-appointment')?.addEventListener('click', () => {
+      const selectedDate = document.querySelector('.date-btn.bg-blue-100')?.getAttribute('data-date');
+      const selectedTimeBtn = document.querySelector('.time-btn.bg-green-100');
+      const bookingKey = selectedTimeBtn?.getAttribute('data-booking-key');
+      const timeText = selectedTimeBtn?.textContent;
+      
+      if (selectedLocation && selectedDate && bookingKey) {
+        // Store appointment details
+        const appointmentDetails = {
+          location: selectedLocation,
+          date: selectedDate,
+          time: timeText,
+          bookingKey: bookingKey
+        };
+        
+        sessionStorage.setItem('selectedAppointment', JSON.stringify(appointmentDetails));
+        alert(`Appointment Selected!\n\nLocation: ${selectedLocation.name}\nDate: ${selectedDate}\nTime: ${timeText}\n\nProceed to checkout to confirm.`);
+      }
     });
   });
 </script>
