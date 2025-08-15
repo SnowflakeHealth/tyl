@@ -174,36 +174,139 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // Call Vital (Junction) API
+    // Call Vital (Junction) API - Get up to 9 locations
     console.log('Calling Vital API with ZIP:', zipCode);
     
-    // Build query parameters - both lab and zip_code must be in query string
-    const params = new URLSearchParams({
-      lab: 'quest',
-      zip_code: zipCode
-    });
+    // Step 1: Get PSC site codes within radius
+    const pscInfoUrl = `${JUNCTION_API_URL}/v3/order/psc/info?zip_code=${zipCode}&lab_id=7&radius=25`;
     
-    const vitalResponse = await fetch(`${JUNCTION_API_URL}/v3/order/psc/appointment/availability?${params}`, {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'x-vital-api-key': JUNCTION_API_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        radius: "25"
-      })
-    });
-
-    if (!vitalResponse.ok) {
-      const errorText = await vitalResponse.text();
-      console.error('Vital API error response:', errorText);
-      throw new Error(`Vital API error: ${vitalResponse.status} - ${errorText}`);
+    let siteCodes: string[] = [];
+    try {
+      const pscInfoResponse = await fetch(pscInfoUrl, {
+        method: 'GET',
+        headers: {
+          'accept': 'application/json',
+          'x-vital-api-key': JUNCTION_API_KEY
+        }
+      });
+      
+      if (pscInfoResponse.ok) {
+        const pscData = await pscInfoResponse.json();
+        
+        // Extract site codes from response, filtering out restricted states
+        if (pscData.patient_service_centers && Array.isArray(pscData.patient_service_centers)) {
+          const restrictedStates = ['NY', 'NJ', 'RI'];
+          
+          siteCodes = pscData.patient_service_centers
+            .filter((psc: any) => !restrictedStates.includes(psc.state))
+            .map((psc: any) => psc.site_code)
+            .filter((code: string) => code)
+            .slice(0, 9); // Limit to 9 locations max
+        }
+      }
+    } catch (error) {
+      console.error('Failed to get PSC info:', error);
     }
-
-    const vitalData = await vitalResponse.json();
     
-    // Transform the data
+    // If no site codes found, fall back to zip-based search
+    if (siteCodes.length === 0) {
+      console.log('No site codes found, falling back to ZIP-based search');
+      
+      // Fallback to original zip-based search
+      const params = new URLSearchParams({
+        lab: 'quest',
+        zip_code: zipCode
+      });
+      
+      const vitalResponse = await fetch(`${JUNCTION_API_URL}/v3/order/psc/appointment/availability?${params}`, {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'x-vital-api-key': JUNCTION_API_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          radius: "25"
+        })
+      });
+
+      if (!vitalResponse.ok) {
+        const errorText = await vitalResponse.text();
+        console.error('Vital API error response:', errorText);
+        throw new Error(`Vital API error: ${vitalResponse.status} - ${errorText}`);
+      }
+
+      const vitalData = await vitalResponse.json();
+      const locations = transformVitalResponse(vitalData, userLat, userLon);
+      
+      // Return early with fallback results
+      return new Response(JSON.stringify({ 
+        locations,
+        userLocation: {
+          latitude: userLat,
+          longitude: userLon,
+          city: city,
+          state: region,
+          zipCode: zipCode
+        }
+      }), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'public, max-age=300'
+        }
+      });
+    }
+    
+    // Step 2: Get availability for site codes in batches of 3
+    const allSlots: any[] = [];
+    
+    // Split site codes into batches of 3 (API limitation)
+    const siteCodeBatches: string[][] = [];
+    for (let i = 0; i < siteCodes.length; i += 3) {
+      siteCodeBatches.push(siteCodes.slice(i, i + 3));
+    }
+    
+    console.log(`Processing ${siteCodeBatches.length} batches of site codes`);
+    
+    // Process each batch
+    for (const batch of siteCodeBatches) {
+      const queryParams = new URLSearchParams({
+        lab: 'quest'
+      });
+      
+      // Add each site code as a separate parameter
+      batch.forEach(code => {
+        queryParams.append('site_codes', code);
+      });
+      
+      const availabilityUrl = `${JUNCTION_API_URL}/v3/order/psc/appointment/availability?${queryParams.toString()}`;
+      
+      try {
+        const response = await fetch(availabilityUrl, {
+          method: 'POST',
+          headers: {
+            'accept': 'application/json',
+            'x-vital-api-key': JUNCTION_API_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({})
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.slots) {
+            allSlots.push(...data.slots);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching batch:', error);
+      }
+    }
+    
+    // Transform the combined data
+    const vitalData = { slots: allSlots };
     const locations = transformVitalResponse(vitalData, userLat, userLon);
 
     return new Response(JSON.stringify({ 
