@@ -1,0 +1,113 @@
+---
+import ShoppingLayout from '../../../layouts/ShoppingLayout.astro';
+import Footer from '../../../components/Footer.astro';
+
+export const prerender = false;
+
+const tests = [
+  {
+    id: "a3ae13c9-8cb8-4218-95f4-cfefc438b099",
+    name: "Hepatitis C Test With Confirmation",
+    price: 10,
+    description: "Screen for hepatitis C virus (HCV) infection with antibody testing and confirm positive results using RNA detection.",
+    url: "/tests/infectious-diseases/viral-screening/hepatitis-c-with-confirmation/"
+  }
+];
+---
+
+<ShoppingLayout 
+  title="Infectious Diseases Tests - Track Your Labs"
+  description="Browse and order infectious disease tests online. Screen for viral, bacterial, and other infectious conditions."
+>
+  <div class="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="text-sm breadcrumbs mb-6">
+      <ul>
+        <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
+        <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
+        <li class="text-gray-900">Infectious Diseases</li>
+      </ul>
+    </nav>
+
+    <h1 class="text-4xl font-bold mb-4">Infectious Diseases Tests</h1>
+    <p class="text-lg text-gray-600 mb-8">
+      Screen for infectious diseases including viral, bacterial, and parasitic infections with comprehensive testing for early detection and monitoring.
+    </p>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {tests.map(test => (
+        <a href={test.url} class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">{test.name}</h3>
+                <p class="text-gray-600 text-sm">{test.description}</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">${test.price}</span>
+                <button 
+                  class="btn btn-primary btn-sm" 
+                  onclick={`event.preventDefault(); event.stopPropagation(); addToCart('${test.id}', '${test.name}', ${test.price});`}
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+  
+  <Footer />
+</ShoppingLayout>
+
+<script>
+  interface CartItem {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    category?: string;
+    subcategory?: string;
+    url?: string;
+  }
+
+  function addToCart(id: string, name: string, price: number) {
+    // Get existing cart
+    let cart: CartItem[] = [];
+    try {
+      cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    } catch {
+      cart = [];
+    }
+
+    // Check if item already in cart
+    const existingItem = cart.find(item => item.id === id);
+    
+    if (!existingItem) {
+      // Add new item
+      cart.push({
+        id,
+        name,
+        price,
+        quantity: 1
+      });
+      
+      // Save cart
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      // Dispatch event for cart update
+      window.dispatchEvent(new Event('cartUpdated'));
+    }
+    
+    // Open cart drawer
+    const cartDrawer = document.getElementById('cart-drawer') as HTMLInputElement;
+    if (cartDrawer) {
+      cartDrawer.checked = true;
+    }
+  }
+
+  // Make function available globally
+  (window as any).addToCart = addToCart;
+</script>

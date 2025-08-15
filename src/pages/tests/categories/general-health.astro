@@ -1,0 +1,197 @@
+---
+import ShoppingLayout from '../../../layouts/ShoppingLayout.astro';
+import Footer from '../../../components/Footer.astro';
+
+export const prerender = false;
+
+const tests = [
+  {
+    id: "c528f597-c4c6-4c01-bea3-884489132574",
+    name: "Calcium Test",
+    price: 3,
+    description: "Measure calcium levels in your blood to assess bone health, heart function, and more.",
+    url: "/tests/general-health/minerals/calcium/"
+  },
+  {
+    id: "fc5288e5-861b-4f26-b86f-25c52bf093d1",
+    name: "Complete Blood Count (CBC) Test",
+    price: 4,
+    description: "Measure key components of your blood to assess overall health and detect potential disorders.",
+    url: "/tests/general-health/blood-counts/cbc/"
+  },
+  {
+    id: "97be733c-b555-48ba-9c49-42873317b7b2",
+    name: "Comprehensive Metabolic Panel (CMP) Test",
+    price: 4,
+    description: "Evaluate liver and kidney function, electrolyte balance, and overall metabolic health with a single blood test.",
+    url: "/tests/general-health/organ-function/cmp/"
+  },
+  {
+    id: "b243f1dd-186f-41b0-b6a2-c89e3f253a5f",
+    name: "Gout (Uric Acid) Test",
+    price: 4,
+    description: "Measure uric acid levels in your blood to help diagnose and monitor gout or other metabolic conditions.",
+    url: "/tests/general-health/organ-function/uric-acid/"
+  },
+  {
+    id: "0fdcad27-a0a1-4d8f-8ace-aa0f033fb3e2",
+    name: "Iodine Test",
+    price: 33,
+    description: "Measure iodine levels in your urine to assess dietary intake and thyroid health.",
+    url: "/tests/general-health/minerals/iodine/"
+  },
+  {
+    id: "db390032-969c-4828-8d5c-2ae4819f42c8",
+    name: "Iron, TIBC & Ferritin Panel",
+    price: 12,
+    description: "Measure your iron, ferritin, and total iron-binding capacity (TIBC) to assess iron status and related health conditions.",
+    url: "/tests/general-health/iron/iron-tibc-ferritin-panel/"
+  },
+  {
+    id: "a6b62757-7d5a-4307-9626-29ba68cb0c81",
+    name: "Lead Test",
+    price: 8,
+    description: "Measure lead levels in your blood to detect and monitor exposure to this toxic heavy metal.",
+    url: "/tests/general-health/heavy-metals/lead/"
+  },
+  {
+    id: "efba5da0-96cf-412f-b8b5-372c60c07f93",
+    name: "Magnesium Test",
+    price: 3,
+    description: "Measure the level of magnesium in your blood to help evaluate nerve, muscle, and heart function.",
+    url: "/tests/general-health/minerals/magnesium/"
+  },
+  {
+    id: "08c1c7a7-d821-451c-94eb-75cfb2d07819",
+    name: "Prothrombin Time with INR Test",
+    price: 5,
+    description: "Measure how long it takes your blood to clot and assess clotting function with a Prothrombin Time (PT) and International Normalized Ratio (INR) test.",
+    url: "/tests/general-health/blood-clotting/prothrombin-inr/"
+  },
+  {
+    id: "e6d38708-dcb8-46f6-aef9-2b71da14b478",
+    name: "Vitamin B12 & Folate Test",
+    price: 12,
+    description: "Check for deficiencies in vitamin B12 and folate (vitamin B9), essential nutrients for blood cell formation, DNA synthesis, and neurological function.",
+    url: "/tests/general-health/vitamins/vitamin-b12-folate/"
+  },
+  {
+    id: "b085ae6a-1310-43c1-a35c-12154cecf2ea",
+    name: "Vitamin B12 Test",
+    price: 8,
+    description: "Check your vitamin B12 levels to help detect deficiency and support nervous system and blood health.",
+    url: "/tests/general-health/vitamins/vitamin-b12/"
+  },
+  {
+    id: "576f99c6-8418-44d7-8aa0-616613ef750e",
+    name: "Vitamin D Test",
+    price: 19,
+    description: "Measure your 25-hydroxyvitamin D [25(OH)D] levels to assess bone health, immune function, and overall wellness.",
+    url: "/tests/general-health/vitamins/vitamin-d/"
+  },
+  {
+    id: "0af1cb92-7a54-4850-a455-4aa6619d730e",
+    name: "Zinc Test",
+    price: 8,
+    description: "Measure the zinc level in your blood to evaluate immune function, wound healing, and overall health.",
+    url: "/tests/general-health/minerals/zinc/"
+  }
+];
+---
+
+<ShoppingLayout 
+  title="General Health Tests - Track Your Labs"
+  description="Browse and order general health tests online. Check vitamins, minerals, blood counts, and overall wellness markers."
+>
+  <div class="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="text-sm breadcrumbs mb-6">
+      <ul>
+        <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
+        <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
+        <li class="text-gray-900">General Health</li>
+      </ul>
+    </nav>
+
+    <h1 class="text-4xl font-bold mb-4">General Health Tests</h1>
+    <p class="text-lg text-gray-600 mb-8">
+      Comprehensive health screening tests to monitor vitamins, minerals, blood counts, and overall wellness indicators for optimal health maintenance.
+    </p>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {tests.map(test => (
+        <a href={test.url} class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">{test.name}</h3>
+                <p class="text-gray-600 text-sm">{test.description}</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">${test.price}</span>
+                <button 
+                  class="btn btn-primary btn-sm" 
+                  onclick={`event.preventDefault(); event.stopPropagation(); addToCart('${test.id}', '${test.name}', ${test.price});`}
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+  
+  <Footer />
+</ShoppingLayout>
+
+<script>
+  interface CartItem {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    category?: string;
+    subcategory?: string;
+    url?: string;
+  }
+
+  function addToCart(id: string, name: string, price: number) {
+    // Get existing cart
+    let cart: CartItem[] = [];
+    try {
+      cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    } catch {
+      cart = [];
+    }
+
+    // Check if item already in cart
+    const existingItem = cart.find(item => item.id === id);
+    
+    if (!existingItem) {
+      // Add new item
+      cart.push({
+        id,
+        name,
+        price,
+        quantity: 1
+      });
+      
+      // Save cart
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      // Dispatch event for cart update
+      window.dispatchEvent(new Event('cartUpdated'));
+    }
+    
+    // Open cart drawer
+    const cartDrawer = document.getElementById('cart-drawer') as HTMLInputElement;
+    if (cartDrawer) {
+      cartDrawer.checked = true;
+    }
+  }
+
+  // Make function available globally
+  (window as any).addToCart = addToCart;
+</script>

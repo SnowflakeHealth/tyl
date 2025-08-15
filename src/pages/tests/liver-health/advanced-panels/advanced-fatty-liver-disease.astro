@@ -5,24 +5,24 @@ import Footer from '../../../../components/Footer.astro';
 export const prerender = false;
 
 const testData = {
-  id: "b0c5e772-7507-4703-91da-13b913f35f53",
-  name: "Adiponectin (Fat Metabolism) Test",
-  price: 18.00,
-  category: "metabolic-health",
-  subcategory: "adipokines",
-  questName: "Adiponectin (Fat Metabolism) Test",
-  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  turnaround: "Up to 8 business days",
-  sampleType: "Blood draw (serum)",
+  id: "4164bf67-ac49-4ef4-8b38-bc83ac72e35f",
+  name: "Advanced Fatty Liver Disease Test Panel",
+  price: 4.00,
+  category: "liver-health",
+  subcategory: "advanced-panels",
+  questName: "Advanced Fatty Liver Disease Test Panel",
+  description: "Evaluate your risk for Metabolic Associated Steatotic Liver Disease (MASLD) and Metabolic Associated Steatohepatitis (MASH) with a specialized blood test panel.",
+  turnaround: "5–7 business days",
+  sampleType: "Blood draw",
   fastingRequired: true,
   fastingDuration: "8–12 hours",
-  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
+  alsoKnownAs: ["Advanced NAFLD/NASH Panel","MASLD/MASH Risk Panel"]
 };
 ---
 
 <ShoppingLayout 
-  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
-  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+  title={`${testData.name} – Order Online | Track Your Labs`}
+  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Evaluate your risk for Metabolic Associated Steatotic Liver Disease (MASLD) and Metabolic Associated Steatohepatitis (MASH) with a specialized blood test panel.`}
 >
   <main class="flex-1">
     <!-- Hero Section -->
@@ -34,8 +34,8 @@ const testData = {
             <ul>
               <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
               <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
-              <li><a href="/tests#metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
-              <li class="text-gray-900">Adiponectin Test</li>
+              <li><a href="/tests#liver-health" class="text-gray-600 hover:text-gray-900">Liver Health</a></li>
+              <li class="text-gray-900">Advanced Fatty Liver Disease Test Panel</li>
             </ul>
           </nav>
 
@@ -71,7 +71,7 @@ const testData = {
                     </tr>
                     <tr>
                       <td class="fact-label">Fasting Required</td>
-                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                      <td class="fact-value">Yes (8–12 hours)</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Sample Type</td>
@@ -89,49 +89,40 @@ const testData = {
               <div class="content-section">
                 <h2 class="section-title">What This Test Measures</h2>
                 <p class="section-text">
-                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
-                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
-                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
-                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                  The Advanced Fatty Liver Disease Test Panel uses a combination of liver-related and metabolic biomarkers to evaluate:
+                </p>
+                <ul class="benefits-list mt-4">
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Liver Enzymes</strong> — ALT, AST, GGT for liver cell injury</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Fibrosis Markers</strong> — Indicators of liver scarring progression</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Metabolic Markers</strong> — Glucose, lipids, and other relevant labs</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Inflammation Markers</strong> — hs-CRP or similar to detect ongoing liver inflammation</span>
+                  </li>
+                </ul>
+                <p class="section-text mt-4">
+                  This test is designed to help identify patients at higher risk for progression from simple steatosis to MASH (inflammatory stage) and advanced fibrosis.
                 </p>
               </div>
 
-              <!-- Who Should Take This Test -->
-              <div class="content-section">
-                <h2 class="section-title">Who Should Take This Test</h2>
-                <ul class="benefits-list">
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Are overweight, obese, or have unexplained weight changes</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Want to monitor metabolic health as part of a wellness program</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Are under evaluation for metabolic syndrome</span>
-                  </li>
-                </ul>
-              </div>
+              
 
               <!-- How It Works -->
               <div class="content-section">
@@ -189,49 +180,28 @@ const testData = {
               <!-- Understanding Your Results -->
               <div class="content-section">
                 <h2 class="section-title">Understanding Your Results</h2>
-                <div class="results-table">
-                  <div class="result-row">
-                    <span class="result-level">Low</span>
-                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
-                  </div>
+                <p class="section-text">Your report may include:</p>
+                <div class="results-table mt-4">
                   <div class="result-row">
                     <span class="result-level">Normal</span>
-                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
+                    <span class="result-meaning">No significant signs of advanced fatty liver disease</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">High</span>
-                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
+                    <span class="result-level">Elevated Enzymes</span>
+                    <span class="result-meaning">May indicate liver inflammation or damage</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">High Fibrosis Markers</span>
+                    <span class="result-meaning">Suggest increased risk of advanced scarring</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">Metabolic Risk Factors</span>
+                    <span class="result-meaning">May show associated cardiovascular or diabetes risk</span>
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 italic mt-4">
-                  Note: Reference ranges vary; results should be interpreted by a healthcare provider in context of overall health.
+                  Note: Results should be interpreted by a healthcare provider in the context of imaging and clinical history.
                 </p>
-              </div>
-
-              <!-- FAQ -->
-              <div class="content-section">
-                <h2 class="section-title">Frequently Asked Questions</h2>
-                <div class="faq-container">
-                  <details class="faq-item">
-                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
-                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
-                  </details>
-                  
-                  <details class="faq-item">
-                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
-                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
-                  </details>
-                  
-                  <details class="faq-item">
-                    <summary class="faq-question">How long until I get results?</summary>
-                    <p class="faq-answer">Typically within 8 business days.</p>
-                  </details>
-                  
-                  <details class="faq-item">
-                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
-                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
-                  </details>
-                </div>
               </div>
 
               <!-- Compliance & Trust -->
@@ -240,19 +210,6 @@ const testData = {
                   <strong>CLIA-Certified & HIPAA-Compliant.</strong> This test is processed by Quest Diagnostics, 
                   a trusted lab network. Your information is protected and results are reviewed by qualified medical professionals.
                 </p>
-              </div>
-
-              <!-- Related Tests -->
-              <div class="content-section">
-                <h2 class="section-title">Related Tests</h2>
-                <div class="related-tests">
-                  <p class="text-gray-600 mb-4">Often ordered with:</p>
-                  <div class="related-links">
-                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
-                    <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
-                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -426,49 +383,6 @@ const testData = {
     color: #4b5563;
   }
 
-  /* FAQ */
-  .faq-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .faq-item {
-    background: #f9fafb;
-    border-radius: 8px;
-    padding: 1rem;
-  }
-
-  .faq-question {
-    font-weight: 600;
-    color: #111827;
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .faq-question::-webkit-details-marker {
-    display: none;
-  }
-
-  .faq-question::after {
-    content: '+';
-    font-size: 1.25rem;
-    color: #6b7280;
-  }
-
-  details[open] .faq-question::after {
-    content: '−';
-  }
-
-  .faq-answer {
-    margin-top: 1rem;
-    color: #4b5563;
-    line-height: 1.6;
-  }
-
   /* CTA Section */
   .cta-section {
     background: #f9fafb;
@@ -488,23 +402,6 @@ const testData = {
     color: #111827;
   }
 
-  /* Related Tests */
-  .related-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .link-item {
-    color: #3b82f6;
-    text-decoration: none;
-    font-size: 1rem;
-  }
-
-  .link-item:hover {
-    text-decoration: underline;
-  }
-
   @media (max-width: 640px) {
     .section-title {
       font-size: 1.5rem;
@@ -512,10 +409,6 @@ const testData = {
 
     .section-text {
       font-size: 1rem;
-    }
-
-    .result-row {
-      grid-template-columns: 80px 1fr;
     }
   }
 </style>
@@ -532,12 +425,18 @@ const testData = {
   }
 
   const testData = {
-    id: "b0c5e772-7507-4703-91da-13b913f35f53",
-    name: "Adiponectin (Fat Metabolism) Test",
-    price: 18.00,
-    category: "metabolic-health",
-    subcategory: "adipokines",
-    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
+    id: "4164bf67-ac49-4ef4-8b38-bc83ac72e35f",
+    name: "Advanced Fatty Liver Disease Test Panel",
+    price: 4.00,
+    category: "liver-health",
+    subcategory: "advanced-panels",
+    questName: "Advanced Fatty Liver Disease Test Panel",
+    description: "Evaluate your risk for Metabolic Associated Steatotic Liver Disease (MASLD) and Metabolic Associated Steatohepatitis (MASH) with a specialized blood test panel.",
+    turnaround: "5–7 business days",
+    sampleType: "Blood draw",
+    fastingRequired: true,
+    fastingDuration: "8–12 hours",
+    alsoKnownAs: ["Advanced NAFLD/NASH Panel","MASLD/MASH Risk Panel"]
   };
 
   document.getElementById('add-to-cart')?.addEventListener('click', () => {
@@ -562,7 +461,8 @@ const testData = {
       // Add new item
       cart.push({
         ...testData,
-        quantity: 1
+        quantity: 1,
+        url: "/tests/liver-health/advanced-panels/advanced-fatty-liver-disease/"
       });
       
       // Save cart
@@ -596,18 +496,18 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "name": "Advanced Fatty Liver Disease Test Panel",
+  "description": "Evaluate your risk for Metabolic Associated Steatotic Liver Disease (MASLD) and Metabolic Associated Steatohepatitis (MASH) with a specialized blood test panel.",
+  "sku": "4164bf67-ac49-4ef4-8b38-bc83ac72e35f",
   "brand": {
     "@type": "Brand",
     "name": "Quest Diagnostics"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "url": "https://www.trackyourlabs.com/tests/liver-health/advanced-panels/advanced-fatty-liver-disease/",
     "priceCurrency": "USD",
-    "price": "18.00",
+    "price": "4.00",
     "priceValidUntil": "2025-12-31",
     "availability": "https://schema.org/InStock"
   }
@@ -618,9 +518,9 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "MedicalTest",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
-  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "name": "Advanced Fatty Liver Disease Test Panel",
+  "description": "Evaluate your risk for Metabolic Associated Steatotic Liver Disease (MASLD) and Metabolic Associated Steatohepatitis (MASH) with a specialized blood test panel.",
+  "usedToDiagnose": "liver health, health assessment",
   "howPerformed": "Blood draw at Quest Diagnostics location"
 }
 </script>
@@ -645,8 +545,8 @@ const testData = {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Adiponectin (Fat Metabolism) Test",
-      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+      "name": "Advanced Fatty Liver Disease Test Panel",
+      "item": "https://www.trackyourlabs.com/tests/liver-health/advanced-panels/advanced-fatty-liver-disease/"
     }
   ]
 }

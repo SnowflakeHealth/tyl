@@ -5,24 +5,24 @@ import Footer from '../../../../components/Footer.astro';
 export const prerender = false;
 
 const testData = {
-  id: "b0c5e772-7507-4703-91da-13b913f35f53",
-  name: "Adiponectin (Fat Metabolism) Test",
-  price: 18.00,
-  category: "metabolic-health",
-  subcategory: "adipokines",
-  questName: "Adiponectin (Fat Metabolism) Test",
-  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  turnaround: "Up to 8 business days",
-  sampleType: "Blood draw (serum)",
+  id: "db390032-969c-4828-8d5c-2ae4819f42c8",
+  name: "Iron, TIBC & Ferritin Panel",
+  price: 12.00,
+  category: "general-health",
+  subcategory: "iron",
+  questName: "Iron, TIBC & Ferritin Panel",
+  description: "Measure your iron, ferritin, and total iron-binding capacity (TIBC) to assess iron status and related health conditions.",
+  turnaround: "1–3 business days",
+  sampleType: "Blood draw",
   fastingRequired: true,
-  fastingDuration: "8–12 hours",
-  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
+  fastingDuration: "8–12 hours recommended",
+  alsoKnownAs: ["Iron Studies Panel","Iron and Ferritin Test"]
 };
 ---
 
 <ShoppingLayout 
-  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
-  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+  title={`${testData.name} – Order Online | Track Your Labs`}
+  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure your iron, ferritin, and total iron-binding capacity (TIBC) to assess iron status and related health conditions.`}
 >
   <main class="flex-1">
     <!-- Hero Section -->
@@ -34,8 +34,8 @@ const testData = {
             <ul>
               <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
               <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
-              <li><a href="/tests#metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
-              <li class="text-gray-900">Adiponectin Test</li>
+              <li><a href="/tests#general-health" class="text-gray-600 hover:text-gray-900">General Health</a></li>
+              <li class="text-gray-900">Iron, TIBC & Ferritin Panel</li>
             </ul>
           </nav>
 
@@ -71,7 +71,7 @@ const testData = {
                     </tr>
                     <tr>
                       <td class="fact-label">Fasting Required</td>
-                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                      <td class="fact-value">Yes (8–12 hours recommended)</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Sample Type</td>
@@ -89,10 +89,7 @@ const testData = {
               <div class="content-section">
                 <h2 class="section-title">What This Test Measures</h2>
                 <p class="section-text">
-                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
-                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
-                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
-                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                  This comprehensive iron panel measures multiple markers to assess your body's iron status. The test includes serum iron (circulating iron), ferritin (stored iron), total iron-binding capacity (TIBC), and transferrin saturation to provide a complete picture of iron metabolism and potential deficiencies or overloads.
                 </p>
               </div>
 
@@ -104,31 +101,31 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are overweight, obese, or have unexplained weight changes</span>
+                    <span>Experience symptoms of fatigue, weakness, or unexplained tiredness</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
+                    <span>Have a family history of iron deficiency or hemochromatosis</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Want to monitor metabolic health as part of a wellness program</span>
+                    <span>Follow a vegetarian or vegan diet with potential iron concerns</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
+                    <span>Are pregnant or have heavy menstrual periods</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are under evaluation for metabolic syndrome</span>
+                    <span>Want to monitor iron levels during supplementation</span>
                   </li>
                 </ul>
               </div>
@@ -169,7 +166,7 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Fast for 8–12 hours before your appointment; only water is permitted</span>
+                    <span>Fast for 8–12 hours recommended before your appointment; only water is permitted</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -191,16 +188,24 @@ const testData = {
                 <h2 class="section-title">Understanding Your Results</h2>
                 <div class="results-table">
                   <div class="result-row">
-                    <span class="result-level">Low</span>
-                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
+                    <span class="result-level">Low Iron & Low Ferritin</span>
+                    <span class="result-meaning">Suggestive of iron deficiency anemia</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">Normal</span>
-                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
+                    <span class="result-level">High Iron & High Ferritin</span>
+                    <span class="result-meaning">May indicate iron overload (hemochromatosis) or inflammation</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">High</span>
-                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
+                    <span class="result-level">Low Ferritin, Normal Iron</span>
+                    <span class="result-meaning">Possible early iron deficiency</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">High TIBC</span>
+                    <span class="result-meaning">Common in iron deficiency</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">Low TIBC</span>
+                    <span class="result-meaning">May occur in chronic illness or iron overload</span>
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 italic mt-4">
@@ -213,23 +218,23 @@ const testData = {
                 <h2 class="section-title">Frequently Asked Questions</h2>
                 <div class="faq-container">
                   <details class="faq-item">
-                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
-                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
+                    <summary class="faq-question">Is fasting required for the Iron Panel?</summary>
+                    <p class="faq-answer">Fasting for 8–12 hours is recommended for the most accurate results, particularly for serum iron levels.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
-                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
+                    <summary class="faq-question">What's the difference between iron and ferritin?</summary>
+                    <p class="faq-answer">Serum iron measures circulating iron in your blood, while ferritin indicates stored iron in your body tissues.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">How long until I get results?</summary>
-                    <p class="faq-answer">Typically within 8 business days.</p>
+                    <summary class="faq-question">How long until I get my results?</summary>
+                    <p class="faq-answer">Typically within 1–3 business days after your blood draw.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
-                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
+                    <summary class="faq-question">Can I take iron supplements before the test?</summary>
+                    <p class="faq-answer">Discuss with your healthcare provider, as iron supplements may affect test results and should be discontinued before testing if recommended.</p>
                   </details>
                 </div>
               </div>
@@ -248,9 +253,9 @@ const testData = {
                 <div class="related-tests">
                   <p class="text-gray-600 mb-4">Often ordered with:</p>
                   <div class="related-links">
-                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
-                    <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
-                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
+                    <a href="/tests/general-health/blood-counts/cbc" class="link-item">Complete Blood Count (CBC) →</a>
+                    <a href="/tests/general-health/vitamins/vitamin-b12" class="link-item">Vitamin B12 Test →</a>
+                    <a href="/tests/general-health/vitamins/vitamin-d" class="link-item">Vitamin D Test →</a>
                   </div>
                 </div>
               </div>
@@ -407,7 +412,7 @@ const testData = {
 
   .result-row {
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 200px 1fr;
     gap: 1rem;
     padding: 1rem;
     border-bottom: 1px solid #e5e7eb;
@@ -515,7 +520,7 @@ const testData = {
     }
 
     .result-row {
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 120px 1fr;
     }
   }
 </style>
@@ -532,12 +537,18 @@ const testData = {
   }
 
   const testData = {
-    id: "b0c5e772-7507-4703-91da-13b913f35f53",
-    name: "Adiponectin (Fat Metabolism) Test",
-    price: 18.00,
-    category: "metabolic-health",
-    subcategory: "adipokines",
-    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
+    id: "db390032-969c-4828-8d5c-2ae4819f42c8",
+    name: "Iron, TIBC & Ferritin Panel",
+    price: 12.00,
+    category: "general-health",
+    subcategory: "iron",
+    questName: "Iron, TIBC & Ferritin Panel",
+    description: "Measure your iron, ferritin, and total iron-binding capacity (TIBC) to assess iron status and related health conditions.",
+    turnaround: "1–3 business days",
+    sampleType: "Blood draw",
+    fastingRequired: true,
+    fastingDuration: "8–12 hours recommended",
+    alsoKnownAs: ["Iron Studies Panel","Iron and Ferritin Test"]
   };
 
   document.getElementById('add-to-cart')?.addEventListener('click', () => {
@@ -562,7 +573,8 @@ const testData = {
       // Add new item
       cart.push({
         ...testData,
-        quantity: 1
+        quantity: 1,
+        url: "/tests/general-health/iron/iron-tibc-ferritin-panel/"
       });
       
       // Save cart
@@ -596,18 +608,18 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "name": "Iron, TIBC & Ferritin Panel",
+  "description": "Measure your iron, ferritin, and total iron-binding capacity (TIBC) to assess iron status and related health conditions.",
+  "sku": "db390032-969c-4828-8d5c-2ae4819f42c8",
   "brand": {
     "@type": "Brand",
     "name": "Quest Diagnostics"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "url": "https://www.trackyourlabs.com/tests/general-health/iron/iron-tibc-ferritin-panel/",
     "priceCurrency": "USD",
-    "price": "18.00",
+    "price": "12.00",
     "priceValidUntil": "2025-12-31",
     "availability": "https://schema.org/InStock"
   }
@@ -618,9 +630,9 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "MedicalTest",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
-  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "name": "Iron, TIBC & Ferritin Panel",
+  "description": "Measure your iron, ferritin, and total iron-binding capacity (TIBC) to assess iron status and related health conditions.",
+  "usedToDiagnose": "general health, health assessment",
   "howPerformed": "Blood draw at Quest Diagnostics location"
 }
 </script>
@@ -645,8 +657,8 @@ const testData = {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Adiponectin (Fat Metabolism) Test",
-      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+      "name": "Iron, TIBC & Ferritin Panel",
+      "item": "https://www.trackyourlabs.com/tests/general-health/iron/iron-tibc-ferritin-panel/"
     }
   ]
 }

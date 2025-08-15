@@ -1,0 +1,113 @@
+---
+import ShoppingLayout from '../../../layouts/ShoppingLayout.astro';
+import Footer from '../../../components/Footer.astro';
+
+export const prerender = false;
+
+const tests = [
+  {
+    id: "d22e5a9c-43b5-4029-8f76-33d4f91e95c0",
+    name: "Testosterone Test",
+    price: 5,
+    description: "Measure your testosterone levels to evaluate hormone balance, reproductive health, and overall wellness.",
+    url: "/tests/hormone-health/mens-health/testosterone/"
+  }
+];
+---
+
+<ShoppingLayout 
+  title="Men's Health Tests - Track Your Labs"
+  description="Browse and order men's health tests online. Check testosterone levels, male hormones, and men's wellness markers."
+>
+  <div class="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="text-sm breadcrumbs mb-6">
+      <ul>
+        <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
+        <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
+        <li class="text-gray-900">Men's Health</li>
+      </ul>
+    </nav>
+
+    <h1 class="text-4xl font-bold mb-4">Men's Health Tests</h1>
+    <p class="text-lg text-gray-600 mb-8">
+      Monitor your male-specific health markers with comprehensive testing for testosterone, hormone balance, and men's wellness indicators.
+    </p>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {tests.map(test => (
+        <a href={test.url} class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">{test.name}</h3>
+                <p class="text-gray-600 text-sm">{test.description}</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">${test.price}</span>
+                <button 
+                  class="btn btn-primary btn-sm" 
+                  onclick={`event.preventDefault(); event.stopPropagation(); addToCart('${test.id}', '${test.name}', ${test.price});`}
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+  
+  <Footer />
+</ShoppingLayout>
+
+<script>
+  interface CartItem {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    category?: string;
+    subcategory?: string;
+    url?: string;
+  }
+
+  function addToCart(id: string, name: string, price: number) {
+    // Get existing cart
+    let cart: CartItem[] = [];
+    try {
+      cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    } catch {
+      cart = [];
+    }
+
+    // Check if item already in cart
+    const existingItem = cart.find(item => item.id === id);
+    
+    if (!existingItem) {
+      // Add new item
+      cart.push({
+        id,
+        name,
+        price,
+        quantity: 1
+      });
+      
+      // Save cart
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      // Dispatch event for cart update
+      window.dispatchEvent(new Event('cartUpdated'));
+    }
+    
+    // Open cart drawer
+    const cartDrawer = document.getElementById('cart-drawer') as HTMLInputElement;
+    if (cartDrawer) {
+      cartDrawer.checked = true;
+    }
+  }
+
+  // Make function available globally
+  (window as any).addToCart = addToCart;
+</script>

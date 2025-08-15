@@ -12,36 +12,628 @@ export const prerender = false;
   <div class="max-w-7xl mx-auto px-4 lg:px-8 py-12">
     <h1 class="text-4xl font-bold mb-8">Order Lab Tests Online</h1>
     
-    <div class="alert alert-info mb-8">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-      </svg>
-      <div>
-        <p class="font-semibold">Shopping functionality coming soon!</p>
-        <p>We're currently building out our full test catalog. Browse our first available test below.</p>
+    <!-- Category Navigation -->
+    <div class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Browse by Category</h2>
+      <div class="flex flex-wrap gap-3">
+        <a href="/tests/categories/heart-health" class="btn btn-outline">Heart Health</a>
+        <a href="/tests/categories/diabetes" class="btn btn-outline">Diabetes</a>
+        <a href="/tests/categories/general-health" class="btn btn-outline">General Health</a>
+        <a href="/tests/categories/metabolic-health" class="btn btn-outline">Metabolic Health</a>
+        <a href="/tests/categories/hormone-health" class="btn btn-outline">Hormone Health</a>
+        <a href="/tests/categories/thyroid-health" class="btn btn-outline">Thyroid Health</a>
+        <a href="/tests/categories/liver-health" class="btn btn-outline">Liver Health</a>
+        <a href="/tests/categories/blood-disorders" class="btn btn-outline">Blood Disorders</a>
+        <a href="/tests/categories/infectious-diseases" class="btn btn-outline">Infectious Diseases</a>
+        <a href="/tests/categories/allergy" class="btn btn-outline">Allergy</a>
+        <a href="/tests/categories/womens-health" class="btn btn-outline">Women's Health</a>
+        <a href="/tests/categories/mens-health" class="btn btn-outline">Men's Health</a>
       </div>
     </div>
     
-    <h2 class="text-2xl font-bold mb-6">Available Tests</h2>
-    
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Adiponectin Test Card -->
-      <a href="/tests/metabolic-health/adipokines/adiponectin-fat-metabolism" class="block group">
-        <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
-          <div class="card-body flex flex-col justify-between">
-            <div>
-              <h3 class="card-title text-lg mb-2">Adiponectin (Fat Metabolism) Test</h3>
-              <p class="text-gray-600 text-sm">Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.</p>
-            </div>
-            <div class="flex items-end justify-between mt-4">
-              <span class="text-2xl font-bold">$18</span>
-              <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('b0c5e772-7507-4703-91da-13b913f35f53', 'Adiponectin (Fat Metabolism) Test', 18);">
-                Add to Cart
-              </button>
+    <!-- Heart Health -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Heart Health</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/tests/heart-health/advanced-panels/advanced-heart-health-with-apob/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Advanced Heart Health Test Panel (with ApoB)</h3>
+                <p class="text-gray-600 text-sm">Get a comprehensive view of your cardiovascular risk with advanced lipid and heart health biomarkers, including ApoB.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$87</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('f19a88de-14f6-494b-bcab-93ed362d8ebe', 'Advanced Heart Health Test Panel (with ApoB)', 87);">
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </a>
+        </a>
+        <a href="/tests/heart-health/lipids/cholesterol-lipid-panel/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Cholesterol (Lipid) Panel</h3>
+                <p class="text-gray-600 text-sm">Check your cholesterol profile to understand your heart health risk and guide next steps.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$6</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('a4f2e439-1946-48d1-a753-acad83cae130', 'Cholesterol (Lipid) Panel', 6);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/heart-health/lipids/high-risk-lipid-lpa-panel/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">High-Risk Heart Health Lipid and Lp(a) Test Panel</h3>
+                <p class="text-gray-600 text-sm">Identify elevated cholesterol and inherited Lipoprotein(a) [Lp(a)] levels to better understand your cardiovascular risk.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$20</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('46995022-0357-47f1-b91e-18147a3c4e45', 'High-Risk Heart Health Lipid and Lp(a) Test Panel', 20);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/heart-health/inflammation-and-other-markers/homocysteine/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Homocysteine Test</h3>
+                <p class="text-gray-600 text-sm">Check your homocysteine levels to assess potential cardiovascular and nutritional health risks.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$18</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('1bed4e2a-8255-4523-9906-ff31ff6907c3', 'Homocysteine Test', 18);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/heart-health/inflammation-and-other-markers/hscrp-inflammation/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">hsCRP Test for Inflammation Marker</h3>
+                <p class="text-gray-600 text-sm">Detect low-grade inflammation linked to cardiovascular disease risk with a high-sensitivity C-reactive protein (hsCRP) t...</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$7</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('5563f414-5e88-4f49-a9df-b89e20f9e35a', 'hsCRP Test for Inflammation Marker', 7);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/heart-health/lipids/lipoprotein-a/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Lipoprotein(a) Test</h3>
+                <p class="text-gray-600 text-sm">Check for elevated Lipoprotein(a) [Lp(a)] levels, an inherited risk factor for cardiovascular disease.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$15</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('63d1793f-db63-48ea-b865-22417180c4b1', 'Lipoprotein(a) Test', 15);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/heart-health/fatty-acids/omega-3-6-ratio-panel/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Omega-3 & 6 Ratio Test Panel</h3>
+                <p class="text-gray-600 text-sm">Measure your omega-3 and omega-6 fatty acid levels to evaluate heart, brain, and overall health.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$60</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('507ed361-c22f-4f86-b1df-b8b4b17eb265', 'Omega-3 & 6 Ratio Test Panel', 60);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- Diabetes -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Diabetes</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/tests/diabetes/risk-assessment/diabetes-risk-test-panel/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Diabetes Risk Test Panel</h3>
+                <p class="text-gray-600 text-sm">Check your risk for diabetes and related heart health factors with one simple panel.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$10</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('79828de0-f345-4e93-9d74-83a9cb80b4c2', 'Diabetes Risk Test Panel', 10);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Hemoglobin A1c Test</h3>
+                <p class="text-gray-600 text-sm">Measure your average blood sugar over the past 2–3 months to assess diabetes risk and management.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$4</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('0f7c859a-3975-4968-beac-344e74347002', 'Hemoglobin A1c Test', 4);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-test-panel/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Insulin Resistance Test Panel</h3>
+                <p class="text-gray-600 text-sm">Assess your risk for insulin resistance and related metabolic health issues with a targeted blood test panel.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$48</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('a3cadd13-ac65-4921-8031-98e65fda87f0', 'Insulin Resistance Test Panel', 48);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- General Health -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">General Health</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/tests/general-health/minerals/calcium/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Calcium Test</h3>
+                <p class="text-gray-600 text-sm">Measure calcium levels in your blood to assess bone health, heart function, and more.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$3</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('c528f597-c4c6-4c01-bea3-884489132574', 'Calcium Test', 3);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/blood-counts/cbc/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Complete Blood Count (CBC) Test</h3>
+                <p class="text-gray-600 text-sm">Measure key components of your blood to assess overall health and detect potential disorders.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$4</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('fc5288e5-861b-4f26-b86f-25c52bf093d1', 'Complete Blood Count (CBC) Test', 4);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/organ-function/cmp/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Comprehensive Metabolic Panel (CMP) Test</h3>
+                <p class="text-gray-600 text-sm">Evaluate liver and kidney function, electrolyte balance, and overall metabolic health with a single blood test.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$4</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('97be733c-b555-48ba-9c49-42873317b7b2', 'Comprehensive Metabolic Panel (CMP) Test', 4);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/organ-function/uric-acid/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Gout (Uric Acid) Test</h3>
+                <p class="text-gray-600 text-sm">Measure uric acid levels in your blood to help diagnose and monitor gout or other metabolic conditions.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$4</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('b243f1dd-186f-41b0-b6a2-c89e3f253a5f', 'Gout (Uric Acid) Test', 4);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/minerals/iodine/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Iodine Test</h3>
+                <p class="text-gray-600 text-sm">Measure iodine levels in your urine to assess dietary intake and thyroid health.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$33</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('0fdcad27-a0a1-4d8f-8ace-aa0f033fb3e2', 'Iodine Test', 33);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/iron/iron-tibc-ferritin-panel/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Iron, TIBC & Ferritin Panel</h3>
+                <p class="text-gray-600 text-sm">Measure your iron, ferritin, and total iron-binding capacity (TIBC) to assess iron status and related health conditions.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$12</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('db390032-969c-4828-8d5c-2ae4819f42c8', 'Iron, TIBC & Ferritin Panel', 12);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/heavy-metals/lead/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Lead Test</h3>
+                <p class="text-gray-600 text-sm">Measure lead levels in your blood to detect and monitor exposure to this toxic heavy metal.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$8</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('a6b62757-7d5a-4307-9626-29ba68cb0c81', 'Lead Test', 8);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/minerals/magnesium/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Magnesium Test</h3>
+                <p class="text-gray-600 text-sm">Measure the level of magnesium in your blood to help evaluate nerve, muscle, and heart function.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$3</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('efba5da0-96cf-412f-b8b5-372c60c07f93', 'Magnesium Test', 3);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/blood-clotting/prothrombin-inr/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Prothrombin Time with INR Test</h3>
+                <p class="text-gray-600 text-sm">Measure how long it takes your blood to clot and assess clotting function with a Prothrombin Time (PT) and International...</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$5</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('08c1c7a7-d821-451c-94eb-75cfb2d07819', 'Prothrombin Time with INR Test', 5);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/vitamins/vitamin-b12-folate/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Vitamin B12 & Folate Test</h3>
+                <p class="text-gray-600 text-sm">Check for deficiencies in vitamin B12 and folate (vitamin B9), essential nutrients for blood cell formation, DNA synthes...</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$12</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('e6d38708-dcb8-46f6-aef9-2b71da14b478', 'Vitamin B12 & Folate Test', 12);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/vitamins/vitamin-b12/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Vitamin B12 Test</h3>
+                <p class="text-gray-600 text-sm">Check your vitamin B12 levels to help detect deficiency and support nervous system and blood health.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$8</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('b085ae6a-1310-43c1-a35c-12154cecf2ea', 'Vitamin B12 Test', 8);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/vitamins/vitamin-d/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Vitamin D Test</h3>
+                <p class="text-gray-600 text-sm">Measure your 25-hydroxyvitamin D [25(OH)D] levels to assess bone health, immune function, and overall wellness.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$19</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('576f99c6-8418-44d7-8aa0-616613ef750e', 'Vitamin D Test', 19);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/general-health/minerals/zinc/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Zinc Test</h3>
+                <p class="text-gray-600 text-sm">Measure the zinc level in your blood to evaluate immune function, wound healing, and overall health.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$8</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('0af1cb92-7a54-4850-a455-4aa6619d730e', 'Zinc Test', 8);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- Metabolic Health -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Metabolic Health</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Adiponectin (Fat Metabolism) Test</h3>
+                <p class="text-gray-600 text-sm">Measure your blood adiponectin levels to gain insights into your metabolic and cardiovascular health.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$18</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('b0c5e772-7507-4703-91da-13b913f35f53', 'Adiponectin (Fat Metabolism) Test', 18);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/metabolic-health/risk-panels/metabolic-risk-test-panel/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Metabolic Risk Test Panel</h3>
+                <p class="text-gray-600 text-sm">Assess your risk for metabolic syndrome and cardiovascular disease with a comprehensive blood test panel.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$161</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('a080ab21-706f-4aa3-8652-448933e00867', 'Metabolic Risk Test Panel', 161);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- Hormone Health -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Hormone Health</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/tests/hormone-health/fertility/amh-marker/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">AMH Marker Test</h3>
+                <p class="text-gray-600 text-sm">Measure your Anti-Müllerian Hormone (AMH) level to estimate ovarian reserve and egg quantity.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$21</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('6ad716a1-ca60-4634-b3ec-d17fecc5bf94', 'AMH Marker Test', 21);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/hormone-health/stress/cortisol/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Cortisol Stress Hormone Test</h3>
+                <p class="text-gray-600 text-sm">Measure your cortisol levels to assess adrenal function and stress response.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$6</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('282cd39c-c37b-4260-81ad-a9cd13e5071d', 'Cortisol Stress Hormone Test', 6);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/hormone-health/fertility/progesterone/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Progesterone Test</h3>
+                <p class="text-gray-600 text-sm">Measure your progesterone level to confirm ovulation and assess reproductive health.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$7</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('761b8238-3ba3-4631-b846-350ab1f16c44', 'Progesterone Test', 7);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="/tests/hormone-health/mens-health/testosterone/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Testosterone Test</h3>
+                <p class="text-gray-600 text-sm">Measure your testosterone levels to evaluate hormone balance, reproductive health, and overall wellness.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$5</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('d22e5a9c-43b5-4029-8f76-33d4f91e95c0', 'Testosterone Test', 5);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- Thyroid Health -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Thyroid Health</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/tests/thyroid-health/function/tsh-function/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Thyroid TSH Function Test</h3>
+                <p class="text-gray-600 text-sm">Measure thyroid-stimulating hormone (TSH) levels to evaluate thyroid function and detect potential thyroid disorders.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$10</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('bff7cf77-7bd5-4f22-99f8-eab2957aa010', 'Thyroid TSH Function Test', 10);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- Liver Health -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Liver Health</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/tests/liver-health/advanced-panels/advanced-fatty-liver-disease/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Advanced Fatty Liver Disease Test Panel</h3>
+                <p class="text-gray-600 text-sm">Evaluate your risk for Metabolic Associated Steatotic Liver Disease (MASLD) and Metabolic Associated Steatohepatitis (MA...</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$4</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('4164bf67-ac49-4ef4-8b38-bc83ac72e35f', 'Advanced Fatty Liver Disease Test Panel', 4);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- Blood Disorders -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Blood Disorders</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/tests/blood-disorders/genetic-screening/sickle-cell-trait/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Sickle Cell Trait Screen Test with Reflex</h3>
+                <p class="text-gray-600 text-sm">Screen for sickle cell trait and, if positive, confirm with additional testing to ensure accurate results.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$32</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('e623f3ba-9e45-4640-bf38-51fbc3fab02d', 'Sickle Cell Trait Screen Test with Reflex', 32);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- Infectious Diseases -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Infectious Diseases</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/tests/infectious-diseases/viral-screening/hepatitis-c-with-confirmation/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Hepatitis C Test With Confirmation</h3>
+                <p class="text-gray-600 text-sm">Screen for hepatitis C virus (HCV) infection with antibody testing and confirm positive results using RNA detection.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$10</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('a3ae13c9-8cb8-4218-95f4-cfefc438b099', 'Hepatitis C Test With Confirmation', 10);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- Allergy -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Allergy</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/tests/allergy/food/food-allergy-panel-with-reflex/" class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">Food Allergy Panel with Reflex to Components</h3>
+                <p class="text-gray-600 text-sm">Test for allergic sensitization to 15 common foods, with reflex component testing for detailed allergen profiling.</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">$105</span>
+                <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('7b953df6-1a48-44bf-8aff-b1eeda4717a6', 'Food Allergy Panel with Reflex to Components', 105);">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
     </div>
   </div>
   
@@ -77,10 +669,7 @@ export const prerender = false;
         id,
         name,
         price,
-        quantity: 1,
-        category: 'metabolic-health',
-        subcategory: 'adipokines',
-        url: '/tests/metabolic-health/adipokines/adiponectin-fat-metabolism'
+        quantity: 1
       });
       
       // Save cart

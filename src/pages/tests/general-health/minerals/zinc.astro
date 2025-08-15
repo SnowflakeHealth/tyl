@@ -5,24 +5,24 @@ import Footer from '../../../../components/Footer.astro';
 export const prerender = false;
 
 const testData = {
-  id: "b0c5e772-7507-4703-91da-13b913f35f53",
-  name: "Adiponectin (Fat Metabolism) Test",
-  price: 18.00,
-  category: "metabolic-health",
-  subcategory: "adipokines",
-  questName: "Adiponectin (Fat Metabolism) Test",
-  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  turnaround: "Up to 8 business days",
-  sampleType: "Blood draw (serum)",
+  id: "0af1cb92-7a54-4850-a455-4aa6619d730e",
+  name: "Zinc Test",
+  price: 8.00,
+  category: "general-health",
+  subcategory: "minerals",
+  questName: "Zinc Test",
+  description: "Measure the zinc level in your blood to evaluate immune function, wound healing, and overall health.",
+  turnaround: "1–3 business days",
+  sampleType: "Blood draw",
   fastingRequired: true,
-  fastingDuration: "8–12 hours",
-  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
+  fastingDuration: "8–12 hours recommended",
+  alsoKnownAs: ["Serum Zinc Test","Plasma Zinc Test"]
 };
 ---
 
 <ShoppingLayout 
-  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
-  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+  title={`${testData.name} – Order Online | Track Your Labs`}
+  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure the zinc level in your blood to evaluate immune function, wound healing, and overall health.`}
 >
   <main class="flex-1">
     <!-- Hero Section -->
@@ -34,8 +34,8 @@ const testData = {
             <ul>
               <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
               <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
-              <li><a href="/tests#metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
-              <li class="text-gray-900">Adiponectin Test</li>
+              <li><a href="/tests#general-health" class="text-gray-600 hover:text-gray-900">General Health</a></li>
+              <li class="text-gray-900">Zinc Test</li>
             </ul>
           </nav>
 
@@ -71,7 +71,7 @@ const testData = {
                     </tr>
                     <tr>
                       <td class="fact-label">Fasting Required</td>
-                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                      <td class="fact-value">Yes (8–12 hours recommended)</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Sample Type</td>
@@ -89,10 +89,7 @@ const testData = {
               <div class="content-section">
                 <h2 class="section-title">What This Test Measures</h2>
                 <p class="section-text">
-                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
-                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
-                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
-                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                  The Zinc Test measures the concentration of zinc in your blood. Zinc is an essential trace mineral involved in immune function, protein synthesis, wound healing, taste, smell, and reproductive health. Deficiency can lead to impaired immunity, delayed wound healing, hair loss, and growth retardation in children, while excess zinc can cause nausea, vomiting, immune suppression, and interfere with copper absorption.
                 </p>
               </div>
 
@@ -104,31 +101,31 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are overweight, obese, or have unexplained weight changes</span>
+                    <span>Experience frequent infections or slow wound healing</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
+                    <span>Have taste or smell changes</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Want to monitor metabolic health as part of a wellness program</span>
+                    <span>Follow a vegetarian diet or have poor nutrition</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
+                    <span>Have digestive disorders affecting mineral absorption</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are under evaluation for metabolic syndrome</span>
+                    <span>Are monitoring zinc supplementation levels</span>
                   </li>
                 </ul>
               </div>
@@ -169,7 +166,7 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Fast for 8–12 hours before your appointment; only water is permitted</span>
+                    <span>Fast for 8–12 hours recommended before your appointment; only water is permitted</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -192,15 +189,15 @@ const testData = {
                 <div class="results-table">
                   <div class="result-row">
                     <span class="result-level">Low</span>
-                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
+                    <span class="result-meaning">May indicate inadequate dietary intake, poor absorption, or increased loss</span>
                   </div>
                   <div class="result-row">
                     <span class="result-level">Normal</span>
-                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
+                    <span class="result-meaning">Indicates adequate zinc levels for healthy function</span>
                   </div>
                   <div class="result-row">
                     <span class="result-level">High</span>
-                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
+                    <span class="result-meaning">May result from over-supplementation, exposure, or certain medical treatments</span>
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 italic mt-4">
@@ -213,23 +210,23 @@ const testData = {
                 <h2 class="section-title">Frequently Asked Questions</h2>
                 <div class="faq-container">
                   <details class="faq-item">
-                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
-                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
+                    <summary class="faq-question">Do I need to fast for this test?</summary>
+                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended for most accurate results.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
-                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
+                    <summary class="faq-question">What causes zinc deficiency?</summary>
+                    <p class="faq-answer">Common causes include poor diet, digestive disorders, certain medications, and increased zinc needs during growth or illness.</p>
                   </details>
                   
                   <details class="faq-item">
                     <summary class="faq-question">How long until I get results?</summary>
-                    <p class="faq-answer">Typically within 8 business days.</p>
+                    <p class="faq-answer">Typically within 1–3 business days.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
-                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
+                    <summary class="faq-question">Can I take zinc supplements before the test?</summary>
+                    <p class="faq-answer">Consult your healthcare provider, as supplements may affect test results and should be discussed beforehand.</p>
                   </details>
                 </div>
               </div>
@@ -248,9 +245,9 @@ const testData = {
                 <div class="related-tests">
                   <p class="text-gray-600 mb-4">Often ordered with:</p>
                   <div class="related-links">
-                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
-                    <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
-                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
+                    <a href="/tests/general-health/minerals/copper" class="link-item">Copper Test →</a>
+                    <a href="/tests/general-health/vitamins/vitamin-d" class="link-item">Vitamin D Test →</a>
+                    <a href="/tests/general-health/blood-counts/cbc" class="link-item">Complete Blood Count →</a>
                   </div>
                 </div>
               </div>
@@ -532,12 +529,18 @@ const testData = {
   }
 
   const testData = {
-    id: "b0c5e772-7507-4703-91da-13b913f35f53",
-    name: "Adiponectin (Fat Metabolism) Test",
-    price: 18.00,
-    category: "metabolic-health",
-    subcategory: "adipokines",
-    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
+    id: "0af1cb92-7a54-4850-a455-4aa6619d730e",
+    name: "Zinc Test",
+    price: 8.00,
+    category: "general-health",
+    subcategory: "minerals",
+    questName: "Zinc Test",
+    description: "Measure the zinc level in your blood to evaluate immune function, wound healing, and overall health.",
+    turnaround: "1–3 business days",
+    sampleType: "Blood draw",
+    fastingRequired: true,
+    fastingDuration: "8–12 hours recommended",
+    alsoKnownAs: ["Serum Zinc Test","Plasma Zinc Test"]
   };
 
   document.getElementById('add-to-cart')?.addEventListener('click', () => {
@@ -562,7 +565,8 @@ const testData = {
       // Add new item
       cart.push({
         ...testData,
-        quantity: 1
+        quantity: 1,
+        url: "/tests/general-health/minerals/zinc/"
       });
       
       // Save cart
@@ -596,18 +600,18 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "name": "Zinc Test",
+  "description": "Measure the zinc level in your blood to evaluate immune function, wound healing, and overall health.",
+  "sku": "0af1cb92-7a54-4850-a455-4aa6619d730e",
   "brand": {
     "@type": "Brand",
     "name": "Quest Diagnostics"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "url": "https://www.trackyourlabs.com/tests/general-health/minerals/zinc/",
     "priceCurrency": "USD",
-    "price": "18.00",
+    "price": "8.00",
     "priceValidUntil": "2025-12-31",
     "availability": "https://schema.org/InStock"
   }
@@ -618,9 +622,9 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "MedicalTest",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
-  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "name": "Zinc Test",
+  "description": "Measure the zinc level in your blood to evaluate immune function, wound healing, and overall health.",
+  "usedToDiagnose": "general health, health assessment",
   "howPerformed": "Blood draw at Quest Diagnostics location"
 }
 </script>
@@ -645,8 +649,8 @@ const testData = {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Adiponectin (Fat Metabolism) Test",
-      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+      "name": "Zinc Test",
+      "item": "https://www.trackyourlabs.com/tests/general-health/minerals/zinc/"
     }
   ]
 }

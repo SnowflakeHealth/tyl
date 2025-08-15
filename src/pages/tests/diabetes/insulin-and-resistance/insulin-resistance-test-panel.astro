@@ -5,24 +5,24 @@ import Footer from '../../../../components/Footer.astro';
 export const prerender = false;
 
 const testData = {
-  id: "b0c5e772-7507-4703-91da-13b913f35f53",
-  name: "Adiponectin (Fat Metabolism) Test",
-  price: 18.00,
-  category: "metabolic-health",
-  subcategory: "adipokines",
-  questName: "Adiponectin (Fat Metabolism) Test",
-  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  turnaround: "Up to 8 business days",
-  sampleType: "Blood draw (serum)",
+  id: "a3cadd13-ac65-4921-8031-98e65fda87f0",
+  name: "Insulin Resistance Test Panel",
+  price: 48.00,
+  category: "diabetes",
+  subcategory: "insulin-and-resistance",
+  questName: "Insulin Resistance Test Panel",
+  description: "Assess your risk for insulin resistance and related metabolic health issues with a targeted blood test panel.",
+  turnaround: "1–3 business days",
+  sampleType: "Blood draw",
   fastingRequired: true,
   fastingDuration: "8–12 hours",
-  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
+  alsoKnownAs: ["Insulin Resistance Panel","Fasting Insulin & Glucose Panel"]
 };
 ---
 
 <ShoppingLayout 
-  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
-  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+  title={`${testData.name} – Order Online | Track Your Labs`}
+  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Assess your risk for insulin resistance and related metabolic health issues with a targeted blood test panel.`}
 >
   <main class="flex-1">
     <!-- Hero Section -->
@@ -34,8 +34,8 @@ const testData = {
             <ul>
               <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
               <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
-              <li><a href="/tests#metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
-              <li class="text-gray-900">Adiponectin Test</li>
+              <li><a href="/tests#diabetes" class="text-gray-600 hover:text-gray-900">Diabetes</a></li>
+              <li class="text-gray-900">Insulin Resistance Test Panel</li>
             </ul>
           </nav>
 
@@ -71,7 +71,7 @@ const testData = {
                     </tr>
                     <tr>
                       <td class="fact-label">Fasting Required</td>
-                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                      <td class="fact-value">Yes (8–12 hours)</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Sample Type</td>
@@ -89,49 +89,34 @@ const testData = {
               <div class="content-section">
                 <h2 class="section-title">What This Test Measures</h2>
                 <p class="section-text">
-                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
-                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
-                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
-                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                  The Insulin Resistance Test Panel evaluates your body's ability to regulate blood sugar and respond to insulin. It typically includes:
                 </p>
-              </div>
-
-              <!-- Who Should Take This Test -->
-              <div class="content-section">
-                <h2 class="section-title">Who Should Take This Test</h2>
                 <ul class="benefits-list">
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
-                    <span>Are overweight, obese, or have unexplained weight changes</span>
+                    <span><strong>Fasting Glucose</strong> — Current blood sugar level after an overnight fast</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
-                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
+                    <span><strong>Fasting Insulin</strong> — Measures how much insulin your pancreas is producing at rest</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
-                    <span>Want to monitor metabolic health as part of a wellness program</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Are under evaluation for metabolic syndrome</span>
+                    <span><strong>HOMA-IR Calculation</strong> — Estimates insulin resistance by combining glucose and insulin results</span>
                   </li>
                 </ul>
+                <p class="section-text">
+                  These results can help detect insulin resistance, which often develops before prediabetes or type 2 diabetes.
+                </p>
               </div>
+
+              
 
               <!-- How It Works -->
               <div class="content-section">
@@ -191,16 +176,24 @@ const testData = {
                 <h2 class="section-title">Understanding Your Results</h2>
                 <div class="results-table">
                   <div class="result-row">
-                    <span class="result-level">Low</span>
-                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
+                    <span class="result-level">Fasting Glucose < 100 mg/dL</span>
+                    <span class="result-meaning">Normal glucose metabolism</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">Normal</span>
-                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
+                    <span class="result-level">Fasting Glucose 100–125 mg/dL</span>
+                    <span class="result-meaning">Prediabetes range</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">High</span>
-                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
+                    <span class="result-level">Fasting Glucose ≥ 126 mg/dL</span>
+                    <span class="result-meaning">Diabetes range (requires confirmation)</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">High Fasting Insulin</span>
+                    <span class="result-meaning">May indicate insulin resistance or early pancreatic strain</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">Elevated HOMA-IR</span>
+                    <span class="result-meaning">Higher score indicates greater insulin resistance risk</span>
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 italic mt-4">
@@ -213,23 +206,23 @@ const testData = {
                 <h2 class="section-title">Frequently Asked Questions</h2>
                 <div class="faq-container">
                   <details class="faq-item">
-                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
-                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
+                    <summary class="faq-question">Do I need to fast for this test?</summary>
+                    <p class="faq-answer">Yes, fasting for 8–12 hours is required for accurate glucose and insulin measurements.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
-                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
+                    <summary class="faq-question">What is HOMA-IR?</summary>
+                    <p class="faq-answer">HOMA-IR (Homeostatic Model Assessment for Insulin Resistance) is a calculation using your fasting glucose and insulin levels to estimate insulin resistance.</p>
                   </details>
                   
                   <details class="faq-item">
                     <summary class="faq-question">How long until I get results?</summary>
-                    <p class="faq-answer">Typically within 8 business days.</p>
+                    <p class="faq-answer">Results are typically available within 1–3 business days.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
-                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
+                    <summary class="faq-question">Can insulin resistance be reversed?</summary>
+                    <p class="faq-answer">Yes, insulin resistance can often be improved through weight loss, regular exercise, healthy diet, and sometimes medication.</p>
                   </details>
                 </div>
               </div>
@@ -248,9 +241,9 @@ const testData = {
                 <div class="related-tests">
                   <p class="text-gray-600 mb-4">Often ordered with:</p>
                   <div class="related-links">
-                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
                     <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
-                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
+                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
+                    <a href="/tests/metabolic-health/adipokines/adiponectin-fat-metabolism" class="link-item">Adiponectin →</a>
                   </div>
                 </div>
               </div>
@@ -407,7 +400,7 @@ const testData = {
 
   .result-row {
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 250px 1fr;
     gap: 1rem;
     padding: 1rem;
     border-bottom: 1px solid #e5e7eb;
@@ -515,7 +508,8 @@ const testData = {
     }
 
     .result-row {
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
     }
   }
 </style>
@@ -532,12 +526,18 @@ const testData = {
   }
 
   const testData = {
-    id: "b0c5e772-7507-4703-91da-13b913f35f53",
-    name: "Adiponectin (Fat Metabolism) Test",
-    price: 18.00,
-    category: "metabolic-health",
-    subcategory: "adipokines",
-    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
+    id: "a3cadd13-ac65-4921-8031-98e65fda87f0",
+    name: "Insulin Resistance Test Panel",
+    price: 48.00,
+    category: "diabetes",
+    subcategory: "insulin-and-resistance",
+    questName: "Insulin Resistance Test Panel",
+    description: "Assess your risk for insulin resistance and related metabolic health issues with a targeted blood test panel.",
+    turnaround: "1–3 business days",
+    sampleType: "Blood draw",
+    fastingRequired: true,
+    fastingDuration: "8–12 hours",
+    alsoKnownAs: ["Insulin Resistance Panel","Fasting Insulin & Glucose Panel"]
   };
 
   document.getElementById('add-to-cart')?.addEventListener('click', () => {
@@ -562,7 +562,8 @@ const testData = {
       // Add new item
       cart.push({
         ...testData,
-        quantity: 1
+        quantity: 1,
+        url: "/tests/diabetes/insulin-and-resistance/insulin-resistance-test-panel/"
       });
       
       // Save cart
@@ -596,18 +597,18 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "name": "Insulin Resistance Test Panel",
+  "description": "Assess your risk for insulin resistance and related metabolic health issues with a targeted blood test panel.",
+  "sku": "a3cadd13-ac65-4921-8031-98e65fda87f0",
   "brand": {
     "@type": "Brand",
     "name": "Quest Diagnostics"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "url": "https://www.trackyourlabs.com/tests/diabetes/insulin-and-resistance/insulin-resistance-test-panel/",
     "priceCurrency": "USD",
-    "price": "18.00",
+    "price": "48.00",
     "priceValidUntil": "2025-12-31",
     "availability": "https://schema.org/InStock"
   }
@@ -618,9 +619,9 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "MedicalTest",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
-  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "name": "Insulin Resistance Test Panel",
+  "description": "Assess your risk for insulin resistance and related metabolic health issues with a targeted blood test panel.",
+  "usedToDiagnose": "diabetes, health assessment",
   "howPerformed": "Blood draw at Quest Diagnostics location"
 }
 </script>
@@ -645,8 +646,8 @@ const testData = {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Adiponectin (Fat Metabolism) Test",
-      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+      "name": "Insulin Resistance Test Panel",
+      "item": "https://www.trackyourlabs.com/tests/diabetes/insulin-and-resistance/insulin-resistance-test-panel/"
     }
   ]
 }

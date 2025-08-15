@@ -5,24 +5,24 @@ import Footer from '../../../../components/Footer.astro';
 export const prerender = false;
 
 const testData = {
-  id: "b0c5e772-7507-4703-91da-13b913f35f53",
-  name: "Adiponectin (Fat Metabolism) Test",
-  price: 18.00,
-  category: "metabolic-health",
-  subcategory: "adipokines",
-  questName: "Adiponectin (Fat Metabolism) Test",
-  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  turnaround: "Up to 8 business days",
-  sampleType: "Blood draw (serum)",
+  id: "a4f2e439-1946-48d1-a753-acad83cae130",
+  name: "Cholesterol (Lipid) Panel",
+  price: 6.00,
+  category: "heart-health",
+  subcategory: "lipids",
+  questName: "Cholesterol (Lipid) Panel",
+  description: "Check your cholesterol profile to understand your heart health risk and guide next steps.",
+  turnaround: "1–2 business days",
+  sampleType: "Blood draw",
   fastingRequired: true,
   fastingDuration: "8–12 hours",
-  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
+  alsoKnownAs: ["Lipid Panel","Lipid Profile"]
 };
 ---
 
 <ShoppingLayout 
-  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
-  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+  title={`${testData.name} – Order Online | Track Your Labs`}
+  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Check your cholesterol profile to understand your heart health risk and guide next steps.`}
 >
   <main class="flex-1">
     <!-- Hero Section -->
@@ -34,8 +34,8 @@ const testData = {
             <ul>
               <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
               <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
-              <li><a href="/tests#metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
-              <li class="text-gray-900">Adiponectin Test</li>
+              <li><a href="/tests#heart-health" class="text-gray-600 hover:text-gray-900">Heart Health</a></li>
+              <li class="text-gray-900">Cholesterol (Lipid) Panel</li>
             </ul>
           </nav>
 
@@ -71,7 +71,7 @@ const testData = {
                     </tr>
                     <tr>
                       <td class="fact-label">Fasting Required</td>
-                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                      <td class="fact-value">Yes (8–12 hours)</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Sample Type</td>
@@ -89,11 +89,40 @@ const testData = {
               <div class="content-section">
                 <h2 class="section-title">What This Test Measures</h2>
                 <p class="section-text">
-                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
-                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
-                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
-                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                  This panel evaluates the fats (lipids) in your blood that impact cardiovascular risk:
                 </p>
+                <ul class="benefits-list mt-4">
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Total Cholesterol (TC)</strong> — Overall cholesterol level</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>LDL Cholesterol</strong> — "Bad" cholesterol associated with plaque buildup</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>HDL Cholesterol</strong> — "Good" cholesterol that helps remove LDL</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Triglycerides (TG)</strong> — Blood fats influenced by diet and metabolism</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Calculated Values</strong> — Non-HDL cholesterol and TC/HDL ratio for added risk insight</span>
+                  </li>
+                </ul>
               </div>
 
               <!-- Who Should Take This Test -->
@@ -104,31 +133,31 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are overweight, obese, or have unexplained weight changes</span>
+                    <span>Have a family history of heart disease or high cholesterol</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
+                    <span>Are age 20+ and want routine cardiovascular screening</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Want to monitor metabolic health as part of a wellness program</span>
+                    <span>Have diabetes, high blood pressure, or obesity</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
+                    <span>Are monitoring cholesterol-lowering medication effectiveness</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are under evaluation for metabolic syndrome</span>
+                    <span>Want to assess the effectiveness of diet and lifestyle changes</span>
                   </li>
                 </ul>
               </div>
@@ -191,16 +220,24 @@ const testData = {
                 <h2 class="section-title">Understanding Your Results</h2>
                 <div class="results-table">
                   <div class="result-row">
-                    <span class="result-level">Low</span>
-                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
+                    <span class="result-level">Total Cholesterol</span>
+                    <span class="result-meaning">< 200 mg/dL: Desirable | 200-239: Borderline high | ≥ 240: High</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">Normal</span>
-                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
+                    <span class="result-level">LDL Cholesterol</span>
+                    <span class="result-meaning">< 100: Optimal | 100-129: Near optimal | 130-159: Borderline high | ≥ 160: High</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">High</span>
-                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
+                    <span class="result-level">HDL Cholesterol</span>
+                    <span class="result-meaning">< 40 (men), < 50 (women): Low risk | ≥ 60: High (protective)</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">Triglycerides</span>
+                    <span class="result-meaning">< 150: Normal | 150-199: Borderline high | 200-499: High | ≥ 500: Very high</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">Non-HDL</span>
+                    <span class="result-meaning">Goal often < 130 mg/dL (lower for higher-risk individuals)</span>
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 italic mt-4">
@@ -213,23 +250,23 @@ const testData = {
                 <h2 class="section-title">Frequently Asked Questions</h2>
                 <div class="faq-container">
                   <details class="faq-item">
-                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
-                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
+                    <summary class="faq-question">Do I need to fast for this test?</summary>
+                    <p class="faq-answer">Yes, fasting for 8-12 hours is required for accurate triglyceride and LDL measurements.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
-                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
+                    <summary class="faq-question">How often should I check my cholesterol?</summary>
+                    <p class="faq-answer">Adults should generally check cholesterol every 4-6 years, or more frequently if levels are elevated or you have risk factors.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">How long until I get results?</summary>
-                    <p class="faq-answer">Typically within 8 business days.</p>
+                    <summary class="faq-question">What's the difference between LDL and HDL?</summary>
+                    <p class="faq-answer">LDL is "bad" cholesterol that can build up in arteries, while HDL is "good" cholesterol that helps remove LDL from the bloodstream.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
-                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
+                    <summary class="faq-question">Can I improve my cholesterol naturally?</summary>
+                    <p class="faq-answer">Yes, through diet changes (reducing saturated fats, increasing fiber), regular exercise, weight management, and avoiding smoking.</p>
                   </details>
                 </div>
               </div>
@@ -248,9 +285,9 @@ const testData = {
                 <div class="related-tests">
                   <p class="text-gray-600 mb-4">Often ordered with:</p>
                   <div class="related-links">
-                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
+                    <a href="/tests/heart-health/advanced-panels/advanced-heart-health-with-apob" class="link-item">Advanced Heart Health Panel →</a>
                     <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
-                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
+                    <a href="/tests/heart-health/inflammation-and-other-markers/hscrp-inflammation" class="link-item">hsCRP (Inflammation) →</a>
                   </div>
                 </div>
               </div>
@@ -407,7 +444,7 @@ const testData = {
 
   .result-row {
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 120px 1fr;
     gap: 1rem;
     padding: 1rem;
     border-bottom: 1px solid #e5e7eb;
@@ -515,7 +552,7 @@ const testData = {
     }
 
     .result-row {
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 100px 1fr;
     }
   }
 </style>
@@ -532,12 +569,18 @@ const testData = {
   }
 
   const testData = {
-    id: "b0c5e772-7507-4703-91da-13b913f35f53",
-    name: "Adiponectin (Fat Metabolism) Test",
-    price: 18.00,
-    category: "metabolic-health",
-    subcategory: "adipokines",
-    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
+    id: "a4f2e439-1946-48d1-a753-acad83cae130",
+    name: "Cholesterol (Lipid) Panel",
+    price: 6.00,
+    category: "heart-health",
+    subcategory: "lipids",
+    questName: "Cholesterol (Lipid) Panel",
+    description: "Check your cholesterol profile to understand your heart health risk and guide next steps.",
+    turnaround: "1–2 business days",
+    sampleType: "Blood draw",
+    fastingRequired: true,
+    fastingDuration: "8–12 hours",
+    alsoKnownAs: ["Lipid Panel","Lipid Profile"]
   };
 
   document.getElementById('add-to-cart')?.addEventListener('click', () => {
@@ -562,7 +605,8 @@ const testData = {
       // Add new item
       cart.push({
         ...testData,
-        quantity: 1
+        quantity: 1,
+        url: "/tests/heart-health/lipids/cholesterol-lipid-panel/"
       });
       
       // Save cart
@@ -596,18 +640,18 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "name": "Cholesterol (Lipid) Panel",
+  "description": "Check your cholesterol profile to understand your heart health risk and guide next steps.",
+  "sku": "a4f2e439-1946-48d1-a753-acad83cae130",
   "brand": {
     "@type": "Brand",
     "name": "Quest Diagnostics"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "url": "https://www.trackyourlabs.com/tests/heart-health/lipids/cholesterol-lipid-panel/",
     "priceCurrency": "USD",
-    "price": "18.00",
+    "price": "6.00",
     "priceValidUntil": "2025-12-31",
     "availability": "https://schema.org/InStock"
   }
@@ -618,9 +662,9 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "MedicalTest",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
-  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "name": "Cholesterol (Lipid) Panel",
+  "description": "Check your cholesterol profile to understand your heart health risk and guide next steps.",
+  "usedToDiagnose": "heart health, health assessment",
   "howPerformed": "Blood draw at Quest Diagnostics location"
 }
 </script>
@@ -645,8 +689,8 @@ const testData = {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Adiponectin (Fat Metabolism) Test",
-      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+      "name": "Cholesterol (Lipid) Panel",
+      "item": "https://www.trackyourlabs.com/tests/heart-health/lipids/cholesterol-lipid-panel/"
     }
   ]
 }

@@ -5,24 +5,24 @@ import Footer from '../../../../components/Footer.astro';
 export const prerender = false;
 
 const testData = {
-  id: "b0c5e772-7507-4703-91da-13b913f35f53",
-  name: "Adiponectin (Fat Metabolism) Test",
-  price: 18.00,
-  category: "metabolic-health",
-  subcategory: "adipokines",
-  questName: "Adiponectin (Fat Metabolism) Test",
-  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  turnaround: "Up to 8 business days",
-  sampleType: "Blood draw (serum)",
-  fastingRequired: true,
-  fastingDuration: "8–12 hours",
-  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
+  id: "08c1c7a7-d821-451c-94eb-75cfb2d07819",
+  name: "Prothrombin Time with INR Test",
+  price: 5.00,
+  category: "general-health",
+  subcategory: "blood-clotting",
+  questName: "Prothrombin Time with INR Test",
+  description: "Measure how long it takes your blood to clot and assess clotting function with a Prothrombin Time (PT) and International Normalized Ratio (INR) test.",
+  turnaround: "1–2 business days",
+  sampleType: "Blood draw",
+  fastingRequired: false,
+  fastingDuration: "",
+  alsoKnownAs: ["PT/INR Test","Protime Test"]
 };
 ---
 
 <ShoppingLayout 
-  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
-  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+  title={`${testData.name} – Order Online | Track Your Labs`}
+  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure how long it takes your blood to clot and assess clotting function with a Prothrombin Time (PT) and International Normalized Ratio (INR) test.`}
 >
   <main class="flex-1">
     <!-- Hero Section -->
@@ -34,8 +34,8 @@ const testData = {
             <ul>
               <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
               <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
-              <li><a href="/tests#metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
-              <li class="text-gray-900">Adiponectin Test</li>
+              <li><a href="/tests#general-health" class="text-gray-600 hover:text-gray-900">General Health</a></li>
+              <li class="text-gray-900">Prothrombin Time with INR Test</li>
             </ul>
           </nav>
 
@@ -71,7 +71,7 @@ const testData = {
                     </tr>
                     <tr>
                       <td class="fact-label">Fasting Required</td>
-                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                      <td class="fact-value">No</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Sample Type</td>
@@ -89,10 +89,7 @@ const testData = {
               <div class="content-section">
                 <h2 class="section-title">What This Test Measures</h2>
                 <p class="section-text">
-                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
-                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
-                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
-                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                  The Prothrombin Time (PT) with INR Test measures how long it takes your blood to clot and provides a standardized ratio. It evaluates your blood's clotting ability and is essential for monitoring anticoagulant therapy, detecting clotting disorders, and assessing liver function and vitamin K status.
                 </p>
               </div>
 
@@ -104,31 +101,31 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are overweight, obese, or have unexplained weight changes</span>
+                    <span>Are taking anticoagulant medications like warfarin</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
+                    <span>Have a history of excessive bleeding or clotting problems</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Want to monitor metabolic health as part of a wellness program</span>
+                    <span>Are scheduled for surgery or dental procedures</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
+                    <span>Have liver disease or suspected vitamin K deficiency</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are under evaluation for metabolic syndrome</span>
+                    <span>Want to assess overall blood clotting function</span>
                   </li>
                 </ul>
               </div>
@@ -167,21 +164,21 @@ const testData = {
                 <ul class="benefits-list">
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Fast for 8–12 hours before your appointment; only water is permitted</span>
+                    <span>No fasting required for this test</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 16a9.065 9.065 0 0 0-6.23-.307L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
                     </svg>
-                    <span>Stay well-hydrated (drink water)</span>
+                    <span>Inform your healthcare provider of all medications, especially blood thinners</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a1.5 1.5 0 0 0-1.006-1.006L15.75 7.5l1.035-.259a1.5 1.5 0 0 0 1.006-1.006L18 5.25l.259 1.035a1.5 1.5 0 0 0 1.006 1.006L20.25 7.5l-1.035.259a1.5 1.5 0 0 0-1.006 1.006ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
                     </svg>
-                    <span>Follow any medication guidance from your healthcare provider</span>
+                    <span>Follow any specific instructions from your healthcare provider</span>
                   </li>
                 </ul>
               </div>
@@ -191,16 +188,20 @@ const testData = {
                 <h2 class="section-title">Understanding Your Results</h2>
                 <div class="results-table">
                   <div class="result-row">
-                    <span class="result-level">Low</span>
-                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
+                    <span class="result-level">Normal PT/INR</span>
+                    <span class="result-meaning">Indicates normal clotting function</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">Normal</span>
-                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
+                    <span class="result-level">Prolonged PT/High INR</span>
+                    <span class="result-meaning">May indicate blood-thinner effect, liver disease, vitamin K deficiency, or clotting factor deficiencies</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">High</span>
-                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
+                    <span class="result-level">Shortened PT/Low INR</span>
+                    <span class="result-meaning">Rare; may indicate increased clotting tendency</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">Therapeutic Range (INR 2.0-3.0)</span>
+                    <span class="result-meaning">Target range for most warfarin patients (varies by condition)</span>
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 italic mt-4">
@@ -213,23 +214,23 @@ const testData = {
                 <h2 class="section-title">Frequently Asked Questions</h2>
                 <div class="faq-container">
                   <details class="faq-item">
-                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
-                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
+                    <summary class="faq-question">Do I need to fast for the PT/INR test?</summary>
+                    <p class="faq-answer">No, fasting is not required for this test. You can eat and drink normally beforehand.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
-                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
+                    <summary class="faq-question">What does a high INR mean?</summary>
+                    <p class="faq-answer">A high INR indicates your blood takes longer to clot, which may be due to blood-thinning medication, liver disease, or vitamin K deficiency.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">How long until I get results?</summary>
-                    <p class="faq-answer">Typically within 8 business days.</p>
+                    <summary class="faq-question">How long until I get my results?</summary>
+                    <p class="faq-answer">Typically within 1–2 business days after your blood draw.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
-                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
+                    <summary class="faq-question">Should I stop my blood thinner before the test?</summary>
+                    <p class="faq-answer">No, do not stop taking prescribed medications unless specifically instructed by your healthcare provider. This test is often used to monitor blood thinners.</p>
                   </details>
                 </div>
               </div>
@@ -248,9 +249,9 @@ const testData = {
                 <div class="related-tests">
                   <p class="text-gray-600 mb-4">Often ordered with:</p>
                   <div class="related-links">
-                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
-                    <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
-                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
+                    <a href="/tests/general-health/blood-counts/cbc" class="link-item">Complete Blood Count (CBC) →</a>
+                    <a href="/tests/general-health/organ-function/cmp" class="link-item">Comprehensive Metabolic Panel →</a>
+                    <a href="/tests/general-health/vitamins/vitamin-d" class="link-item">Vitamin D Test →</a>
                   </div>
                 </div>
               </div>
@@ -407,7 +408,7 @@ const testData = {
 
   .result-row {
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 200px 1fr;
     gap: 1rem;
     padding: 1rem;
     border-bottom: 1px solid #e5e7eb;
@@ -515,7 +516,7 @@ const testData = {
     }
 
     .result-row {
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 120px 1fr;
     }
   }
 </style>
@@ -532,12 +533,18 @@ const testData = {
   }
 
   const testData = {
-    id: "b0c5e772-7507-4703-91da-13b913f35f53",
-    name: "Adiponectin (Fat Metabolism) Test",
-    price: 18.00,
-    category: "metabolic-health",
-    subcategory: "adipokines",
-    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
+    id: "08c1c7a7-d821-451c-94eb-75cfb2d07819",
+    name: "Prothrombin Time with INR Test",
+    price: 5.00,
+    category: "general-health",
+    subcategory: "blood-clotting",
+    questName: "Prothrombin Time with INR Test",
+    description: "Measure how long it takes your blood to clot and assess clotting function with a Prothrombin Time (PT) and International Normalized Ratio (INR) test.",
+    turnaround: "1–2 business days",
+    sampleType: "Blood draw",
+    fastingRequired: false,
+    fastingDuration: "",
+    alsoKnownAs: ["PT/INR Test","Protime Test"]
   };
 
   document.getElementById('add-to-cart')?.addEventListener('click', () => {
@@ -562,7 +569,8 @@ const testData = {
       // Add new item
       cart.push({
         ...testData,
-        quantity: 1
+        quantity: 1,
+        url: "/tests/general-health/blood-clotting/prothrombin-inr/"
       });
       
       // Save cart
@@ -596,18 +604,18 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "name": "Prothrombin Time with INR Test",
+  "description": "Measure how long it takes your blood to clot and assess clotting function with a Prothrombin Time (PT) and International Normalized Ratio (INR) test.",
+  "sku": "08c1c7a7-d821-451c-94eb-75cfb2d07819",
   "brand": {
     "@type": "Brand",
     "name": "Quest Diagnostics"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "url": "https://www.trackyourlabs.com/tests/general-health/blood-clotting/prothrombin-inr/",
     "priceCurrency": "USD",
-    "price": "18.00",
+    "price": "5.00",
     "priceValidUntil": "2025-12-31",
     "availability": "https://schema.org/InStock"
   }
@@ -618,9 +626,9 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "MedicalTest",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
-  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "name": "Prothrombin Time with INR Test",
+  "description": "Measure how long it takes your blood to clot and assess clotting function with a Prothrombin Time (PT) and International Normalized Ratio (INR) test.",
+  "usedToDiagnose": "general health, health assessment",
   "howPerformed": "Blood draw at Quest Diagnostics location"
 }
 </script>
@@ -645,8 +653,8 @@ const testData = {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Adiponectin (Fat Metabolism) Test",
-      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+      "name": "Prothrombin Time with INR Test",
+      "item": "https://www.trackyourlabs.com/tests/general-health/blood-clotting/prothrombin-inr/"
     }
   ]
 }

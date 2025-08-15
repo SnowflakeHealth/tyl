@@ -5,24 +5,24 @@ import Footer from '../../../../components/Footer.astro';
 export const prerender = false;
 
 const testData = {
-  id: "b0c5e772-7507-4703-91da-13b913f35f53",
-  name: "Adiponectin (Fat Metabolism) Test",
-  price: 18.00,
-  category: "metabolic-health",
-  subcategory: "adipokines",
-  questName: "Adiponectin (Fat Metabolism) Test",
-  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  turnaround: "Up to 8 business days",
-  sampleType: "Blood draw (serum)",
+  id: "79828de0-f345-4e93-9d74-83a9cb80b4c2",
+  name: "Diabetes Risk Test Panel",
+  price: 10.00,
+  category: "diabetes",
+  subcategory: "risk-assessment",
+  questName: "Diabetes Risk Test Panel",
+  description: "Check your risk for diabetes and related heart health factors with one simple panel.",
+  turnaround: "1–3 business days",
+  sampleType: "Blood draw",
   fastingRequired: true,
   fastingDuration: "8–12 hours",
-  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
+  alsoKnownAs: ["Diabetes Screening Panel","Glucose-HbA1c-Lipids Panel"]
 };
 ---
 
 <ShoppingLayout 
-  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
-  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+  title={`${testData.name} – Order Online | Track Your Labs`}
+  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Check your risk for diabetes and related heart health factors with one simple panel.`}
 >
   <main class="flex-1">
     <!-- Hero Section -->
@@ -34,8 +34,8 @@ const testData = {
             <ul>
               <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
               <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
-              <li><a href="/tests#metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
-              <li class="text-gray-900">Adiponectin Test</li>
+              <li><a href="/tests#diabetes" class="text-gray-600 hover:text-gray-900">Diabetes</a></li>
+              <li class="text-gray-900">Diabetes Risk Test Panel</li>
             </ul>
           </nav>
 
@@ -71,7 +71,7 @@ const testData = {
                     </tr>
                     <tr>
                       <td class="fact-label">Fasting Required</td>
-                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                      <td class="fact-value">Yes (8–12 hours)</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Sample Type</td>
@@ -89,11 +89,28 @@ const testData = {
               <div class="content-section">
                 <h2 class="section-title">What This Test Measures</h2>
                 <p class="section-text">
-                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
-                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
-                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
-                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                  The Diabetes Risk Test Panel includes three core markers to assess your risk for diabetes and related heart disease:
                 </p>
+                <ul class="benefits-list mt-4">
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Fasting Glucose</strong> — Measures blood sugar at a single point in time</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Hemoglobin A1c (HbA1c)</strong> — Reflects your average blood sugar over 2–3 months</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Lipid Panel</strong> — Measures cholesterol and triglycerides, which may be altered by diabetes and contribute to heart disease</span>
+                  </li>
+                </ul>
               </div>
 
               <!-- Who Should Take This Test -->
@@ -104,31 +121,25 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are overweight, obese, or have unexplained weight changes</span>
+                    <span>Have a family history of diabetes or prediabetes</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
+                    <span>Are overweight or have been told they have metabolic syndrome</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Want to monitor metabolic health as part of a wellness program</span>
+                    <span>Want comprehensive diabetes and heart disease risk assessment</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Are under evaluation for metabolic syndrome</span>
+                    <span>Are over age 35 and want routine health screening</span>
                   </li>
                 </ul>
               </div>
@@ -191,16 +202,32 @@ const testData = {
                 <h2 class="section-title">Understanding Your Results</h2>
                 <div class="results-table">
                   <div class="result-row">
-                    <span class="result-level">Low</span>
-                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
+                    <span class="result-level">Fasting Glucose &lt; 100 mg/dL</span>
+                    <span class="result-meaning">Normal glucose levels</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">Normal</span>
-                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
+                    <span class="result-level">Fasting Glucose 100-125 mg/dL</span>
+                    <span class="result-meaning">Prediabetes - increased risk of developing diabetes</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">High</span>
-                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
+                    <span class="result-level">Fasting Glucose ≥ 126 mg/dL</span>
+                    <span class="result-meaning">Diabetes range (requires confirmation)</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">HbA1c &lt; 5.7%</span>
+                    <span class="result-meaning">Normal average blood sugar</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">HbA1c 5.7-6.4%</span>
+                    <span class="result-meaning">Prediabetes range</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">HbA1c ≥ 6.5%</span>
+                    <span class="result-meaning">Diabetes range (requires confirmation)</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">Lipid Panel</span>
+                    <span class="result-meaning">High LDL/triglycerides or low HDL may indicate increased cardiovascular risk</span>
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 italic mt-4">
@@ -213,23 +240,23 @@ const testData = {
                 <h2 class="section-title">Frequently Asked Questions</h2>
                 <div class="faq-container">
                   <details class="faq-item">
-                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
-                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
+                    <summary class="faq-question">Do I need to fast for this panel?</summary>
+                    <p class="faq-answer">Yes, fasting for 8-12 hours is required for accurate glucose and lipid measurements.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
-                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
+                    <summary class="faq-question">What's the difference between glucose and HbA1c?</summary>
+                    <p class="faq-answer">Glucose measures blood sugar at one point in time, while HbA1c reflects your average blood sugar over the past 2-3 months.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">How long until I get results?</summary>
-                    <p class="faq-answer">Typically within 8 business days.</p>
+                    <summary class="faq-question">How often should I test for diabetes risk?</summary>
+                    <p class="faq-answer">For adults over 35 or those with risk factors, screening every 3 years is generally recommended. Your doctor may suggest more frequent testing.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
-                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
+                    <summary class="faq-question">Can prediabetes be reversed?</summary>
+                    <p class="faq-answer">Yes, prediabetes can often be reversed or prevented from progressing to diabetes through lifestyle changes like diet, exercise, and weight management.</p>
                   </details>
                 </div>
               </div>
@@ -248,9 +275,9 @@ const testData = {
                 <div class="related-tests">
                   <p class="text-gray-600 mb-4">Often ordered with:</p>
                   <div class="related-links">
-                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
-                    <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
-                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
+                    <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c Test →</a>
+                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Resistance Panel →</a>
+                    <a href="/tests/general-health/organ-function/cmp" class="link-item">Comprehensive Metabolic Panel →</a>
                   </div>
                 </div>
               </div>
@@ -407,7 +434,7 @@ const testData = {
 
   .result-row {
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 180px 1fr;
     gap: 1rem;
     padding: 1rem;
     border-bottom: 1px solid #e5e7eb;
@@ -420,6 +447,7 @@ const testData = {
   .result-level {
     font-weight: 600;
     color: #111827;
+    font-size: 0.875rem;
   }
 
   .result-meaning {
@@ -515,7 +543,7 @@ const testData = {
     }
 
     .result-row {
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 140px 1fr;
     }
   }
 </style>
@@ -532,12 +560,18 @@ const testData = {
   }
 
   const testData = {
-    id: "b0c5e772-7507-4703-91da-13b913f35f53",
-    name: "Adiponectin (Fat Metabolism) Test",
-    price: 18.00,
-    category: "metabolic-health",
-    subcategory: "adipokines",
-    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
+    id: "79828de0-f345-4e93-9d74-83a9cb80b4c2",
+    name: "Diabetes Risk Test Panel",
+    price: 10.00,
+    category: "diabetes",
+    subcategory: "risk-assessment",
+    questName: "Diabetes Risk Test Panel",
+    description: "Check your risk for diabetes and related heart health factors with one simple panel.",
+    turnaround: "1–3 business days",
+    sampleType: "Blood draw",
+    fastingRequired: true,
+    fastingDuration: "8–12 hours",
+    alsoKnownAs: ["Diabetes Screening Panel","Glucose-HbA1c-Lipids Panel"]
   };
 
   document.getElementById('add-to-cart')?.addEventListener('click', () => {
@@ -562,7 +596,8 @@ const testData = {
       // Add new item
       cart.push({
         ...testData,
-        quantity: 1
+        quantity: 1,
+        url: "/tests/diabetes/risk-assessment/diabetes-risk-test-panel/"
       });
       
       // Save cart
@@ -596,18 +631,18 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "name": "Diabetes Risk Test Panel",
+  "description": "Check your risk for diabetes and related heart health factors with one simple panel.",
+  "sku": "79828de0-f345-4e93-9d74-83a9cb80b4c2",
   "brand": {
     "@type": "Brand",
     "name": "Quest Diagnostics"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "url": "https://www.trackyourlabs.com/tests/diabetes/risk-assessment/diabetes-risk-test-panel/",
     "priceCurrency": "USD",
-    "price": "18.00",
+    "price": "10.00",
     "priceValidUntil": "2025-12-31",
     "availability": "https://schema.org/InStock"
   }
@@ -618,9 +653,9 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "MedicalTest",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
-  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "name": "Diabetes Risk Test Panel",
+  "description": "Check your risk for diabetes and related heart health factors with one simple panel.",
+  "usedToDiagnose": "diabetes, health assessment",
   "howPerformed": "Blood draw at Quest Diagnostics location"
 }
 </script>
@@ -645,8 +680,8 @@ const testData = {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Adiponectin (Fat Metabolism) Test",
-      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+      "name": "Diabetes Risk Test Panel",
+      "item": "https://www.trackyourlabs.com/tests/diabetes/risk-assessment/diabetes-risk-test-panel/"
     }
   ]
 }

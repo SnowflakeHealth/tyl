@@ -5,24 +5,24 @@ import Footer from '../../../../components/Footer.astro';
 export const prerender = false;
 
 const testData = {
-  id: "b0c5e772-7507-4703-91da-13b913f35f53",
-  name: "Adiponectin (Fat Metabolism) Test",
-  price: 18.00,
-  category: "metabolic-health",
-  subcategory: "adipokines",
-  questName: "Adiponectin (Fat Metabolism) Test",
-  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  turnaround: "Up to 8 business days",
-  sampleType: "Blood draw (serum)",
-  fastingRequired: true,
-  fastingDuration: "8–12 hours",
-  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
+  id: "fc5288e5-861b-4f26-b86f-25c52bf093d1",
+  name: "Complete Blood Count (CBC) Test",
+  price: 4.00,
+  category: "general-health",
+  subcategory: "blood-counts",
+  questName: "Complete Blood Count (CBC) Test",
+  description: "Measure key components of your blood to assess overall health and detect potential disorders.",
+  turnaround: "1–2 business days",
+  sampleType: "Blood draw",
+  fastingRequired: false,
+  fastingDuration: "",
+  alsoKnownAs: ["CBC","Full Blood Count","FBC"]
 };
 ---
 
 <ShoppingLayout 
-  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
-  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+  title={`${testData.name} – Order Online | Track Your Labs`}
+  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure key components of your blood to assess overall health and detect potential disorders.`}
 >
   <main class="flex-1">
     <!-- Hero Section -->
@@ -34,8 +34,8 @@ const testData = {
             <ul>
               <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
               <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
-              <li><a href="/tests#metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
-              <li class="text-gray-900">Adiponectin Test</li>
+              <li><a href="/tests#general-health" class="text-gray-600 hover:text-gray-900">General Health</a></li>
+              <li class="text-gray-900">Complete Blood Count (CBC) Test</li>
             </ul>
           </nav>
 
@@ -71,7 +71,7 @@ const testData = {
                     </tr>
                     <tr>
                       <td class="fact-label">Fasting Required</td>
-                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                      <td class="fact-value">No</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Sample Type</td>
@@ -89,11 +89,46 @@ const testData = {
               <div class="content-section">
                 <h2 class="section-title">What This Test Measures</h2>
                 <p class="section-text">
-                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
-                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
-                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
-                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                  A Complete Blood Count (CBC) is one of the most common blood tests, providing important information about the cells in your blood:
                 </p>
+                <ul class="benefits-list mt-4">
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Red Blood Cells (RBC)</strong> — Carry oxygen throughout the body</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Hemoglobin (Hb)</strong> — Protein in RBCs that binds oxygen</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Hematocrit (Hct)</strong> — Proportion of blood made up of RBCs</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>White Blood Cells (WBC)</strong> — Immune cells that fight infection</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>Platelets (PLT)</strong> — Help with blood clotting</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span><strong>MCV, MCH, MCHC</strong> — Red cell size and hemoglobin content indicators</span>
+                  </li>
+                </ul>
               </div>
 
               <!-- Who Should Take This Test -->
@@ -104,31 +139,31 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are overweight, obese, or have unexplained weight changes</span>
+                    <span>Experience fatigue, weakness, or shortness of breath</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
+                    <span>Have signs of infection or inflammation</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Want to monitor metabolic health as part of a wellness program</span>
+                    <span>Notice unusual bruising or bleeding</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
+                    <span>Want a baseline health assessment</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are under evaluation for metabolic syndrome</span>
+                    <span>Are monitoring treatment for blood disorders</span>
                   </li>
                 </ul>
               </div>
@@ -169,7 +204,7 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Fast for 8–12 hours before your appointment; only water is permitted</span>
+                    <span>No fasting required</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -189,22 +224,27 @@ const testData = {
               <!-- Understanding Your Results -->
               <div class="content-section">
                 <h2 class="section-title">Understanding Your Results</h2>
-                <div class="results-table">
+                <p class="section-text">Your report will include:</p>
+                <div class="results-table mt-4">
                   <div class="result-row">
-                    <span class="result-level">Low</span>
-                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
+                    <span class="result-level">RBC, Hb, Hct</span>
+                    <span class="result-meaning">Low values may indicate anemia; high may suggest dehydration or other conditions</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">Normal</span>
-                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
+                    <span class="result-level">WBC</span>
+                    <span class="result-meaning">High values may indicate infection or inflammation; low may signal immune suppression</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">High</span>
-                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
+                    <span class="result-level">Platelets</span>
+                    <span class="result-meaning">Low may cause bleeding risk; high may indicate clotting disorders</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">MCV/MCH/MCHC</span>
+                    <span class="result-meaning">Help classify types of anemia or other blood disorders</span>
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 italic mt-4">
-                  Note: Reference ranges vary; results should be interpreted by a healthcare provider in context of overall health.
+                  Note: Interpretation should be done by a qualified healthcare provider in context of symptoms and history.
                 </p>
               </div>
 
@@ -213,23 +253,23 @@ const testData = {
                 <h2 class="section-title">Frequently Asked Questions</h2>
                 <div class="faq-container">
                   <details class="faq-item">
-                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
-                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
+                    <summary class="faq-question">Do I need to fast for a CBC test?</summary>
+                    <p class="faq-answer">No, fasting is not required for a CBC test.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
-                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
+                    <summary class="faq-question">What can a CBC detect?</summary>
+                    <p class="faq-answer">A CBC can detect anemia, infections, blood cancers, bleeding disorders, and immune system disorders.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">How long until I get results?</summary>
-                    <p class="faq-answer">Typically within 8 business days.</p>
+                    <summary class="faq-question">How often should I get a CBC?</summary>
+                    <p class="faq-answer">Frequency depends on your health status. Annual testing is common for routine checkups.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
-                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
+                    <summary class="faq-question">What does a high or low WBC count mean?</summary>
+                    <p class="faq-answer">High WBC often indicates infection or inflammation. Low WBC may suggest immune system problems or medication effects.</p>
                   </details>
                 </div>
               </div>
@@ -248,9 +288,9 @@ const testData = {
                 <div class="related-tests">
                   <p class="text-gray-600 mb-4">Often ordered with:</p>
                   <div class="related-links">
-                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
-                    <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
-                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
+                    <a href="/tests/general-health/organ-function/cmp" class="link-item">Comprehensive Metabolic Panel →</a>
+                    <a href="/tests/general-health/iron/iron-tibc-ferritin-panel" class="link-item">Iron Panel →</a>
+                    <a href="/tests/general-health/vitamins/vitamin-b12-folate" class="link-item">Vitamin B12 and Folate →</a>
                   </div>
                 </div>
               </div>
@@ -356,6 +396,34 @@ const testData = {
     color: #10b981;
   }
 
+  /* Results Table */
+  .results-table {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .result-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .result-row:last-child {
+    border-bottom: none;
+  }
+
+  .result-level {
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .result-meaning {
+    color: #4b5563;
+  }
+
   /* Steps */
   .steps-container {
     display: flex;
@@ -396,34 +464,6 @@ const testData = {
   .step-text {
     color: #6b7280;
     font-size: 0.875rem;
-  }
-
-  /* Results Table */
-  .results-table {
-    background: #f9fafb;
-    border-radius: 8px;
-    padding: 1rem;
-  }
-
-  .result-row {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 1rem;
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  .result-row:last-child {
-    border-bottom: none;
-  }
-
-  .result-level {
-    font-weight: 600;
-    color: #111827;
-  }
-
-  .result-meaning {
-    color: #4b5563;
   }
 
   /* FAQ */
@@ -515,7 +555,7 @@ const testData = {
     }
 
     .result-row {
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 120px 1fr;
     }
   }
 </style>
@@ -532,12 +572,18 @@ const testData = {
   }
 
   const testData = {
-    id: "b0c5e772-7507-4703-91da-13b913f35f53",
-    name: "Adiponectin (Fat Metabolism) Test",
-    price: 18.00,
-    category: "metabolic-health",
-    subcategory: "adipokines",
-    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
+    id: "fc5288e5-861b-4f26-b86f-25c52bf093d1",
+    name: "Complete Blood Count (CBC) Test",
+    price: 4.00,
+    category: "general-health",
+    subcategory: "blood-counts",
+    questName: "Complete Blood Count (CBC) Test",
+    description: "Measure key components of your blood to assess overall health and detect potential disorders.",
+    turnaround: "1–2 business days",
+    sampleType: "Blood draw",
+    fastingRequired: false,
+    fastingDuration: "",
+    alsoKnownAs: ["CBC","Full Blood Count","FBC"]
   };
 
   document.getElementById('add-to-cart')?.addEventListener('click', () => {
@@ -562,7 +608,8 @@ const testData = {
       // Add new item
       cart.push({
         ...testData,
-        quantity: 1
+        quantity: 1,
+        url: "/tests/general-health/blood-counts/cbc/"
       });
       
       // Save cart
@@ -596,18 +643,18 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "name": "Complete Blood Count (CBC) Test",
+  "description": "Measure key components of your blood to assess overall health and detect potential disorders.",
+  "sku": "fc5288e5-861b-4f26-b86f-25c52bf093d1",
   "brand": {
     "@type": "Brand",
     "name": "Quest Diagnostics"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "url": "https://www.trackyourlabs.com/tests/general-health/blood-counts/cbc/",
     "priceCurrency": "USD",
-    "price": "18.00",
+    "price": "4.00",
     "priceValidUntil": "2025-12-31",
     "availability": "https://schema.org/InStock"
   }
@@ -618,9 +665,9 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "MedicalTest",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
-  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "name": "Complete Blood Count (CBC) Test",
+  "description": "Measure key components of your blood to assess overall health and detect potential disorders.",
+  "usedToDiagnose": "general health, health assessment",
   "howPerformed": "Blood draw at Quest Diagnostics location"
 }
 </script>
@@ -645,8 +692,8 @@ const testData = {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Adiponectin (Fat Metabolism) Test",
-      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+      "name": "Complete Blood Count (CBC) Test",
+      "item": "https://www.trackyourlabs.com/tests/general-health/blood-counts/cbc/"
     }
   ]
 }

@@ -1,0 +1,155 @@
+---
+import ShoppingLayout from '../../../layouts/ShoppingLayout.astro';
+import Footer from '../../../components/Footer.astro';
+
+export const prerender = false;
+
+const tests = [
+  {
+    id: "f19a88de-14f6-494b-bcab-93ed362d8ebe",
+    name: "Advanced Heart Health Test Panel (with ApoB)",
+    price: 87,
+    description: "Get a comprehensive view of your cardiovascular risk with advanced lipid and heart health biomarkers, including ApoB.",
+    url: "/tests/heart-health/advanced-panels/advanced-heart-health-with-apob/"
+  },
+  {
+    id: "a4f2e439-1946-48d1-a753-acad83cae130",
+    name: "Cholesterol (Lipid) Panel",
+    price: 6,
+    description: "Check your cholesterol profile to understand your heart health risk and guide next steps.",
+    url: "/tests/heart-health/lipids/cholesterol-lipid-panel/"
+  },
+  {
+    id: "46995022-0357-47f1-b91e-18147a3c4e45",
+    name: "High-Risk Heart Health Lipid and Lp(a) Test Panel",
+    price: 20,
+    description: "Identify elevated cholesterol and inherited Lipoprotein(a) [Lp(a)] levels to better understand your cardiovascular risk.",
+    url: "/tests/heart-health/lipids/high-risk-lipid-lpa-panel/"
+  },
+  {
+    id: "1bed4e2a-8255-4523-9906-ff31ff6907c3",
+    name: "Homocysteine Test",
+    price: 18,
+    description: "Check your homocysteine levels to assess potential cardiovascular and nutritional health risks.",
+    url: "/tests/heart-health/inflammation-and-other-markers/homocysteine/"
+  },
+  {
+    id: "5563f414-5e88-4f49-a9df-b89e20f9e35a",
+    name: "hsCRP Test for Inflammation Marker",
+    price: 7,
+    description: "Detect low-grade inflammation linked to cardiovascular disease risk with a high-sensitivity C-reactive protein (hsCRP) test.",
+    url: "/tests/heart-health/inflammation-and-other-markers/hscrp-inflammation/"
+  },
+  {
+    id: "63d1793f-db63-48ea-b865-22417180c4b1",
+    name: "Lipoprotein(a) Test",
+    price: 15,
+    description: "Check for elevated Lipoprotein(a) [Lp(a)] levels, an inherited risk factor for cardiovascular disease.",
+    url: "/tests/heart-health/lipids/lipoprotein-a/"
+  },
+  {
+    id: "507ed361-c22f-4f86-b1df-b8b4b17eb265",
+    name: "Omega-3 & 6 Ratio Test Panel",
+    price: 60,
+    description: "Measure your omega-3 and omega-6 fatty acid levels to evaluate heart, brain, and overall health.",
+    url: "/tests/heart-health/fatty-acids/omega-3-6-ratio-panel/"
+  }
+];
+---
+
+<ShoppingLayout 
+  title="Heart Health Tests - Track Your Labs"
+  description="Browse and order heart health tests online. Check cholesterol, inflammation markers, and cardiovascular risk factors."
+>
+  <div class="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="text-sm breadcrumbs mb-6">
+      <ul>
+        <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
+        <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
+        <li class="text-gray-900">Heart Health</li>
+      </ul>
+    </nav>
+
+    <h1 class="text-4xl font-bold mb-4">Heart Health Tests</h1>
+    <p class="text-lg text-gray-600 mb-8">
+      Monitor your cardiovascular health with comprehensive tests for cholesterol, inflammation markers, and heart disease risk factors.
+    </p>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {tests.map(test => (
+        <a href={test.url} class="block group">
+          <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+            <div class="card-body flex flex-col justify-between">
+              <div>
+                <h3 class="card-title text-lg mb-2">{test.name}</h3>
+                <p class="text-gray-600 text-sm">{test.description}</p>
+              </div>
+              <div class="flex items-end justify-between mt-4">
+                <span class="text-2xl font-bold">${test.price}</span>
+                <button 
+                  class="btn btn-primary btn-sm" 
+                  onclick={`event.preventDefault(); event.stopPropagation(); addToCart('${test.id}', '${test.name}', ${test.price});`}
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+  
+  <Footer />
+</ShoppingLayout>
+
+<script>
+  interface CartItem {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    category?: string;
+    subcategory?: string;
+    url?: string;
+  }
+
+  function addToCart(id: string, name: string, price: number) {
+    // Get existing cart
+    let cart: CartItem[] = [];
+    try {
+      cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    } catch {
+      cart = [];
+    }
+
+    // Check if item already in cart
+    const existingItem = cart.find(item => item.id === id);
+    
+    if (!existingItem) {
+      // Add new item
+      cart.push({
+        id,
+        name,
+        price,
+        quantity: 1
+      });
+      
+      // Save cart
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      // Dispatch event for cart update
+      window.dispatchEvent(new Event('cartUpdated'));
+    }
+    
+    // Open cart drawer
+    const cartDrawer = document.getElementById('cart-drawer') as HTMLInputElement;
+    if (cartDrawer) {
+      cartDrawer.checked = true;
+    }
+  }
+
+  // Make function available globally
+  (window as any).addToCart = addToCart;
+</script>

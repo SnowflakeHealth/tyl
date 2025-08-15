@@ -5,24 +5,24 @@ import Footer from '../../../../components/Footer.astro';
 export const prerender = false;
 
 const testData = {
-  id: "b0c5e772-7507-4703-91da-13b913f35f53",
-  name: "Adiponectin (Fat Metabolism) Test",
-  price: 18.00,
-  category: "metabolic-health",
-  subcategory: "adipokines",
-  questName: "Adiponectin (Fat Metabolism) Test",
-  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  turnaround: "Up to 8 business days",
-  sampleType: "Blood draw (serum)",
-  fastingRequired: true,
-  fastingDuration: "8–12 hours",
-  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
+  id: "c528f597-c4c6-4c01-bea3-884489132574",
+  name: "Calcium Test",
+  price: 3.00,
+  category: "general-health",
+  subcategory: "minerals",
+  questName: "Calcium Test",
+  description: "Measure calcium levels in your blood to assess bone health, heart function, and more.",
+  turnaround: "1–2 business days",
+  sampleType: "Blood draw",
+  fastingRequired: false,
+  fastingDuration: "",
+  alsoKnownAs: ["Serum Calcium Test","Total Calcium Test"]
 };
 ---
 
 <ShoppingLayout 
-  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
-  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+  title={`${testData.name} – Order Online | Track Your Labs`}
+  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure calcium levels in your blood to assess bone health, heart function, and more.`}
 >
   <main class="flex-1">
     <!-- Hero Section -->
@@ -34,8 +34,8 @@ const testData = {
             <ul>
               <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
               <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
-              <li><a href="/tests#metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
-              <li class="text-gray-900">Adiponectin Test</li>
+              <li><a href="/tests#general-health" class="text-gray-600 hover:text-gray-900">General Health</a></li>
+              <li class="text-gray-900">Calcium Test</li>
             </ul>
           </nav>
 
@@ -71,7 +71,7 @@ const testData = {
                     </tr>
                     <tr>
                       <td class="fact-label">Fasting Required</td>
-                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                      <td class="fact-value">No (may be fasting if ordered with other tests)</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Sample Type</td>
@@ -89,10 +89,7 @@ const testData = {
               <div class="content-section">
                 <h2 class="section-title">What This Test Measures</h2>
                 <p class="section-text">
-                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
-                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
-                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
-                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                  The Calcium Test measures the amount of calcium in your blood. Calcium is vital for strong bones and teeth, muscle contraction, nerve signaling, and blood clotting. Most calcium is stored in bones, but blood levels must remain within a narrow range for normal function.
                 </p>
               </div>
 
@@ -104,31 +101,31 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are overweight, obese, or have unexplained weight changes</span>
+                    <span>Have symptoms like muscle cramps, tingling, or fatigue</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
+                    <span>Have kidney disease or are on dialysis</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Want to monitor metabolic health as part of a wellness program</span>
+                    <span>Have parathyroid disorders or thyroid surgery history</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
+                    <span>Take medications that affect calcium levels</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are under evaluation for metabolic syndrome</span>
+                    <span>Want to monitor bone health and mineral balance</span>
                   </li>
                 </ul>
               </div>
@@ -169,7 +166,7 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Fast for 8–12 hours before your appointment; only water is permitted</span>
+                    <span>No fasting typically required</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -191,20 +188,20 @@ const testData = {
                 <h2 class="section-title">Understanding Your Results</h2>
                 <div class="results-table">
                   <div class="result-row">
-                    <span class="result-level">Low</span>
-                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
+                    <span class="result-level">High</span>
+                    <span class="result-meaning">May indicate overactive parathyroid glands, certain cancers, excess vitamin D, or other conditions</span>
                   </div>
                   <div class="result-row">
                     <span class="result-level">Normal</span>
-                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
+                    <span class="result-meaning">Indicates healthy calcium levels for proper body function</span>
                   </div>
                   <div class="result-row">
-                    <span class="result-level">High</span>
-                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
+                    <span class="result-level">Low</span>
+                    <span class="result-meaning">May be due to low vitamin D, kidney disease, or other metabolic disorders</span>
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 italic mt-4">
-                  Note: Reference ranges vary; results should be interpreted by a healthcare provider in context of overall health.
+                  Note: This test typically measures total calcium; ionized calcium testing may be needed in some cases.
                 </p>
               </div>
 
@@ -213,23 +210,23 @@ const testData = {
                 <h2 class="section-title">Frequently Asked Questions</h2>
                 <div class="faq-container">
                   <details class="faq-item">
-                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
-                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
+                    <summary class="faq-question">Do I need to fast for the Calcium Test?</summary>
+                    <p class="faq-answer">No, fasting is typically not required for a calcium test.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
-                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
+                    <summary class="faq-question">What causes high calcium levels?</summary>
+                    <p class="faq-answer">Common causes include hyperparathyroidism, certain cancers, excess vitamin D, or certain medications.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">How long until I get results?</summary>
-                    <p class="faq-answer">Typically within 8 business days.</p>
+                    <summary class="faq-question">What are symptoms of abnormal calcium levels?</summary>
+                    <p class="faq-answer">Symptoms may include muscle cramps, fatigue, tingling, irregular heartbeat, or kidney stones.</p>
                   </details>
                   
                   <details class="faq-item">
-                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
-                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
+                    <summary class="faq-question">How often should I test my calcium levels?</summary>
+                    <p class="faq-answer">Frequency depends on your health conditions and risk factors. Consult your healthcare provider.</p>
                   </details>
                 </div>
               </div>
@@ -248,9 +245,9 @@ const testData = {
                 <div class="related-tests">
                   <p class="text-gray-600 mb-4">Often ordered with:</p>
                   <div class="related-links">
-                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
-                    <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
-                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
+                    <a href="/tests/general-health/vitamins/vitamin-d" class="link-item">Vitamin D Test →</a>
+                    <a href="/tests/general-health/minerals/magnesium" class="link-item">Magnesium Test →</a>
+                    <a href="/tests/general-health/panels/comprehensive-metabolic-panel" class="link-item">Comprehensive Metabolic Panel →</a>
                   </div>
                 </div>
               </div>
@@ -356,6 +353,34 @@ const testData = {
     color: #10b981;
   }
 
+  /* Results Table */
+  .results-table {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .result-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .result-row:last-child {
+    border-bottom: none;
+  }
+
+  .result-level {
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .result-meaning {
+    color: #4b5563;
+  }
+
   /* Steps */
   .steps-container {
     display: flex;
@@ -398,32 +423,23 @@ const testData = {
     font-size: 0.875rem;
   }
 
-  /* Results Table */
-  .results-table {
+  /* CTA Section */
+  .cta-section {
     background: #f9fafb;
+    padding: 1.5rem;
     border-radius: 8px;
-    padding: 1rem;
+    margin-bottom: 3.5rem;
   }
 
-  .result-row {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 1rem;
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  .result-row:last-child {
-    border-bottom: none;
-  }
-
-  .result-level {
-    font-weight: 600;
-    color: #111827;
-  }
-
-  .result-meaning {
+  .cta-text {
+    font-size: 1rem;
+    line-height: 1.6;
     color: #4b5563;
+    margin: 0;
+  }
+
+  .cta-text strong {
+    color: #111827;
   }
 
   /* FAQ */
@@ -467,25 +483,6 @@ const testData = {
     margin-top: 1rem;
     color: #4b5563;
     line-height: 1.6;
-  }
-
-  /* CTA Section */
-  .cta-section {
-    background: #f9fafb;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-bottom: 3.5rem;
-  }
-
-  .cta-text {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #4b5563;
-    margin: 0;
-  }
-
-  .cta-text strong {
-    color: #111827;
   }
 
   /* Related Tests */
@@ -532,12 +529,18 @@ const testData = {
   }
 
   const testData = {
-    id: "b0c5e772-7507-4703-91da-13b913f35f53",
-    name: "Adiponectin (Fat Metabolism) Test",
-    price: 18.00,
-    category: "metabolic-health",
-    subcategory: "adipokines",
-    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
+    id: "c528f597-c4c6-4c01-bea3-884489132574",
+    name: "Calcium Test",
+    price: 3.00,
+    category: "general-health",
+    subcategory: "minerals",
+    questName: "Calcium Test",
+    description: "Measure calcium levels in your blood to assess bone health, heart function, and more.",
+    turnaround: "1–2 business days",
+    sampleType: "Blood draw",
+    fastingRequired: false,
+    fastingDuration: "",
+    alsoKnownAs: ["Serum Calcium Test","Total Calcium Test"]
   };
 
   document.getElementById('add-to-cart')?.addEventListener('click', () => {
@@ -562,7 +565,8 @@ const testData = {
       // Add new item
       cart.push({
         ...testData,
-        quantity: 1
+        quantity: 1,
+        url: "/tests/general-health/minerals/calcium/"
       });
       
       // Save cart
@@ -596,18 +600,18 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "name": "Calcium Test",
+  "description": "Measure calcium levels in your blood to assess bone health, heart function, and more.",
+  "sku": "c528f597-c4c6-4c01-bea3-884489132574",
   "brand": {
     "@type": "Brand",
     "name": "Quest Diagnostics"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "url": "https://www.trackyourlabs.com/tests/general-health/minerals/calcium/",
     "priceCurrency": "USD",
-    "price": "18.00",
+    "price": "3.00",
     "priceValidUntil": "2025-12-31",
     "availability": "https://schema.org/InStock"
   }
@@ -618,9 +622,9 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "MedicalTest",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
-  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "name": "Calcium Test",
+  "description": "Measure calcium levels in your blood to assess bone health, heart function, and more.",
+  "usedToDiagnose": "general health, health assessment",
   "howPerformed": "Blood draw at Quest Diagnostics location"
 }
 </script>
@@ -645,8 +649,8 @@ const testData = {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Adiponectin (Fat Metabolism) Test",
-      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+      "name": "Calcium Test",
+      "item": "https://www.trackyourlabs.com/tests/general-health/minerals/calcium/"
     }
   ]
 }

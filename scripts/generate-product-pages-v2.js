@@ -1,28 +1,179 @@
----
-import ShoppingLayout from '../../../../layouts/ShoppingLayout.astro';
-import Footer from '../../../../components/Footer.astro';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Function to extract metadata from markdown file
+function extractMetadata(content) {
+  const metadataMatch = content.match(/```json\n([\s\S]*?)\n```/);
+  if (!metadataMatch) {
+    throw new Error('No metadata found in file');
+  }
+  return JSON.parse(metadataMatch[1]);
+}
+
+// Function to extract sections from markdown
+function extractSections(content) {
+  const sections = {};
+  
+  // Extract hero section
+  const heroMatch = content.match(/## Hero Section\n([\s\S]*?)(?=\n---|\n##|$)/);
+  if (heroMatch) {
+    const lines = heroMatch[1].trim().split('\n');
+    sections.hero = lines[0]?.replace(/^_/, '').replace(/_$/, '') || '';
+    sections.highlights = lines
+      .filter(line => line.startsWith('-'))
+      .map(line => line.substring(1).trim());
+  }
+  
+  // Extract Quick Facts table
+  const quickFactsMatch = content.match(/## Quick Facts\n([\s\S]*?)(?=\n---|\n##|$)/);
+  if (quickFactsMatch) {
+    sections.quickFacts = parseQuickFacts(quickFactsMatch[1].trim());
+  }
+  
+  // Extract What This Test Measures
+  const whatItMeasuresMatch = content.match(/## What This Test Measures\n([\s\S]*?)(?=\n---|\n##|$)/);
+  if (whatItMeasuresMatch) {
+    sections.whatItMeasures = whatItMeasuresMatch[1].trim();
+  }
+  
+  // Extract Why Take This Test
+  const whyTakeMatch = content.match(/## Why Take This Test\n([\s\S]*?)(?=\n---|\n##|$)/);
+  if (whyTakeMatch) {
+    sections.whyTake = whyTakeMatch[1].trim();
+  }
+  
+  // Extract Who Should Take This Test
+  const whoShouldTakeMatch = content.match(/## Who Should Take This Test\n([\s\S]*?)(?=\n---|\n##|$)/);
+  if (whoShouldTakeMatch) {
+    sections.whoShouldTake = whoShouldTakeMatch[1].trim()
+      .split('\n')
+      .filter(line => line.startsWith('-'))
+      .map(line => line.substring(1).trim());
+  }
+  
+  // Extract What to Expect
+  const whatToExpectMatch = content.match(/## What to Expect\n([\s\S]*?)(?=\n---|\n##|$)/);
+  if (whatToExpectMatch) {
+    sections.whatToExpect = whatToExpectMatch[1].trim();
+  }
+  
+  // Extract Understanding Your Results
+  const understandingResultsMatch = content.match(/## Understanding Your Results\n([\s\S]*?)(?=\n---|\n##|$)/);
+  if (understandingResultsMatch) {
+    sections.understandingResults = understandingResultsMatch[1].trim();
+  }
+  
+  // Extract How It Works
+  const howItWorksMatch = content.match(/## How It Works\n([\s\S]*?)(?=\n---|\n##|$)/);
+  if (howItWorksMatch) {
+    sections.howItWorks = howItWorksMatch[1].trim();
+  }
+  
+  return sections;
+}
+
+// Function to parse Quick Facts table
+function parseQuickFacts(quickFactsText) {
+  const facts = {};
+  const lines = quickFactsText.split('\n');
+  
+  for (const line of lines) {
+    if (line.includes('|') && !line.includes('---')) {
+      const parts = line.split('|').map(p => p.trim()).filter(p => p);
+      if (parts.length >= 2) {
+        const key = parts[0].replace(/\*\*/g, '').trim();
+        const value = parts[1].replace(/\*\*/g, '').trim();
+        facts[key] = value;
+      }
+    }
+  }
+  
+  return facts;
+}
+
+// Helper to convert markdown bold to strong tags and escape HTML
+function convertBold(text) {
+  return text
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
+// Helper to clean text
+function cleanText(text) {
+  return text
+    .replace(/\[Order Now\]/g, '')
+    .replace(/\[Find a Lab\]/g, '')
+    .replace(/💲 /g, '')
+    .replace(/\*\*(.*?)\*\*/g, '$1');
+}
+
+// Category display names
+const categoryDisplayNames = {
+  'heart-health': 'Heart Health',
+  'diabetes': 'Diabetes',
+  'general-health': 'General Health',
+  'metabolic-health': 'Metabolic Health',
+  'hormone-health': 'Hormone Health',
+  'thyroid-health': 'Thyroid Health',
+  'liver-health': 'Liver Health',
+  'kidney-health': 'Kidney Health',
+  'blood-disorders': 'Blood Disorders',
+  'infectious-diseases': 'Infectious Diseases',
+  'allergy': 'Allergy'
+};
+
+// Function to determine import path depth
+function getImportDepth(urlPath) {
+  const depth = urlPath.split('/').filter(p => p && p !== 'tests').length;
+  return '../'.repeat(depth + 1);
+}
+
+// Generate the Astro component matching the Adiponectin template exactly
+function generateAstroComponent(testName, metadata, sections) {
+  const price = Math.floor(metadata.price_usd);
+  const importPath = getImportDepth(metadata.url_path);
+  const categoryName = categoryDisplayNames[metadata.category] || metadata.category;
+  
+  // Extract fasting info
+  const fastingRequired = sections.quickFacts['Fasting Required'] || 'No';
+  const isFastingRequired = fastingRequired.toLowerCase().includes('yes');
+  const fastingDuration = isFastingRequired ? (fastingRequired.match(/\((.*?)\)/)?.[1] || '8–12 hours') : '';
+  
+  // Build the testData object
+  const testData = `{
+  id: "${metadata.test_id}",
+  name: "${testName}",
+  price: ${price}.00,
+  category: "${metadata.category}",
+  subcategory: "${metadata.subcategory}",
+  questName: "${metadata.quest_test_name}",
+  description: "${sections.hero || metadata.quest_description}",
+  turnaround: "${sections.quickFacts['Turnaround Time'] || '1–3 business days'}",
+  sampleType: "${sections.quickFacts['Sample Type'] || 'Blood draw'}",
+  fastingRequired: ${isFastingRequired},
+  fastingDuration: "${fastingDuration}",
+  alsoKnownAs: ${sections.quickFacts['Also Known As'] ? 
+    JSON.stringify(sections.quickFacts['Also Known As'].split(',').map(s => s.trim())) : 
+    '[]'}
+}`;
+
+  return `---
+import ShoppingLayout from '${importPath}layouts/ShoppingLayout.astro';
+import Footer from '${importPath}components/Footer.astro';
 
 export const prerender = false;
 
-const testData = {
-  id: "b0c5e772-7507-4703-91da-13b913f35f53",
-  name: "Adiponectin (Fat Metabolism) Test",
-  price: 18.00,
-  category: "metabolic-health",
-  subcategory: "adipokines",
-  questName: "Adiponectin (Fat Metabolism) Test",
-  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  turnaround: "Up to 8 business days",
-  sampleType: "Blood draw (serum)",
-  fastingRequired: true,
-  fastingDuration: "8–12 hours",
-  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
-};
+const testData = ${testData};
 ---
 
 <ShoppingLayout 
-  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
-  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+  title={\`\${testData.name} – Order Online | Track Your Labs\`}
+  description={\`Order the \${testData.name} online for $\${testData.price.toFixed(2)}. ${cleanText(sections.hero || metadata.quest_description)}\`}
 >
   <main class="flex-1">
     <!-- Hero Section -->
@@ -34,8 +185,8 @@ const testData = {
             <ul>
               <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
               <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
-              <li><a href="/tests#metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
-              <li class="text-gray-900">Adiponectin Test</li>
+              <li><a href="/tests#${metadata.category}" class="text-gray-600 hover:text-gray-900">${categoryName}</a></li>
+              <li class="text-gray-900">${testName}</li>
             </ul>
           </nav>
 
@@ -47,7 +198,7 @@ const testData = {
           <!-- Price and Add to Cart -->
           <div class="mb-12">
             <div class="flex items-baseline gap-2 mb-6">
-              <span class="text-4xl font-bold">${testData.price.toFixed(0)}</span>
+              <span class="text-4xl font-bold">\${testData.price.toFixed(0)}</span>
             </div>
             
             <button id="add-to-cart" class="btn btn-primary btn-lg px-16">
@@ -67,11 +218,11 @@ const testData = {
                   <tbody>
                     <tr>
                       <td class="fact-label">Test Type</td>
-                      <td class="fact-value">Blood test</td>
+                      <td class="fact-value">${sections.quickFacts['Test Type'] || 'Blood test'}</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Fasting Required</td>
-                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                      <td class="fact-value">${fastingRequired}</td>
                     </tr>
                     <tr>
                       <td class="fact-label">Sample Type</td>
@@ -85,53 +236,26 @@ const testData = {
                 </table>
               </div>
 
-              <!-- What This Test Measures -->
+              ${sections.whatItMeasures ? `<!-- What This Test Measures -->
               <div class="content-section">
                 <h2 class="section-title">What This Test Measures</h2>
                 <p class="section-text">
-                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
-                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
-                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
-                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                  ${convertBold(sections.whatItMeasures.replace(/\n\n/g, '</p>\n                <p class="section-text">\n                  '))}
                 </p>
-              </div>
+              </div>` : ''}
 
-              <!-- Who Should Take This Test -->
+              ${sections.whoShouldTake && sections.whoShouldTake.length > 0 ? `<!-- Who Should Take This Test -->
               <div class="content-section">
                 <h2 class="section-title">Who Should Take This Test</h2>
                 <ul class="benefits-list">
-                  <li class="benefit-item">
+                  ${sections.whoShouldTake.map(item => `<li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Are overweight, obese, or have unexplained weight changes</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Want to monitor metabolic health as part of a wellness program</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
-                  </li>
-                  <li class="benefit-item">
-                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <span>Are under evaluation for metabolic syndrome</span>
-                  </li>
+                    <span>${convertBold(item)}</span>
+                  </li>`).join('\n                  ')}
                 </ul>
-              </div>
+              </div>` : ''}
 
               <!-- How It Works -->
               <div class="content-section">
@@ -161,7 +285,7 @@ const testData = {
                 </div>
               </div>
 
-              <!-- How to Prepare -->
+              ${isFastingRequired ? `<!-- How to Prepare -->
               <div class="content-section">
                 <h2 class="section-title">How to Prepare</h2>
                 <ul class="benefits-list">
@@ -169,7 +293,7 @@ const testData = {
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Fast for 8–12 hours before your appointment; only water is permitted</span>
+                    <span>Fast for ${fastingDuration} before your appointment; only water is permitted</span>
                   </li>
                   <li class="benefit-item">
                     <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -184,55 +308,18 @@ const testData = {
                     <span>Follow any medication guidance from your healthcare provider</span>
                   </li>
                 </ul>
-              </div>
+              </div>` : ''}
 
-              <!-- Understanding Your Results -->
+              ${sections.understandingResults ? `<!-- Understanding Your Results -->
               <div class="content-section">
                 <h2 class="section-title">Understanding Your Results</h2>
-                <div class="results-table">
-                  <div class="result-row">
-                    <span class="result-level">Low</span>
-                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
-                  </div>
-                  <div class="result-row">
-                    <span class="result-level">Normal</span>
-                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
-                  </div>
-                  <div class="result-row">
-                    <span class="result-level">High</span>
-                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
-                  </div>
+                <div class="section-text">
+                  ${convertBold(sections.understandingResults)}
                 </div>
                 <p class="text-sm text-gray-600 italic mt-4">
                   Note: Reference ranges vary; results should be interpreted by a healthcare provider in context of overall health.
                 </p>
-              </div>
-
-              <!-- FAQ -->
-              <div class="content-section">
-                <h2 class="section-title">Frequently Asked Questions</h2>
-                <div class="faq-container">
-                  <details class="faq-item">
-                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
-                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
-                  </details>
-                  
-                  <details class="faq-item">
-                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
-                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
-                  </details>
-                  
-                  <details class="faq-item">
-                    <summary class="faq-question">How long until I get results?</summary>
-                    <p class="faq-answer">Typically within 8 business days.</p>
-                  </details>
-                  
-                  <details class="faq-item">
-                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
-                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
-                  </details>
-                </div>
-              </div>
+              </div>` : ''}
 
               <!-- Compliance & Trust -->
               <div class="cta-section">
@@ -240,19 +327,6 @@ const testData = {
                   <strong>CLIA-Certified & HIPAA-Compliant.</strong> This test is processed by Quest Diagnostics, 
                   a trusted lab network. Your information is protected and results are reviewed by qualified medical professionals.
                 </p>
-              </div>
-
-              <!-- Related Tests -->
-              <div class="content-section">
-                <h2 class="section-title">Related Tests</h2>
-                <div class="related-tests">
-                  <p class="text-gray-600 mb-4">Often ordered with:</p>
-                  <div class="related-links">
-                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
-                    <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
-                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -398,77 +472,6 @@ const testData = {
     font-size: 0.875rem;
   }
 
-  /* Results Table */
-  .results-table {
-    background: #f9fafb;
-    border-radius: 8px;
-    padding: 1rem;
-  }
-
-  .result-row {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 1rem;
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  .result-row:last-child {
-    border-bottom: none;
-  }
-
-  .result-level {
-    font-weight: 600;
-    color: #111827;
-  }
-
-  .result-meaning {
-    color: #4b5563;
-  }
-
-  /* FAQ */
-  .faq-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .faq-item {
-    background: #f9fafb;
-    border-radius: 8px;
-    padding: 1rem;
-  }
-
-  .faq-question {
-    font-weight: 600;
-    color: #111827;
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .faq-question::-webkit-details-marker {
-    display: none;
-  }
-
-  .faq-question::after {
-    content: '+';
-    font-size: 1.25rem;
-    color: #6b7280;
-  }
-
-  details[open] .faq-question::after {
-    content: '−';
-  }
-
-  .faq-answer {
-    margin-top: 1rem;
-    color: #4b5563;
-    line-height: 1.6;
-  }
-
   /* CTA Section */
   .cta-section {
     background: #f9fafb;
@@ -488,23 +491,6 @@ const testData = {
     color: #111827;
   }
 
-  /* Related Tests */
-  .related-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .link-item {
-    color: #3b82f6;
-    text-decoration: none;
-    font-size: 1rem;
-  }
-
-  .link-item:hover {
-    text-decoration: underline;
-  }
-
   @media (max-width: 640px) {
     .section-title {
       font-size: 1.5rem;
@@ -512,10 +498,6 @@ const testData = {
 
     .section-text {
       font-size: 1rem;
-    }
-
-    .result-row {
-      grid-template-columns: 80px 1fr;
     }
   }
 </style>
@@ -531,14 +513,7 @@ const testData = {
     url: string;
   }
 
-  const testData = {
-    id: "b0c5e772-7507-4703-91da-13b913f35f53",
-    name: "Adiponectin (Fat Metabolism) Test",
-    price: 18.00,
-    category: "metabolic-health",
-    subcategory: "adipokines",
-    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
-  };
+  const testData = ${testData.replace(/\n/g, '\n  ')};
 
   document.getElementById('add-to-cart')?.addEventListener('click', () => {
     // Get existing cart
@@ -562,7 +537,8 @@ const testData = {
       // Add new item
       cart.push({
         ...testData,
-        quantity: 1
+        quantity: 1,
+        url: "${metadata.url_path}"
       });
       
       // Save cart
@@ -596,18 +572,18 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
-  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "name": "${testName}",
+  "description": "${cleanText(sections.hero || metadata.quest_description)}",
+  "sku": "${metadata.test_id}",
   "brand": {
     "@type": "Brand",
     "name": "Quest Diagnostics"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "url": "https://www.trackyourlabs.com${metadata.url_path}",
     "priceCurrency": "USD",
-    "price": "18.00",
+    "price": "${price}.00",
     "priceValidUntil": "2025-12-31",
     "availability": "https://schema.org/InStock"
   }
@@ -618,9 +594,9 @@ const testData = {
 {
   "@context": "https://schema.org",
   "@type": "MedicalTest",
-  "name": "Adiponectin (Fat Metabolism) Test",
-  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
-  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "name": "${testName}",
+  "description": "${cleanText(sections.hero || metadata.quest_description)}",
+  "usedToDiagnose": "${metadata.category.replace(/-/g, ' ')}, health assessment",
   "howPerformed": "Blood draw at Quest Diagnostics location"
 }
 </script>
@@ -645,9 +621,78 @@ const testData = {
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Adiponectin (Fat Metabolism) Test",
-      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+      "name": "${testName}",
+      "item": "https://www.trackyourlabs.com${metadata.url_path}"
     }
   ]
 }
-</script>
+</script>`;
+}
+
+// Main function to process all test files
+async function generateAllProductPages() {
+  const docsTestsDir = path.join(__dirname, '..', 'docs', 'tests');
+  const srcPagesDir = path.join(__dirname, '..', 'src', 'pages', 'tests');
+  
+  // Get all markdown files in docs/tests
+  const files = fs.readdirSync(docsTestsDir).filter(f => f.endsWith('.md') && f !== 'hierarchy.md');
+  
+  console.log(`Found ${files.length} test data files to process`);
+  
+  let successCount = 0;
+  let skipCount = 0;
+  const errors = [];
+  
+  for (const file of files) {
+    const testName = file.replace('.md', '');
+    
+    // Skip Adiponectin since we're using it as the template
+    if (testName === 'Adiponectin') {
+      console.log(`Skipping ${testName} (template file)`);
+      skipCount++;
+      continue;
+    }
+    
+    try {
+      // Read the markdown file
+      const content = fs.readFileSync(path.join(docsTestsDir, file), 'utf-8');
+      
+      // Extract metadata and sections
+      const metadata = extractMetadata(content);
+      const sections = extractSections(content);
+      
+      // Generate the Astro component
+      const astroContent = generateAstroComponent(metadata.quest_test_name, metadata, sections);
+      
+      // Create the directory structure
+      const urlPath = metadata.url_path.replace(/^\/tests\//, '').replace(/\/$/, '');
+      const outputDir = path.join(srcPagesDir, path.dirname(urlPath));
+      const outputFile = path.join(outputDir, path.basename(urlPath) + '.astro');
+      
+      // Create directories if they don't exist
+      fs.mkdirSync(outputDir, { recursive: true });
+      
+      // Write the Astro file
+      fs.writeFileSync(outputFile, astroContent);
+      
+      console.log(`✓ Generated ${urlPath}`);
+      successCount++;
+    } catch (error) {
+      console.error(`✗ Error processing ${testName}: ${error.message}`);
+      errors.push({ test: testName, error: error.message });
+    }
+  }
+  
+  console.log('\n=== Summary ===');
+  console.log(`Successfully generated: ${successCount} pages`);
+  console.log(`Skipped: ${skipCount} pages`);
+  console.log(`Errors: ${errors.length}`);
+  
+  if (errors.length > 0) {
+    console.log('\nErrors:');
+    errors.forEach(e => console.log(`  - ${e.test}: ${e.error}`));
+  }
+}
+
+// Run the script
+generateAllProductPages().catch(console.error);
