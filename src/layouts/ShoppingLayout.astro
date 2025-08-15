@@ -1,0 +1,62 @@
+---
+import '../styles/global.css';
+import ShoppingNavbar from '../components/ShoppingNavbar.astro';
+import CartDrawer from '../components/CartDrawer.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Order lab tests online. CLIA-certified Quest Diagnostics processing. Fast, accurate results delivered securely.' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content={title} />
+    <meta name="author" content="Track Your Labs" />
+    <meta name="keywords" content="lab tests, blood tests, Quest Diagnostics, health testing, online lab ordering, medical tests" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.trackyourlabs.com/" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="Track Your Labs" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.trackyourlabs.com/" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={`https://www.trackyourlabs.com${Astro.url.pathname}`} />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Track Your Labs" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="min-h-screen flex flex-col">
+      <ShoppingNavbar />
+      <main class="flex-1 pt-16">
+        <slot />
+      </main>
+      <CartDrawer />
+    </div>
+  </body>
+</html>

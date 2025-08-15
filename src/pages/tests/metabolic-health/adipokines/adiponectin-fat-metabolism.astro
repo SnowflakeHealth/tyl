@@ -1,0 +1,654 @@
+---
+import ShoppingLayout from '../../../../layouts/ShoppingLayout.astro';
+import Footer from '../../../../components/Footer.astro';
+
+export const prerender = false;
+
+const testData = {
+  id: "b0c5e772-7507-4703-91da-13b913f35f53",
+  name: "Adiponectin (Fat Metabolism) Test",
+  price: 18.00,
+  category: "metabolic-health",
+  subcategory: "adipokines",
+  questName: "Adiponectin (Fat Metabolism) Test",
+  description: "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
+  turnaround: "Up to 8 business days",
+  sampleType: "Blood draw (serum)",
+  fastingRequired: true,
+  fastingDuration: "8–12 hours",
+  alsoKnownAs: ["Adiponectin Test", "Fat Metabolism Test"]
+};
+---
+
+<ShoppingLayout 
+  title={`${testData.name} – Measure Adiponectin Levels | Order Online`}
+  description={`Order the ${testData.name} online for $${testData.price.toFixed(2)}. Measure adiponectin to assess fat metabolism and insulin sensitivity. Fasting required. Results in up to 8 days.`}
+>
+  <main class="flex-1">
+    <!-- Hero Section -->
+    <div class="min-h-screen bg-base-100">
+      <div>
+        <div class="max-w-2xl mx-auto px-4">
+          <!-- Breadcrumb -->
+          <nav class="text-sm breadcrumbs py-4">
+            <ul>
+              <li><a href="/" class="text-gray-600 hover:text-gray-900">Home</a></li>
+              <li><a href="/tests" class="text-gray-600 hover:text-gray-900">Tests</a></li>
+              <li><a href="/tests/metabolic-health" class="text-gray-600 hover:text-gray-900">Metabolic Health</a></li>
+              <li><a href="/tests/metabolic-health/adipokines" class="text-gray-600 hover:text-gray-900">Adipokines</a></li>
+              <li class="text-gray-900">Adiponectin (Fat Metabolism)</li>
+            </ul>
+          </nav>
+
+          <h1 class="text-4xl font-bold mb-4">{testData.name}</h1>
+          <p class="text-lg text-gray-600 leading-relaxed mb-8">
+            {testData.description}
+          </p>
+          
+          <!-- Price and Add to Cart -->
+          <div class="mb-12">
+            <div class="flex items-baseline gap-2 mb-6">
+              <span class="text-4xl font-bold">${testData.price.toFixed(0)}</span>
+            </div>
+            
+            <button id="add-to-cart" class="btn btn-primary btn-lg px-16">
+              Add to Cart
+            </button>
+          </div>
+
+          <!-- Marketing Copy Section -->
+          <div class="marketing-section">
+            <div class="vertical-separator"></div>
+            
+            <div class="marketing-content">
+              <!-- Quick Facts -->
+              <div class="quick-facts-section">
+                <h2 class="section-title">Quick Facts</h2>
+                <table class="facts-table">
+                  <tbody>
+                    <tr>
+                      <td class="fact-label">Test Type</td>
+                      <td class="fact-value">Blood test</td>
+                    </tr>
+                    <tr>
+                      <td class="fact-label">Fasting Required</td>
+                      <td class="fact-value">Yes ({testData.fastingDuration})</td>
+                    </tr>
+                    <tr>
+                      <td class="fact-label">Sample Type</td>
+                      <td class="fact-value">{testData.sampleType}</td>
+                    </tr>
+                    <tr>
+                      <td class="fact-label">Turnaround Time</td>
+                      <td class="fact-value">{testData.turnaround}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- What This Test Measures -->
+              <div class="content-section">
+                <h2 class="section-title">What This Test Measures</h2>
+                <p class="section-text">
+                  The Adiponectin Test measures the level of adiponectin — a protein hormone produced by fat cells (adipocytes) 
+                  that plays a key role in regulating glucose and lipid metabolism. Higher adiponectin levels are generally 
+                  linked to improved insulin sensitivity and a reduced risk of metabolic disorders. Lower levels may indicate 
+                  an increased risk for conditions such as type 2 diabetes, obesity-related complications, and cardiovascular disease.
+                </p>
+              </div>
+
+              <!-- Who Should Take This Test -->
+              <div class="content-section">
+                <h2 class="section-title">Who Should Take This Test</h2>
+                <ul class="benefits-list">
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span>Are overweight, obese, or have unexplained weight changes</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span>Have insulin resistance or a family history of type 2 diabetes</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span>Want to monitor metabolic health as part of a wellness program</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span>Are tracking the effectiveness of dietary or exercise interventions</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span>Are under evaluation for metabolic syndrome</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- How It Works -->
+              <div class="content-section">
+                <h2 class="section-title">How It Works</h2>
+                <div class="steps-container">
+                  <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                      <h3 class="step-title">Order Online</h3>
+                      <p class="step-text">Select your test and pay securely</p>
+                    </div>
+                  </div>
+                  <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                      <h3 class="step-title">Visit a Lab</h3>
+                      <p class="step-text">Provide your sample at a Quest Diagnostics location</p>
+                    </div>
+                  </div>
+                  <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                      <h3 class="step-title">Get Results</h3>
+                      <p class="step-text">Access your secure, doctor-reviewed results within {testData.turnaround}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- How to Prepare -->
+              <div class="content-section">
+                <h2 class="section-title">How to Prepare</h2>
+                <ul class="benefits-list">
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span>Fast for 8–12 hours before your appointment; only water is permitted</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 16a9.065 9.065 0 0 0-6.23-.307L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+                    </svg>
+                    <span>Stay well-hydrated (drink water)</span>
+                  </li>
+                  <li class="benefit-item">
+                    <svg class="benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a1.5 1.5 0 0 0-1.006-1.006L15.75 7.5l1.035-.259a1.5 1.5 0 0 0 1.006-1.006L18 5.25l.259 1.035a1.5 1.5 0 0 0 1.006 1.006L20.25 7.5l-1.035.259a1.5 1.5 0 0 0-1.006 1.006ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                    </svg>
+                    <span>Follow any medication guidance from your healthcare provider</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Understanding Your Results -->
+              <div class="content-section">
+                <h2 class="section-title">Understanding Your Results</h2>
+                <div class="results-table">
+                  <div class="result-row">
+                    <span class="result-level">Low</span>
+                    <span class="result-meaning">May suggest insulin resistance, increased risk for type 2 diabetes or metabolic syndrome</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">Normal</span>
+                    <span class="result-meaning">Indicates healthy adiponectin function and typical metabolic profile</span>
+                  </div>
+                  <div class="result-row">
+                    <span class="result-level">High</span>
+                    <span class="result-meaning">Often linked to improved insulin sensitivity and lower cardiovascular risk</span>
+                  </div>
+                </div>
+                <p class="text-sm text-gray-600 italic mt-4">
+                  Note: Reference ranges vary; results should be interpreted by a healthcare provider in context of overall health.
+                </p>
+              </div>
+
+              <!-- FAQ -->
+              <div class="content-section">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="faq-container">
+                  <details class="faq-item">
+                    <summary class="faq-question">Do I need to fast for the Adiponectin Test?</summary>
+                    <p class="faq-answer">Yes, fasting for 8–12 hours is recommended.</p>
+                  </details>
+                  
+                  <details class="faq-item">
+                    <summary class="faq-question">What does a low adiponectin level indicate?</summary>
+                    <p class="faq-answer">Low levels can suggest insulin resistance, increased cardiovascular risk, or possible metabolic syndrome.</p>
+                  </details>
+                  
+                  <details class="faq-item">
+                    <summary class="faq-question">How long until I get results?</summary>
+                    <p class="faq-answer">Typically within 8 business days.</p>
+                  </details>
+                  
+                  <details class="faq-item">
+                    <summary class="faq-question">Can adiponectin levels be improved?</summary>
+                    <p class="faq-answer">Yes — through weight loss, physical activity, and certain dietary changes.</p>
+                  </details>
+                </div>
+              </div>
+
+              <!-- Compliance & Trust -->
+              <div class="cta-section">
+                <p class="cta-text">
+                  <strong>CLIA-Certified & HIPAA-Compliant.</strong> This test is processed by Quest Diagnostics, 
+                  a trusted lab network. Your information is protected and results are reviewed by qualified medical professionals.
+                </p>
+              </div>
+
+              <!-- Related Tests -->
+              <div class="content-section">
+                <h2 class="section-title">Related Tests</h2>
+                <div class="related-tests">
+                  <p class="text-gray-600 mb-4">Often ordered with:</p>
+                  <div class="related-links">
+                    <a href="/tests/heart-health/lipids/cholesterol-lipid-panel" class="link-item">Lipid Panel →</a>
+                    <a href="/tests/diabetes/glycemic-control/hemoglobin-a1c" class="link-item">Hemoglobin A1c →</a>
+                    <a href="/tests/diabetes/insulin-and-resistance/insulin-resistance-panel" class="link-item">Insulin Test →</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</ShoppingLayout>
+
+<style>
+  .marketing-section {
+    margin-top: 4rem;
+  }
+
+  .vertical-separator {
+    width: 1px;
+    height: 100px;
+    background: linear-gradient(to bottom, #e5e7eb, #e5e7eb 50%, transparent);
+    margin: 0 auto 3rem;
+  }
+
+  .marketing-content {
+    color: #374151;
+  }
+
+  .section-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+  }
+
+  .content-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .section-text {
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: #4b5563;
+    margin: 0;
+  }
+
+  /* Quick Facts Table */
+  .quick-facts-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .facts-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .facts-table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .facts-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .fact-label {
+    padding: 0.75rem 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 600;
+    width: 40%;
+  }
+
+  .fact-value {
+    padding: 0.75rem 0;
+    font-size: 1rem;
+    color: #111827;
+  }
+
+  /* Benefits List */
+  .benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .benefit-item {
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4b5563;
+  }
+
+  .benefit-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #10b981;
+  }
+
+  /* Steps */
+  .steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .step-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    background: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    flex: 1;
+  }
+
+  .step-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.25rem;
+  }
+
+  .step-text {
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+
+  /* Results Table */
+  .results-table {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .result-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .result-row:last-child {
+    border-bottom: none;
+  }
+
+  .result-level {
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .result-meaning {
+    color: #4b5563;
+  }
+
+  /* FAQ */
+  .faq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .faq-item {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .faq-question {
+    font-weight: 600;
+    color: #111827;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-question::after {
+    content: '+';
+    font-size: 1.25rem;
+    color: #6b7280;
+  }
+
+  details[open] .faq-question::after {
+    content: '−';
+  }
+
+  .faq-answer {
+    margin-top: 1rem;
+    color: #4b5563;
+    line-height: 1.6;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    background: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 3.5rem;
+  }
+
+  .cta-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4b5563;
+    margin: 0;
+  }
+
+  .cta-text strong {
+    color: #111827;
+  }
+
+  /* Related Tests */
+  .related-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .link-item {
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+
+  .link-item:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .section-text {
+      font-size: 1rem;
+    }
+
+    .result-row {
+      grid-template-columns: 80px 1fr;
+    }
+  }
+</style>
+
+<script>
+  interface CartItem {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    category: string;
+    subcategory: string;
+    url: string;
+  }
+
+  const testData = {
+    id: "b0c5e772-7507-4703-91da-13b913f35f53",
+    name: "Adiponectin (Fat Metabolism) Test",
+    price: 18.00,
+    category: "metabolic-health",
+    subcategory: "adipokines",
+    url: "/tests/metabolic-health/adipokines/adiponectin-fat-metabolism"
+  };
+
+  document.getElementById('add-to-cart')?.addEventListener('click', () => {
+    // Get existing cart
+    let cart: CartItem[] = [];
+    try {
+      cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    } catch {
+      cart = [];
+    }
+
+    // Check if item already in cart
+    const existingItem = cart.find(item => item.id === testData.id);
+    
+    if (existingItem) {
+      // Item already in cart, just open drawer
+      const cartDrawer = document.getElementById('cart-drawer') as HTMLInputElement;
+      if (cartDrawer) {
+        cartDrawer.checked = true;
+      }
+    } else {
+      // Add new item
+      cart.push({
+        ...testData,
+        quantity: 1
+      });
+      
+      // Save cart
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      // Dispatch event for cart update
+      window.dispatchEvent(new Event('cartUpdated'));
+      
+      // Open cart drawer
+      const cartDrawer = document.getElementById('cart-drawer') as HTMLInputElement;
+      if (cartDrawer) {
+        cartDrawer.checked = true;
+      }
+      
+      // Show success feedback
+      const addButton = document.getElementById('add-to-cart') as HTMLButtonElement;
+      const originalText = addButton.textContent;
+      addButton.textContent = '✓ Added to Cart';
+      addButton.classList.add('btn-success');
+      
+      setTimeout(() => {
+        addButton.textContent = originalText;
+        addButton.classList.remove('btn-success');
+      }, 2000);
+    }
+  });
+</script>
+
+<!-- Structured Data for SEO -->
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Adiponectin (Fat Metabolism) Test",
+  "description": "Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.",
+  "sku": "b0c5e772-7507-4703-91da-13b913f35f53",
+  "brand": {
+    "@type": "Brand",
+    "name": "Quest Diagnostics"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/",
+    "priceCurrency": "USD",
+    "price": "18.00",
+    "priceValidUntil": "2025-12-31",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalTest",
+  "name": "Adiponectin (Fat Metabolism) Test",
+  "description": "Blood test measuring adiponectin levels to assess fat metabolism and insulin sensitivity",
+  "usedToDiagnose": "Metabolic syndrome, insulin resistance, cardiovascular risk assessment",
+  "howPerformed": "Blood draw at Quest Diagnostics location"
+}
+</script>
+
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.trackyourlabs.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tests",
+      "item": "https://www.trackyourlabs.com/tests/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Adiponectin (Fat Metabolism) Test",
+      "item": "https://www.trackyourlabs.com/tests/metabolic-health/adipokines/adiponectin-fat-metabolism/"
+    }
+  ]
+}
+</script>

@@ -1,0 +1,181 @@
+---
+---
+
+<div class="drawer drawer-end">
+  <input id="cart-drawer" type="checkbox" class="drawer-toggle" />
+  
+  <!-- Drawer side -->
+  <div class="drawer-side z-50">
+    <label for="cart-drawer" class="drawer-overlay"></label>
+    <div class="menu p-4 w-96 min-h-full bg-base-100 text-base-content border-l border-gray-200">
+      <!-- Cart header -->
+      <div class="flex items-center justify-between mb-6 pb-4 border-b">
+        <h2 class="text-xl font-bold">Your Cart</h2>
+        <label for="cart-drawer" class="btn btn-square btn-ghost btn-sm">
+          <!-- X-mark icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </label>
+      </div>
+      
+      <!-- Cart items container -->
+      <div id="cart-items" class="flex-1 overflow-y-auto">
+        <!-- Empty cart message -->
+        <div id="empty-cart" class="text-center py-8">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto mb-4 text-gray-300">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+          </svg>
+          <p class="text-gray-500">Your cart is empty</p>
+          <p class="text-sm text-gray-400 mt-2">Add tests to get started</p>
+        </div>
+        
+        <!-- Cart items will be inserted here -->
+        <div id="cart-list" class="space-y-4 hidden">
+          <!-- Items populated by JavaScript -->
+        </div>
+      </div>
+      
+      <!-- Cart footer with total and checkout -->
+      <div id="cart-footer" class="border-t pt-4 mt-4 hidden">
+        <div class="flex justify-between mb-2">
+          <span class="font-semibold">Subtotal:</span>
+          <span id="cart-subtotal" class="font-semibold">$0.00</span>
+        </div>
+        <details class="mb-2">
+          <summary class="flex justify-between cursor-pointer text-sm">
+            <div class="flex items-center gap-1">
+              <span>Processing fee</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-500">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+              </svg>
+            </div>
+            <span>$19</span>
+          </summary>
+          <p class="text-xs text-gray-600 mt-2 pl-2">Includes physician requisition & review, Quest blood draw, and lab ordering</p>
+        </details>
+        <div class="flex justify-between mb-4 border-t pt-2">
+          <span class="font-bold">Total:</span>
+          <span id="cart-total" class="font-bold">$0.00</span>
+        </div>
+        <button id="checkout-btn" class="btn btn-primary btn-block" disabled>
+          Proceed to Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  interface CartItem {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    category?: string;
+    url?: string;
+  }
+  
+  function getCart(): CartItem[] {
+    try {
+      return JSON.parse(localStorage.getItem('cart') || '[]');
+    } catch {
+      return [];
+    }
+  }
+  
+  function saveCart(cart: CartItem[]) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cartUpdated'));
+  }
+  
+  function renderCart() {
+    const cart = getCart();
+    const emptyCart = document.getElementById('empty-cart');
+    const cartList = document.getElementById('cart-list');
+    const cartFooter = document.getElementById('cart-footer');
+    const subtotalEl = document.getElementById('cart-subtotal');
+    const totalEl = document.getElementById('cart-total');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    
+    if (!emptyCart || !cartList || !cartFooter || !subtotalEl || !totalEl || !checkoutBtn) return;
+    
+    if (cart.length === 0) {
+      emptyCart.classList.remove('hidden');
+      cartList.classList.add('hidden');
+      cartFooter.classList.add('hidden');
+    } else {
+      emptyCart.classList.add('hidden');
+      cartList.classList.remove('hidden');
+      cartFooter.classList.remove('hidden');
+      
+      // Clear existing items
+      cartList.innerHTML = '';
+      
+      let subtotal = 0;
+      const processingFee = 19.00;
+      
+      cart.forEach((item, index) => {
+        subtotal += item.price;
+        
+        const itemEl = document.createElement('div');
+        itemEl.className = 'bg-base-200 rounded-lg p-3';
+        itemEl.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="flex-1">
+              <h3 class="font-semibold text-sm">${item.name}</h3>
+            </div>
+            <button class="btn btn-ghost btn-xs remove-item" data-index="${index}" title="Remove from cart">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+              </svg>
+            </button>
+            <span class="font-semibold whitespace-nowrap">$${item.price.toFixed(0)}</span>
+          </div>
+        `;
+        cartList.appendChild(itemEl);
+      });
+      
+      subtotalEl.textContent = `$${subtotal.toFixed(0)}`;
+      totalEl.textContent = `$${(subtotal + processingFee).toFixed(0)}`;
+      
+      // Enable checkout button when cart has items
+      (checkoutBtn as HTMLButtonElement).disabled = false;
+    }
+  }
+  
+  function removeItem(index: number) {
+    const cart = getCart();
+    cart.splice(index, 1);
+    saveCart(cart);
+    renderCart();
+  }
+  
+  // Event delegation for cart actions
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    
+    if (target.closest('.remove-item')) {
+      const index = parseInt(target.closest('.remove-item')!.getAttribute('data-index') || '0');
+      removeItem(index);
+    }
+  });
+  
+  // Checkout button handler
+  document.getElementById('checkout-btn')?.addEventListener('click', () => {
+    window.location.href = '/checkout';
+  });
+  
+  // Initial render
+  document.addEventListener('DOMContentLoaded', renderCart);
+  
+  // Re-render when cart is updated
+  window.addEventListener('cartUpdated', renderCart);
+  
+  // Re-render when storage changes (from other tabs)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'cart') {
+      renderCart();
+    }
+  });
+</script>

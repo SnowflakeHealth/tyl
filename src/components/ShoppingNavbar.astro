@@ -1,0 +1,77 @@
+---
+---
+
+<div class="navbar bg-base-100 shadow-lg fixed top-0 z-40 w-full">
+  <div class="navbar-start">
+    <a href="/" class="btn btn-ghost text-xl font-bold">Track Your Labs</a>
+  </div>
+  <div class="navbar-center hidden lg:flex">
+    <ul class="menu menu-horizontal px-1">
+      <li><a href="/tests">All Tests</a></li>
+      <li><a href="/tests/heart-health">Heart Health</a></li>
+      <li><a href="/tests/diabetes">Diabetes</a></li>
+      <li><a href="/tests/general-health">General Health</a></li>
+    </ul>
+  </div>
+  <div class="navbar-end pr-4">
+    <div class="dropdown dropdown-end lg:hidden">
+      <label tabindex="0" class="btn btn-ghost">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+        </svg>
+      </label>
+      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+        <li><a href="/tests">All Tests</a></li>
+        <li><a href="/tests/heart-health">Heart Health</a></li>
+        <li><a href="/tests/diabetes">Diabetes</a></li>
+        <li><a href="/tests/general-health">General Health</a></li>
+      </ul>
+    </div>
+    
+    <!-- Cart Button -->
+    <label for="cart-drawer" class="btn btn-ghost btn-circle drawer-button">
+      <div class="indicator">
+        <!-- Shopping Cart Icon (Heroicon: shopping-cart) -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+        </svg>
+        <span id="cart-count" class="badge badge-sm indicator-item badge-primary hidden">0</span>
+      </div>
+    </label>
+  </div>
+</div>
+
+<script>
+  // Update cart count from localStorage
+  function updateCartCount() {
+    const cartCount = document.getElementById('cart-count');
+    if (!cartCount) return;
+    
+    try {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const totalItems = cart.length; // Count number of different tests in cart
+      
+      if (totalItems > 0) {
+        cartCount.textContent = totalItems.toString();
+        cartCount.classList.remove('hidden');
+      } else {
+        cartCount.classList.add('hidden');
+      }
+    } catch (e) {
+      console.error('Error updating cart count:', e);
+    }
+  }
+  
+  // Update on page load
+  document.addEventListener('DOMContentLoaded', updateCartCount);
+  
+  // Listen for cart changes
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'cart') {
+      updateCartCount();
+    }
+  });
+  
+  // Custom event for same-page cart updates
+  window.addEventListener('cartUpdated', updateCartCount);
+</script>

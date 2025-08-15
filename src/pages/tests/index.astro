@@ -1,0 +1,102 @@
+---
+import ShoppingLayout from '../../layouts/ShoppingLayout.astro';
+import Footer from '../../components/Footer.astro';
+
+export const prerender = false;
+---
+
+<ShoppingLayout 
+  title="Order Lab Tests Online - Track Your Labs"
+  description="Browse and order lab tests online. CLIA-certified Quest Diagnostics processing. Fast, accurate results delivered securely."
+>
+  <div class="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+    <h1 class="text-4xl font-bold mb-8">Order Lab Tests Online</h1>
+    
+    <div class="alert alert-info mb-8">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+      </svg>
+      <div>
+        <p class="font-semibold">Shopping functionality coming soon!</p>
+        <p>We're currently building out our full test catalog. Browse our first available test below.</p>
+      </div>
+    </div>
+    
+    <h2 class="text-2xl font-bold mb-6">Available Tests</h2>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Adiponectin Test Card -->
+      <a href="/tests/metabolic-health/adipokines/adiponectin-fat-metabolism" class="block group">
+        <div class="card bg-base-100 border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all cursor-pointer h-full">
+          <div class="card-body flex flex-col justify-between">
+            <div>
+              <h3 class="card-title text-lg mb-2">Adiponectin (Fat Metabolism) Test</h3>
+              <p class="text-gray-600 text-sm">Measure adiponectin levels to gain insights into your metabolic and cardiovascular health.</p>
+            </div>
+            <div class="flex items-end justify-between mt-4">
+              <span class="text-2xl font-bold">$18</span>
+              <button class="btn btn-primary btn-sm" onclick="event.preventDefault(); event.stopPropagation(); addToCart('b0c5e772-7507-4703-91da-13b913f35f53', 'Adiponectin (Fat Metabolism) Test', 18);">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  
+  <Footer />
+</ShoppingLayout>
+
+<script>
+  interface CartItem {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    category?: string;
+    subcategory?: string;
+    url?: string;
+  }
+
+  function addToCart(id: string, name: string, price: number) {
+    // Get existing cart
+    let cart: CartItem[] = [];
+    try {
+      cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    } catch {
+      cart = [];
+    }
+
+    // Check if item already in cart
+    const existingItem = cart.find(item => item.id === id);
+    
+    if (!existingItem) {
+      // Add new item
+      cart.push({
+        id,
+        name,
+        price,
+        quantity: 1,
+        category: 'metabolic-health',
+        subcategory: 'adipokines',
+        url: '/tests/metabolic-health/adipokines/adiponectin-fat-metabolism'
+      });
+      
+      // Save cart
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      // Dispatch event for cart update
+      window.dispatchEvent(new Event('cartUpdated'));
+    }
+    
+    // Open cart drawer
+    const cartDrawer = document.getElementById('cart-drawer') as HTMLInputElement;
+    if (cartDrawer) {
+      cartDrawer.checked = true;
+    }
+  }
+
+  // Make function available globally
+  (window as any).addToCart = addToCart;
+</script>
