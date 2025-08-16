@@ -686,6 +686,21 @@ export const prerender = false;
     }
   }
 
+  // Check if we should open the cart drawer (coming from locations page)
+  window.addEventListener('DOMContentLoaded', () => {
+    const shouldOpenCart = sessionStorage.getItem('openCartDrawer');
+    if (shouldOpenCart === 'true') {
+      // Clear the flag
+      sessionStorage.removeItem('openCartDrawer');
+      
+      // Open the cart drawer
+      const cartDrawer = document.getElementById('cart-drawer') as HTMLInputElement;
+      if (cartDrawer) {
+        cartDrawer.checked = true;
+      }
+    }
+  });
+
   // Make function available globally
   (window as any).addToCart = addToCart;
 </script>
